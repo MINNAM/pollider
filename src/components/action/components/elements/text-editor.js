@@ -63,36 +63,22 @@ class TextEditor extends React.Component {
 
             const content = this.state.editorState.getCurrentContent();
 
+            let inlineStyles = {};
+
+            for ( let key in textStyleMap ) {
+
+                inlineStyles[ key ] = {
+
+                    style : textStyleMap[ key ]
+
+                };
+
+            }
+
+
             let options = {
 
-              inlineStyles: {
-
-                  BOLD : {
-                      element : 'b'
-                  },
-
-                  NORMALTEXT : {
-                      style : { fontSize : 13 }
-                  },
-
-                  SUBTITLE: {
-                      style : {
-                          fontSize: '30px',
-                          color: 'grey'
-                      }
-                  },
-                  HEADING1: {
-                      style : {
-                          fontSize: '20px'
-                      },
-                  },
-                  HEADING2: {
-                      style : {
-                          fontSize: '15px'
-                      },
-                  },
-
-              }
+              inlineStyles
 
             };
 

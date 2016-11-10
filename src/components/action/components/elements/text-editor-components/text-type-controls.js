@@ -18,14 +18,17 @@ const textStyleMap = {
         fontSize: '13px',
     },
     SUBTITLE: {
-        fontSize: '30px',
-        color: 'grey'
+        fontSize: '25px',
+        fontFamily : 'Bevan'
     },
     HEADING1: {
         fontSize: '20px',
+        fontWeight : 300,
+        color : 'rgb(150,150,150)'
     },
     HEADING2: {
         fontSize: '15px',
+        fontWeight : 'bold',
     },
 
 };

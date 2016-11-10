@@ -214,18 +214,16 @@ class Post extends React.Component {
 
         if ( event.dataTransfer.types[ 0 ] ) {
 
-
           this.props.setSelected( this.props.model );
 
-          var files = event.dataTransfer.files; // Array of all files
+          const files = event.dataTransfer.files; // Array of all files
 
           for ( var i = 0; i < files.length; i++ ) {
 
             if ( files[ i ].type ) {
 
-                var dataTypeName = files[ i ].type.split( '/' )[ 0 ];
-                var dataType     = this.props.postDataTypes[ dataTypeName ];
-
+                const dataTypeName = files[ i ].type.split( '/' )[ 0 ];
+                const dataType     = this.props.postDataTypes[ dataTypeName ];
 
                 if ( this.props.postType.support.indexOf( dataTypeName ) > -1 ) {
 

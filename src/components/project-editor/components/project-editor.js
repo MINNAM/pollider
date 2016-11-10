@@ -142,6 +142,14 @@ class ProjectEditor extends React.Component {
             case 1:
 
                 model.upRow( data.model );
+                model.content    = data.content;
+                model.contentRaw = data.contentRaw;
+
+                this.setState({
+
+                    preview : this.props.model.html()
+
+                });
 
             break;
 
@@ -149,6 +157,14 @@ class ProjectEditor extends React.Component {
             case 2:
 
                 model.downRow( data.model );
+                model.content    = data.content;
+                model.contentRaw = data.contentRaw;
+
+                this.setState({
+
+                    preview : this.props.model.html()
+
+                });
 
             break;
 
@@ -156,6 +172,14 @@ class ProjectEditor extends React.Component {
             case 3:
 
                 model.duplicate( data.model );
+                model.content    = data.content;
+                model.contentRaw = data.contentRaw;
+
+                this.setState({
+
+                    preview : this.props.model.html()
+
+                });
 
             break;
 
@@ -163,6 +187,14 @@ class ProjectEditor extends React.Component {
             case 4:
 
                 model.topRow( data.model );
+                model.content    = data.content;
+                model.contentRaw = data.contentRaw;
+
+                this.setState({
+
+                    preview : this.props.model.html()
+
+                });
 
             break;
 
@@ -170,6 +202,14 @@ class ProjectEditor extends React.Component {
             case 5:
 
                 model.bottomRow( data.model );
+                model.content    = data.content;
+                model.contentRaw = data.contentRaw;
+
+                this.setState({
+
+                    preview : this.props.model.html()
+
+                });
 
             break;
 

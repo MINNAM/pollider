@@ -55,15 +55,17 @@ class Post {
 
             }.bind( this ));
 
-            xhr.onreadystatechange = () => {
+            xhr.onreadystatechange = function () {
 
                 if ( this.readyState == 4 && this.status == 200 ) {
 
-                    var res = JSON.parse( this.response );
-                    /* Updates attribute after uploading */
-                    self.hide.path = res.path;
-                    self.hide.filename = res.filename;
-                    self.extension = res.extension;
+                    const res = JSON.parse( this.response );
+
+                    for ( let key in res ) {
+
+                        self[ key ] = res[ key ];
+
+                    }
 
                     done();
 

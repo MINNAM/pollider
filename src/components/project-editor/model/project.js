@@ -262,7 +262,7 @@ class Project extends ProjectBase {
 
     html () {
 
-        let html = '';
+        let html = '<header></header>';
 
         for ( let key in this.rows ) {
 

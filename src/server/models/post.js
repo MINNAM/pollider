@@ -320,7 +320,7 @@ class Post {
 
             ( err, rows ) => {
 
-                let posts = {};
+                const posts = {};
 
                 if ( rows ) {
 
@@ -563,7 +563,7 @@ class Post {
                     let fileName          = fileNameFormatted + '.' + fileNameSplit[ 1 ];
                     let newPath           = dirYearMonth + "/" + fileName;
 
-                    fs.writeFile( newPath, data, function (err) {
+                    fs.writeFile( newPath, data, function ( err ) {
 
                         let path = "/uploads/" + ( year.toString() + "/" + month.toString() ) + "/";
 
@@ -575,13 +575,65 @@ class Post {
 
                             function ( err, rows ) {
 
-                                res.send({
+                                self.connection.query (
 
-                                    path      : path,
-                                    filename  : fileNameFormatted,
-                                    extension : fileNameSplit[ 1 ]
+                                    'SELECT p.id AS post_id, p.parent_id, p.post_type_id as post_type_id, pdt.name AS post_data_type, p.name, p.extension, p.path, p.filename, p.size, p.container, p.status, p.public_date, p.created_date, p.modified_date, pd.id AS post_data_id, pd.field, pd.content, pd.content_raw FROM m_post p INNER JOIN m_post_data pd ON p.id = pd.post_id INNER JOIN m_post_data_type pdt ON p.post_data_type_id = pdt.id  WHERE post_id = ?',
 
-                                });
+                                    [ fields.id ],
+
+                                    function ( err, rows ) {
+
+                                        const posts = {};
+
+                                        if ( rows ) {
+
+                                            rows.map( ( element, key ) => {
+
+                                                if ( !posts[ element.post_id ] ) {
+
+                                                    posts[ element.post_id ] = {
+
+                                                        id            : element.post_id,
+                                                        parent_id     : element.parent_id,
+                                                        name          : element.name,
+                                                        status        : element.status,
+                                                        extension     : element.extension,
+                                                        container     : element.container,
+                                                        public_date   : element.public_date,
+                                                        created_date  : element.created_date,
+                                                        modified_date : element.modified_date,
+                                                        size          : element.size,
+                                                        data          : [],
+                                                        hide          : {
+
+                                                          path     : element.path,
+                                                          filename : element.filename,
+                                                          dataType : element.post_data_type
+
+                                                        }
+
+                                                    };
+
+                                                }
+
+                                                posts[ element.post_id ].data.push({
+
+                                                    id      : element.post_data_id,
+                                                    field   : element.field,
+                                                    content : element.content,
+                                                    content_raw : element.content_raw
+
+                                                });
+
+                                            });
+
+                                        }
+
+                                        res.send( posts[ fields.id ] );
+
+                                    }
+
+                                );
 
                             }
 

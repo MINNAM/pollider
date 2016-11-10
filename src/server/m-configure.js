@@ -30,6 +30,18 @@ function main ( connection, req, res ) {
                 data_type : 'project',
                 display   : 1,
                 main      : true
+            },
+            {
+                field     : 'Hello',
+                data_type : 'project',
+                display   : 1,
+                main      : true
+            },
+            {
+                field     : 'There',
+                data_type : 'project',
+                display   : 1,
+                main      : true
             }
 
         ]
@@ -63,7 +75,12 @@ function main ( connection, req, res ) {
                 display   : 1
             },
             {
-                field     : 'Detail',
+                field     : 'Greeting',
+                data_type : 'text',
+                display   : 1
+            },
+            {
+                field     : 'Title',
                 data_type : 'text',
                 display   : 1
             }

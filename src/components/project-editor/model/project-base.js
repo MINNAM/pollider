@@ -1,4 +1,6 @@
-export default class ProjectBase {
+import Row from './row.js';
+
+class ProjectBase {
 
     constructor () {
 
@@ -190,3 +192,5 @@ export default class ProjectBase {
     }
 
 }
+
+export default ProjectBase;

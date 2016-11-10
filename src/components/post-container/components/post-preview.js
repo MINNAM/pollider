@@ -70,6 +70,26 @@ class PostPreview extends React.Component {
 
         switch ( model.hide.dataType ) {
 
+            case 'post' :
+
+                return (
+                    <iframe
+                        src = "hello"
+                        className = { 'preview' }
+                        style     = {{
+
+                            display : 'inline-block',
+                            height  : 270,
+                            width   : '100%',
+
+                        }}
+                    >
+
+                    </iframe>
+                );
+
+            break;
+
             case 'image' :
 
                 if (  model.hide.path == null ) {

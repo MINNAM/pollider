@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Slider from 'material-ui/Slider';
 import Dialog  from '../../action/components/dialog.js';
 
 class Element extends React.Component {
@@ -62,9 +62,41 @@ class Element extends React.Component {
 
         let model = this.state.model;
 
+        let optionComponents;
+
+        switch ( model.type ) {
+
+            case 'image':
+
+            optionComponents = <Slider
+                defaultValue = { this.props.parentModel.padding }
+                max = { 1 }
+                onChange  = { ( event, value ) => {
+
+                    this.props.handleActionChange(
+                        null,
+                        {
+                            type : 'set-padding',
+                            value : value
+                        },
+                        this.props.parentModel
+
+                    );
+
+                }}
+            />;
+
+            break;
+
+        }
+
         return (
 
-            <div>
+            <div
+                style = {{
+                    padding : '5%'
+                }}
+            >
                 <span
                     onTouchTap = {  () => {
 
@@ -74,6 +106,8 @@ class Element extends React.Component {
                 >
                     { model.type }
                 </span>
+
+                {optionComponents}
 
             </div>
 

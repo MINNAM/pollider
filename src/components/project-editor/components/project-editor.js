@@ -11,6 +11,7 @@ import getMuiTheme      from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RowContainer     from './row-container.js';
 import ProjectAction    from './project-action.js';
+import ProjectPreview   from './project-preview.js';
 
 class ProjectEditor extends React.Component {
 
@@ -26,7 +27,7 @@ class ProjectEditor extends React.Component {
             actionDialogOpen : false,
             actionCallback   : null,
             actionModel      : [],
-            preview          : this.props.model.html()
+            preview          : this.props.model
 
         };
 
@@ -147,7 +148,7 @@ class ProjectEditor extends React.Component {
 
                 this.setState({
 
-                    preview : this.props.model.html()
+                    preview : this.props.model
 
                 });
 
@@ -162,7 +163,7 @@ class ProjectEditor extends React.Component {
 
                 this.setState({
 
-                    preview : this.props.model.html()
+                    preview : this.props.model
 
                 });
 
@@ -177,7 +178,7 @@ class ProjectEditor extends React.Component {
 
                 this.setState({
 
-                    preview : this.props.model.html()
+                    preview : this.props.model
 
                 });
 
@@ -192,7 +193,7 @@ class ProjectEditor extends React.Component {
 
                 this.setState({
 
-                    preview : this.props.model.html()
+                    preview : this.props.model
 
                 });
 
@@ -207,7 +208,7 @@ class ProjectEditor extends React.Component {
 
                 this.setState({
 
-                    preview : this.props.model.html()
+                    preview : this.props.model
 
                 });
 
@@ -291,6 +292,18 @@ class ProjectEditor extends React.Component {
 
             break;
 
+            case 'set-padding' :
+
+                model.setPadding( data.value );
+
+                this.setState({
+
+                    preview : this.props.model
+
+                });
+
+            break;
+
             case 'text-editor' :
 
                 this.handleActionDialogOpen({
@@ -319,7 +332,7 @@ class ProjectEditor extends React.Component {
 
                             this.setState({
 
-                                preview : this.props.model.html()
+                                preview : this.props.model
 
                             });
 
@@ -332,7 +345,7 @@ class ProjectEditor extends React.Component {
 
                             this.setState({
 
-                                preview : this.props.model.html()
+                                preview : this.props.model
 
                             });
 
@@ -379,7 +392,7 @@ class ProjectEditor extends React.Component {
 
                             let path = _data.hide.path + _data.hide.filename + '.' + _data.extension;
 
-                            model.content    = "<img src = " + CONFIG.backendUrl  + path + " />";
+                            model.content    = _data;
 
 
                         },
@@ -388,11 +401,11 @@ class ProjectEditor extends React.Component {
 
                             let path = _data.hide.path + _data.hide.filename + '.' + _data.extension;
 
-                            model.content    = "<img src = " + CONFIG.backendUrl  + path + " />";
+                            model.content    = _data;
 
                             this.setState({
 
-                                preview : this.props.model.html()
+                                preview : this.props.model
 
                             });
 
@@ -404,7 +417,7 @@ class ProjectEditor extends React.Component {
 
                             this.setState({
 
-                                preview : this.props.model.html()
+                                preview : this.props.model
 
                             });
 
@@ -431,8 +444,6 @@ class ProjectEditor extends React.Component {
                     }
 
                 });
-
-
 
             break;
 
@@ -539,9 +550,9 @@ class ProjectEditor extends React.Component {
                     </div>
                 </div>
 
-                <div className = "col-sm-6" style = {{ height: '100%', padding : '2.5% 2.5% 0% 2.5%', background: 'rgb(60,60,60)', overflow: 'hidden' }}>
-                    <div className = "project-preview" style = {{ height: '95%', background: 'white', overflow: 'auto' }} dangerouslySetInnerHTML = {{ __html: this.state.preview }} >
-                    </div>
+                <div className = "col-sm-6" style = {{ height: '100%', padding : '2.5% 2.5% 0% 2.5%', background: 'rgb(60,60,60)', overflow: 'scroll' }}>
+                    <ProjectPreview model = { this.state.preview } />
+
                 </div>
                 <ProjectAction
                     model          = { this.props.post }

@@ -270,6 +270,7 @@ class Post {
                                                     id            : row4[ 0 ].id,
                                                     parent_id     : row4[ 0 ].parent_id,
                                                     name          : row4[ 0 ].name,
+                                                    status        : 'public',
                                                     container     : row4[ 0 ].container,
                                                     public_date   : row4[ 0 ].public_date,
                                                     created_date  : row4[ 0 ].created_date,
@@ -577,7 +578,7 @@ class Post {
 
                                 self.connection.query (
 
-                                    'SELECT p.id AS post_id, p.parent_id, p.post_type_id as post_type_id, pdt.name AS post_data_type, p.name, p.extension, p.path, p.filename, p.size, p.container, p.status, p.public_date, p.created_date, p.modified_date, pd.id AS post_data_id, pd.field, pd.content, pd.content_raw FROM m_post p INNER JOIN m_post_data pd ON p.id = pd.post_id INNER JOIN m_post_data_type pdt ON p.post_data_type_id = pdt.id  WHERE post_id = ?',
+                                    'SELECT p.id AS post_id, p.parent_id, p.post_type_id as post_type_id, pdt.name AS post_data_type, p.name, p.status, p.extension, p.path, p.filename, p.size, p.container, p.public_date, p.created_date, p.modified_date, pd.id AS post_data_id, pd.field, pd.content, pd.content_raw FROM m_post p INNER JOIN m_post_data pd ON p.id = pd.post_id INNER JOIN m_post_data_type pdt ON p.post_data_type_id = pdt.id  WHERE post_id = ?',
 
                                     [ fields.id ],
 

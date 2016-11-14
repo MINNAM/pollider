@@ -1,5 +1,5 @@
 /* Pollider */
-import main       from './m-configure.js';
+import main from './m-configure.js';
 
 let exec = require("child_process").exec;
 
@@ -22,7 +22,16 @@ let queryPostDataTypes = "INSERT INTO m_post_data_type ( `id`, `name` ) VALUES (
 
 function install ( connection, req, res ) {
 
-    exec( '/usr/local/mysql/bin/mysql --user=root --password=1111 m < ' + __dirname + "/sql/install.sql", ( error, stdout, stderr ) => {
+    const platform = process.platform;
+    let   mysqlDir = 'mysql';
+
+    if ( /^darwin/.test( platform ) ) {
+
+        mysqlDir = '/usr/local/mysql/bin/mysql';
+
+    }
+
+    exec( mysqlDir + ' --user=root --password=1111 m < ' + __dirname + "/sql/install.sql", ( error, stdout, stderr ) => {
 
         connection.query(
 

@@ -102,58 +102,11 @@ class Col extends React.Component {
 
     }
 
-    handleRowAction ( type, data ) {
-
-        let model = this.state.model;
-
-        switch( type ) {
-
-            case 'deleteRow' :
-                model.deleteRow( data.model );
-                break;
-
-            case 'upRow' :
-                model.upRow( data.model );
-                break;
-
-            case 'downRow' :
-                model.downRow( data.model );
-                break;
-
-            case 'duplicate' :
-                model.duplicate( data.model );
-                break;
-
-            case 'topRow' :
-                model.topRow( data.model );
-                break;
-
-            case 'bottomRow' :
-                model.bottomRow( data.model );
-                break;
-
-            case 'addRowAbove' :
-                this.setSelected( data.model, 0 );
-                this.handleRowSelectorOpen( data.model );
-                break;
-
-            case 'addRowBelow' :
-                this.setSelected( data.model, 1 );
-                this.handleRowSelectorOpen( data.model );
-                break;
-
-        }
-
-        this.setState({ model });
-
-    }
-
     render () {
 
         let allowAddRow = true;
         let allowAddElement = true;
         let allowMarginTop = this._col ? (this._col.parentNode.offsetHeight / 2) - 30: '';
-
 
         if ( this.props.dynamic == false ) {
 
@@ -339,7 +292,7 @@ class Col extends React.Component {
                 >
                     <div style = {{ padding: '', height: '100%' }}>
 
-                        { (!allowAddRow && !allowAddElement && this.state.model.element ) ? <Element uploads = { this.props.uploads } model = { this.state.model.element } handleActionChange = { this.props.handleActionChange } display  = { this.props.display }/> : '' }
+                        { (!allowAddRow && !allowAddElement && this.state.model.element ) ? <Element uploads = { this.props.uploads } model = { this.state.model.element } parentModel = { this.state.model } handleActionChange = { this.props.handleActionChange } display  = { this.props.display }/> : '' }
 
                         <RowContainer
                             display            = { this.props.display }

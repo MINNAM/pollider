@@ -1,6 +1,6 @@
 
 import Row          from './row';
-import Element      from './Element.js';
+import Element      from './element.js';
 
 class ProjectBase {
 
@@ -197,13 +197,20 @@ class ProjectBase {
 
 class Col extends ProjectBase {
 
-    constructor ( width, element ) {
+    constructor ( width, element, padding = 0.2 ) {
 
         super( null );
 
-        this.type  = '';
-        this.width = width;
-        this.rows  = [];
+        this.type    = '';
+        this.width   = width;
+        this.rows    = [];
+        this.padding = padding;
+
+    }
+
+    setPadding ( value ) {
+
+        this.padding = value;
 
     }
 
@@ -217,6 +224,7 @@ class Col extends ProjectBase {
 
         this.type  = col.type;
         this.width = col.width;
+        this.padding = col.padding;
 
         if ( col.element ) {
 
@@ -254,7 +262,6 @@ class Col extends ProjectBase {
             }
 
         }
-
 
         html += '</div>';
 

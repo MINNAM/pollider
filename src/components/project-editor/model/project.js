@@ -228,7 +228,7 @@ class Project extends ProjectBase {
 
         let data = this.model.data ;
 
-        data[ this.dataKey ].content_raw = JSON.stringify( {
+        data[ this.dataKey ].content_raw = JSON.stringify({
 
             index : this.index,
             rows  : this.rows
@@ -243,8 +243,8 @@ class Project extends ProjectBase {
     }
 
     load ( json ) {
-
-        json.rows.map( ( row, key ) => {
+        
+        json.rows.map(( row, key ) => {
 
             const newRow = new Row( key );
 

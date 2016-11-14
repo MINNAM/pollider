@@ -30,59 +30,6 @@ function main ( connection, req, res ) {
                 data_type : 'project',
                 display   : 1,
                 main      : true
-            },
-            {
-                field     : 'Hello',
-                data_type : 'project',
-                display   : 1,
-                main      : true
-            },
-            {
-                field     : 'There',
-                data_type : 'project',
-                display   : 1,
-                main      : true
-            }
-
-        ]
-
-    });
-
-    m.registerPost({
-
-        name          : 'Photo Work',
-        name_singular : 'File',
-        name_plural   : 'Files',
-        uploadable    : true,
-        support      : {
-            audio    : true,
-            document : true,
-            image    : true,
-            other    : true,
-            post     : false,
-            video    : true
-        },
-        meta         : [
-
-            {
-                field     : 'Description',
-                data_type : 'text',
-                display   : 1
-            },
-            {
-                field     : 'Alt Text',
-                data_type : 'text',
-                display   : 1
-            },
-            {
-                field     : 'Greeting',
-                data_type : 'text',
-                display   : 1
-            },
-            {
-                field     : 'Title',
-                data_type : 'text',
-                display   : 1
             }
 
         ]
@@ -115,7 +62,6 @@ function main ( connection, req, res ) {
                 data_type : 'text',
                 display   : 1
             }
-
         ]
 
     });

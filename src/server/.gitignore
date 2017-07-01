@@ -1,6 +1,0 @@
-tmp/*
-uploads/*
-.DS_Store
-
-!tmp/.gitignore
-!uploads/.gitignore

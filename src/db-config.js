@@ -1,0 +1,1 @@
+{"user": "root", "password": "1111", "name": "pollider", "host": "localhost", "table_prefix": ""}

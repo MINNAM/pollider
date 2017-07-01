@@ -2,9 +2,9 @@ import React from 'react';
 import {Router, browserHistory, Route} from 'react-router';
 
 import AppRoot from './app-root.js';
-import Admin from './admin.js';
+import Admin   from './admin.js';
 import Install from './install.js';
-import Login from './login.js';
+import Login   from './login.js';
 import Setting from './setting.js';
 
 const AppRouter = () => {

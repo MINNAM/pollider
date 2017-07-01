@@ -135,7 +135,7 @@ router.get('/install', (req, res) => {
 
         if (error) {
 
-            res.status(500).send(error.message);
+            res.status( 500 ).send( error.message );
 
         } else if (redirectLocation) {
 

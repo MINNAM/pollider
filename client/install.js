@@ -422,7 +422,7 @@ class Install extends React.Component {
                                 >
                                     <img
                                         id = 'logo'
-                                        src = { CONFIG.backendUrl + '/img/logo6.svg' }
+                                        src = { CONFIG.backendUrl + '/images/logo.svg' }
                                         style = {{
                                             height : '100%',
                                             display: 'inline-block',

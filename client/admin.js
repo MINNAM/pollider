@@ -37,7 +37,6 @@ import Seperator           from './components/ui/components/seperator.js';
 
 // global.navigator = { userAgent: 'all' }; // fix client/server checksum error for material-ui
 
-injectTapEventPlugin();
 
 let navigator;
 
@@ -623,8 +622,6 @@ class Admin extends React.Component {
                                             previousProject.parentModel = null;
                                             currentProject.model = null;
                                             currentProject.parentModel = null;
-
-                                            console.log( 'the fck', this.state.previousProject, this.state.currentProject, previousProject, currentProject );
 
                                             if ( JSON.stringify( previousProject ) != JSON.stringify( currentProject ) ) {
 

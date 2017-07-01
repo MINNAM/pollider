@@ -26,7 +26,7 @@ module.exports = [{
 
     output: {
         filename: 'blog.js',
-        path: path.join('public/javascripts/')
+        path: path.join( __dirname + '/public/javascripts/')
     },
 
     module: {

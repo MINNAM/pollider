@@ -298,6 +298,9 @@ class PostContainer extends React.Component {
                 setDestination  = { self.setDestination.bind( self ) }
                 reallocateModel = { self.reallocateModel.bind( self ) }
                 upload          = { self.upload.bind( self ) }
+                setUpdatePreview = { ( updatePreview) => {
+                    this.setState({ updatePreview });
+                } }
                 insertPost      = {
 
                     ( target, file, dataType ) => {
@@ -1098,6 +1101,7 @@ class PostContainer extends React.Component {
                             {
                                 this.state.selected ?
                                     <PostInfoContainer
+                                        updatePreview          = { this.state.updatePreview }
                                         parentModel            = { this.state.model }
                                         model                  = { this.state.selected }
                                         handleActionDialogOpen = { this.handleActionDialogOpen.bind( this ) }

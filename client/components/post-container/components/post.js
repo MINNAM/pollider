@@ -39,9 +39,26 @@ class Post extends React.Component {
 
         event.stopPropagation();
 
-        this.props.model.update();
+        this.props.setSelected( this.props.model );
+
+    }
+
+    onMouseDown ( event ) {
+
+        event.stopPropagation();
 
         this.props.setSelected( this.props.model );
+        this.props.setUpdatePreview( false );
+
+    }
+
+
+    onMouseUp ( event ) {
+
+        event.stopPropagation();
+
+        this.props.model.update();
+        this.props.setUpdatePreview( true );
 
     }
 
@@ -83,6 +100,8 @@ class Post extends React.Component {
 
         event.dataTransfer.setData( "text/html", "" );
         event.dataTransfer.setDragImage( img, 0, 0);
+
+        this.props.setUpdatePreview( false );
 
         if ( Object.prototype.toString.call( this.props.selected ) === '[object Array]'  ) {
 
@@ -181,6 +200,8 @@ class Post extends React.Component {
             top :  ( event.pageY - document.body.scrollTop ) + 'px'
 
         });
+
+        this.props.setUpdatePreview( true );
 
     }
 
@@ -388,10 +409,12 @@ class Post extends React.Component {
                             cursor   : 'pointer'
                         }}
                         draggable    = { true }
-                        onTouchTap   = { this.onClick.bind( this ) }
+
+                        onMouseUp = { this.onMouseUp.bind( this ) }
+                        onMouseDown = { this.onMouseDown.bind( this ) }
                         onMouseLeave = { this.onMouseLeave.bind( this ) }
                         onMouseEnter = { this.onMouseEnter.bind( this ) }
-                        onDrag       = { this.onDrag.bind( this ) }
+
                         onDragStart  = { this.onDragStart.bind( this ) }
                         onDrop       = { this.onDrop.bind( this ) }
                         onDragEnd    = { this.onDragEnd.bind( this ) }

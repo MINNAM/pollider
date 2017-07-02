@@ -651,6 +651,7 @@ class PostInfoContainer extends React.Component {
 
                 <div>
                     <PostPreview
+                        update    = { this.props.updatePreview }
                         model     = { model }
                         hyperlink = { this.props.hyperlink }
                     />

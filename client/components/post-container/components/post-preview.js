@@ -37,6 +37,17 @@ class PostPreview extends React.Component {
 
     }
 
+    componentWillReceiveProps(nextProps) {
+
+        console.log( 'what', this.props.model.id, nextProps.model.id );
+
+        this.setState({
+            nextModel : nextProps.model
+        });
+
+
+    }
+
     shouldComponentUpdate () {
 
         this.setState({
@@ -82,8 +93,9 @@ class PostPreview extends React.Component {
                             overflow: 'hidden'
                         }}
                     >
+
                         <iframe
-                            src       = { this.props.hyperlink + '/' + model._hyperlink }
+                            src       = { this.props.update ? this.props.hyperlink + '/' + model._hyperlink : '' }
                             className = { 'preview' }
                             style     = {{
 
@@ -95,9 +107,9 @@ class PostPreview extends React.Component {
                                 transformOrigin : '0 0'
 
                             }}
-                        >
+                        />
 
-                        </iframe>
+
                     </div>
                 );
 

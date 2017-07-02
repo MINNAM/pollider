@@ -649,10 +649,10 @@ class Post {
     */
     getBlog ( query, done ) {
 
-        const { parentId, container,postTypeId, parentHyperlink, hyperlink } = query;
+        const { parentId, parentStatus, container,postTypeId, parentHyperlink, hyperlink } = query;
 
         this.db.connection.query(
-            `SELECT id, parent_id, alias_id, container, name FROM ${ this.table_prefix }post;`,
+            `SELECT id, parent_id, alias_id, container, name, status FROM ${ this.table_prefix }post;`,
             ( err, posts ) => {
 
                 let children = {};
@@ -677,8 +677,6 @@ class Post {
                             }
 
                         }
-
-                        console.log( 'aliases', aliases );
 
                         if ( post.container == 1 ) {
 
@@ -715,7 +713,17 @@ class Post {
 
                 _children.map( ( child, key ) => {
 
-                    sqlOnIds += `p.id = ${ child.alias_id ? child.alias_id : child.id } ${ key < _children.length - 1 ? 'OR' : ''} `;
+                    if ( parentStatus == 'private' ) {
+
+                        sqlOnIds += `p.id = ${ child.alias_id ? child.alias_id : child.id } ${ key < _children.length - 1 ? 'OR' : ''} `;
+
+                    } else {
+
+                        if ( child.status != 'private' ) {
+                            sqlOnIds += `p.id = ${ child.alias_id ? child.alias_id : child.id } ${ key < _children.length - 1 ? 'OR' : ''} `;
+                        }
+
+                    }
 
                 });
 

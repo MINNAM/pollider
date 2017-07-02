@@ -286,6 +286,7 @@ const handleContainer = function ( row, res ) {
     post.getBlog({
 
         parentId : row.id,
+        parentStatus : row.status,
         postDataCount : row.post_data_count,
         postTypeId : 1,
         container : false,

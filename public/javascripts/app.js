@@ -32222,7 +32222,7 @@ var PostContainer = function () {
         }
     }, {
         key: 'updatePost',
-        value: function updatePost(post) {
+        value: function updatePost(post, done) {
             var _this = this;
 
             var date = new Date();
@@ -32256,6 +32256,8 @@ var PostContainer = function () {
                         }
                     }
 
+                    post.update();
+
                     _this.onUpdate(date, 'Updated ' + post.name, 1);
                 }
 
@@ -32281,8 +32283,6 @@ var PostContainer = function () {
 
                 return this.posts[key];
             } else {
-
-                console.log(elements[key]);
 
                 /* Recursively find a parent of a current object */
                 var parent = this.navigateParent(this.posts, elements[key].parent_id);
@@ -60316,6 +60316,17 @@ var Post = function () {
 
             if (node.parentNode) {
 
+                if (Object.keys(node.parentNode).length === 0 && node.parentNode.constructor === Object) {
+
+                    if (this.container == 1) {
+
+                        return hyperlink + '/';
+                    } else {
+
+                        return '' + hyperlink;
+                    }
+                }
+
                 return this.buildLink(node.parentNode.hyperlink + '/' + hyperlink, node.parentNode);
             } else {
 
@@ -60337,7 +60348,11 @@ var Post = function () {
         key: 'update',
         value: function update() {
 
+            // console.log( 'update', Object.keys(this.parentNode).length === 0 && this.parentNode.constructor === Object );
+
             this._hyperlink = this.buildLink(this.hyperlink, this);
+
+            // console.log( 'update', this._hyperlink );
         }
     }, {
         key: 'createAlias',

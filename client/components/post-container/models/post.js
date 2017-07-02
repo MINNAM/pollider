@@ -93,6 +93,21 @@ class Post {
 
         if ( node.parentNode ) {
 
+            if ( Object.keys( node.parentNode).length === 0 && node.parentNode.constructor === Object ) {
+
+                if ( this.container ==  1 ) {
+
+                    return `${hyperlink}/`;
+
+                } else {
+
+                    return `${hyperlink}`;
+
+                }
+
+
+            }
+
             return this.buildLink ( `${node.parentNode.hyperlink}/${hyperlink}`, node.parentNode );
 
         } else {
@@ -116,7 +131,11 @@ class Post {
     */
     update () {
 
+        // console.log( 'update', Object.keys(this.parentNode).length === 0 && this.parentNode.constructor === Object );
+
         this._hyperlink = this.buildLink( this.hyperlink, this );
+
+        // console.log( 'update', this._hyperlink );
 
     }
 

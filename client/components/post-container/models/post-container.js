@@ -80,7 +80,7 @@ class PostContainer {
 
     }
 
-    updatePost ( post ) {
+    updatePost ( post, done ) {
 
         const date = new Date();
 
@@ -111,9 +111,12 @@ class PostContainer {
 
                         post.children[ key ].parentNode = post;
 
+
                     }
 
                 }
+
+                post.update();
 
                 this.onUpdate( date, 'Updated ' + post.name , 1 );
 
@@ -143,8 +146,6 @@ class PostContainer {
           return this.posts[ key ];
 
       } else {
-
-          console.log( elements[ key ] );
 
           /* Recursively find a parent of a current object */
           const parent = this.navigateParent( this.posts, elements[ key ].parent_id );

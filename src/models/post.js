@@ -351,7 +351,7 @@ class Post {
                         this.db.connection.query(
 
                             `SELECT
-                                p.id, p.parent_id, p.path, p.filename, p.name, p.hyperlink, p.container, p.public_date, p.extension, p.size, p.created_date, p.modified_date, pdt.name AS post_data_type
+                                p.id, p.alias_id, p.parent_id, p.path, p.filename, p.name, p.hyperlink, p.container, p.public_date, p.extension, p.size, p.created_date, p.status, p.modified_date, pdt.name AS post_data_type
                                 FROM ${ this.table_prefix }post p
                                 INNER JOIN ${ this.table_prefix }post_data_type pdt
                                     ON p.post_data_type_id = pdt.id
@@ -359,7 +359,9 @@ class Post {
                             [ rows.insertId ],
                             ( err, posts ) => {
 
-                                const post = posts[0];
+                                const post = posts[ 0 ];
+
+                                console.log( 'alias', post );
 
                                 res.send({
 

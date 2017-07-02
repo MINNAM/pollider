@@ -31244,6 +31244,8 @@ var PostContainer = function (_React$Component) {
                     parent.children[newPost.id].parentNode = parent;
                 }
 
+                newPost.update(); // update hyperlink
+
                 _this5.setState({ model: model, selected: newPost });
             });
         }
@@ -31466,6 +31468,8 @@ var PostContainer = function (_React$Component) {
                                     var model = _this6.state.model;
                                     var newPost = model.new();
 
+                                    console.log(_newPost);
+
                                     newPost.assign(_newPost);
 
                                     if (newPost.parent_id == null) {
@@ -31478,6 +31482,8 @@ var PostContainer = function (_React$Component) {
                                         parent.children[newPost.id] = newPost;
                                         parent.children[newPost.id].parentNode = parent;
                                     }
+
+                                    newPost.update();
 
                                     _this6.setState({ model: model, selected: newPost });
                                 });

@@ -107,8 +107,6 @@ class Post {
 
             }
 
-
-
         }
 
     }
@@ -128,7 +126,7 @@ class Post {
 
             id : this.id
 
-        } ).done( function ( response ) {            
+        } ).done( function ( response ) {
 
             done( response );
 

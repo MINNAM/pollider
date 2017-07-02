@@ -377,6 +377,8 @@ class PostContainer extends React.Component {
 
             }
 
+            newPost.update(); // update hyperlink
+
             this.setState({ model: model, selected: newPost });
 
         });
@@ -627,6 +629,8 @@ class PostContainer extends React.Component {
                                 const model = this.state.model;
                                 const newPost =  model.new();
 
+                                console.log( _newPost );
+
                                 newPost.assign( _newPost );
 
                                 if ( newPost.parent_id == null ) {
@@ -641,6 +645,8 @@ class PostContainer extends React.Component {
                                     parent.children[ newPost.id ].parentNode = parent;
 
                                 }
+
+                                newPost.update();
 
                                 this.setState({ model: model, selected: newPost });
 

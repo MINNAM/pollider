@@ -289,7 +289,7 @@ const handleContainer = function ( row, res ) {
         postDataCount : row.post_data_count,
         postTypeId : 1,
         container : false,
-        parentHyperlink : '/projects',
+        parentHyperlink : 'projects',
         hyperlink : row.hyperlink,
         postDataCount : row.post_data_count
 
@@ -327,7 +327,7 @@ router.get('/', (req, res) => {
 
         postTypeId : 1,
         container : false,
-        hyperlink : '/projects'
+        hyperlink : 'projects'
 
     }, ( posts ) => {
 
@@ -363,7 +363,7 @@ router.get('/', (req, res) => {
 
 router.get('/*', ( req, res ) => {
 
-    const links = req.originalUrl.split('/');
+    const links = req.originalUrl.replace( '//', '/').split('/');
 
     post.getPostTypeByHyperlink({
 

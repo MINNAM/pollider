@@ -341,7 +341,7 @@ class Post {
                         rows[ 0 ].post_type_id,
                         rows[ 0 ].post_data_type_id,
                         rows[ 0 ].name,
-                        null,
+                        rows[ 0 ].name,
                         null,
                         null,
                         null,
@@ -650,6 +650,8 @@ class Post {
 
                         }
 
+                        console.log( 'aliases', aliases );
+
                         if ( post.container == 1 ) {
 
                             children = { ...this.findChildren ( post.id, posts, children )};
@@ -667,8 +669,6 @@ class Post {
                                         aliases[ children[ key ].alias_id ] = [ children[ key ] ];
 
                                     }
-
-
 
                                 }
 
@@ -789,6 +789,8 @@ class Post {
 
                                 if ( !posts[ element.post_id ] ) {
 
+                                    console.log( element.hyperlink );
+
                                     posts[ element.post_id ] = {
 
                                         id            : element.post_id,
@@ -863,6 +865,8 @@ class Post {
                                 ( err, rows ) => {
 
                                     _posts.map( ( element, key ) => {
+
+                                        console.log( element.id, element.name );
 
                                         if ( parentId ) {
 

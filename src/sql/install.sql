@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `pollider`.`post` (
   CONSTRAINT `fk_post_post2`
     FOREIGN KEY (`alias_id`)
     REFERENCES `pollider`.`post` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 

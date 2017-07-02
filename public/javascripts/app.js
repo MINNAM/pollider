@@ -32393,7 +32393,12 @@ var PostContainer = function () {
                             this.getIds(post.children[key], postsToDelete);
                         }
 
-                        postsToDelete.push({ id: post.children[key].id, path: post.children[key].container ? null : post.children[key].hide.path + post.children[key].hide.filename + '.' + post.children[key].extension });
+                        postsToDelete.push({
+                            id: post.children[key].id,
+                            alias_id: post.children[key].alias_id,
+                            path: post.children[key].container ? null : post.children[key].hide.path + post.children[key].hide.filename + '.' + post.children[key].extension
+
+                        });
                     }
                 }
 

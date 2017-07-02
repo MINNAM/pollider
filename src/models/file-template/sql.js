@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS \`${data.name}\`.\`${data.table_prefix}post\` (
   CONSTRAINT \`fk_${data.table_prefix}post_${data.table_prefix}post2\`
     FOREIGN KEY (\`alias_id\`)
     REFERENCES \`${data.name}\`.\`${data.table_prefix}post\` (\`id\`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 

@@ -151,6 +151,8 @@ class Post {
 
         const _posts          = JSON.parse( posts );
 
+
+
         for ( let key in _posts ) {
 
             (( _key ) => {
@@ -166,6 +168,28 @@ class Post {
             })( key );
 
         }
+
+        itemsToDelete.sort( ( a, b ) => {
+
+            if ( parseInt( a ) < parseInt( b ) ) {
+
+                return -1;
+
+            }
+
+            if ( parseInt( a ) > parseInt( b ) ) {
+
+                return 1;
+
+            }
+
+            return 0;
+
+        });
+
+
+
+         console.log( itemsToDelete );
 
         const _paths = Array.from( new Set( paths ) ); // to array
 
@@ -184,6 +208,8 @@ class Post {
             `DELETE FROM ${ this.table_prefix }post WHERE id IN ?`,
             [[ itemsToDelete ]],
             ( err, row ) => {
+
+                console.log( err );
 
                 res.send( true );
 

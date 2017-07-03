@@ -44,6 +44,8 @@
     "serve-favicon": "^2.3.2",
     "stylus": "^0.54.5",
     "superagent": "^2.0.0",
-    "webpack": "2.2.1"
+    "webpack": "2.2.1",
+    "xoauth2": "^1.2.0",
+    "nodemailer": "^2.7.0"
   }
 }

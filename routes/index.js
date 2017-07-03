@@ -33,7 +33,7 @@ fs.readFile(__dirname + '/../src/db-config.js', 'utf8', (err, data) =>  {
 
     try {
 
-        const db_config = JSON.parse(data.toString().trim());
+        const db_config = JSON.parse( data.toString().trim() );
 
         database.initiate({
 
@@ -277,6 +277,29 @@ router.post( '/install', ( req, res ) => {
         });
 
     });
+
+});
+
+router.post( '/contact', ( req, res ) => {
+
+    const data = [];
+
+    if ( req.body ) {
+
+
+
+        req.body.map( ( element ) => {
+
+            data[ element.id ] = element.value
+
+        });
+
+    }
+
+    console.log( data );
+
+    res.send( data );
+
 
 });
 

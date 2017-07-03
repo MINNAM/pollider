@@ -20,15 +20,16 @@ class Body extends React.Component {
 
         super( props );
 
-        this.state = { scrollY : 0, navTop : 300 };
+        this.state = { scrollY : 0 };
 
         if ( typeof window != 'undefined' ) {
 
             this.state = { scrollY : window.scrollY, navTop  : 0 };
 
-            window.addEventListener( 'scroll', () => {                
+            window.addEventListener( 'scroll', () => {
 
                 this.setState({
+
                     scrollY : window.scrollY
 
                 });

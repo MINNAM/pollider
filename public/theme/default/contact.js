@@ -1,6 +1,8 @@
 import React from 'react';
 import CloseButton from './components/ui/buttons/close-button.js';
 import Input from './components/input.js';
+import $ from 'jquery';
+import CONFIG from '../../../client/models/m-config.js';
 
 const NOT_NULL = 0;
 const EMAIL    = 1;
@@ -8,13 +10,13 @@ const EMAIL    = 1;
 const INPUT_FIELDS = [
     {
         label    : 'First Name',
-        id       : 'first-name',
+        id       : 'first_name',
         type     : 'input',
         required : 1
     },
     {
         label    : 'Last Name',
-        id       : 'last-name',
+        id       : 'last_name',
         type     : 'input',
         required : 1
     },
@@ -60,18 +62,35 @@ class Contact extends React.Component {
 
     send ( done ) {
 
-        this.setState({
-            sending : true
+        // this.setState({
+        //     sending : true
+        // });
+
+        $.ajax({
+
+            url         : CONFIG.backendUrl + 'contact',
+            type        : "POST",
+            data        : JSON.stringify( this.state.data ),
+            contentType : "application/json; charset=utf-8",
+            dataType    : "json",
+            success     : ( response ) => {
+
+                console.log( response );
+
+            }
+
         });
 
-        setTimeout( () => {
+        // console.log ( this.state.data );
 
-            this.setState({
-                sending : false,
-                sent : true
-            });
-
-        }, 5000 );
+        // setTimeout( () => {
+        //
+        //     this.setState({
+        //         sending : false,
+        //         sent : true
+        //     });
+        //
+        // }, 5000 );
 
 
     }
@@ -299,7 +318,7 @@ class Contact extends React.Component {
 
                                     this.send( () => {
 
-                                        toggle();
+                                        // toggle();
 
                                     });
 

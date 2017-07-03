@@ -3,6 +3,8 @@ import CONFIG from '../../../models/m-config.js';
 
 import TEXT_STYLE from '../../../../public/theme/default/text-style.js';
 
+import FontAwesomeButton from '../../../../public/theme/default/components/ui/buttons/font-awesome-button.js';
+
 class ElementView extends React.Component {
 
     constructor ( props ) {
@@ -175,17 +177,48 @@ class ElementView extends React.Component {
                     >
                         <div
                             style = {{
-                                // width : '100%',
-                                display : 'block',
-                                overflow : 'auto',
-                                height : this.refs.code ? this.refs.code.offsetHeight : 200,
-                                whiteSpace : 'nowrap',
-                                position : 'relative',
+                                display : 'inline-block',
                                 width : '100%',
-                                background : 'rgb(0, 14, 29)',
+                                height : this.state.toggleCode ? 'initial' : 310,
+                                overflow : 'hidden',
+                                transition : '0.5s all'
                             }}
                         >
-                            { code }
+                            <div
+                                style = {{
+                                    // width : '100%',
+                                    display : 'block',
+                                    overflow : 'auto',
+                                    height : this.refs.code ? this.refs.code.offsetHeight : 200,
+                                    whiteSpace : 'nowrap',
+                                    position : 'relative',
+                                    width : '100%',
+                                    background : 'rgb(0, 14, 29)',
+                                }}
+                            >
+                                { code }
+                            </div>
+                            <FontAwesomeButton
+                                className   = { this.state.toggleCode ? 'fa-angle-up' : 'fa-angle-down' }
+                                size        = { 28 }
+                                iconStyle   = {{
+                                    color : 'rgb(76, 211, 173)'
+                                }}
+                                hoverStyle  = {{ color : 'rgb(60,60,60)' }}
+                                parentStyle = {{
+                                    left : '50%',
+                                    bottom : 10,
+                                    transform : 'translate(-50%, 0)',
+                                    position     : 'absolute',
+                                }}
+                                onClick = {() => {
+
+                                    this.setState({
+                                        toggleCode : !this.state.toggleCode
+                                    })
+
+                                }}
+                            />
                         </div>
                     </div>
                 )

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 855);
+/******/ 	return __webpack_require__(__webpack_require__.s = 857);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -54183,7 +54183,7 @@ util.inherits = __webpack_require__(51);
 /*</replacement>*/
 
 /*<replacement>*/
-var debugUtil = __webpack_require__(854);
+var debugUtil = __webpack_require__(856);
 var debug = void 0;
 if (debugUtil && debugUtil.debuglog) {
   debug = debugUtil.debuglog('stream');
@@ -62810,6 +62810,10 @@ var _textStyle = __webpack_require__(229);
 
 var _textStyle2 = _interopRequireDefault(_textStyle);
 
+var _fontAwesomeButton = __webpack_require__(849);
+
+var _fontAwesomeButton2 = _interopRequireDefault(_fontAwesomeButton);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -62993,17 +62997,49 @@ var ElementView = function (_React$Component) {
                                 'div',
                                 {
                                     style: {
-                                        // width : '100%',
-                                        display: 'block',
-                                        overflow: 'auto',
-                                        height: this.refs.code ? this.refs.code.offsetHeight : 200,
-                                        whiteSpace: 'nowrap',
-                                        position: 'relative',
+                                        display: 'inline-block',
                                         width: '100%',
-                                        background: 'rgb(0, 14, 29)'
+                                        height: this.state.toggleCode ? 'initial' : 310,
+                                        overflow: 'hidden',
+                                        transition: '0.5s all'
                                     }
                                 },
-                                code
+                                _react2.default.createElement(
+                                    'div',
+                                    {
+                                        style: {
+                                            // width : '100%',
+                                            display: 'block',
+                                            overflow: 'auto',
+                                            height: this.refs.code ? this.refs.code.offsetHeight : 200,
+                                            whiteSpace: 'nowrap',
+                                            position: 'relative',
+                                            width: '100%',
+                                            background: 'rgb(0, 14, 29)'
+                                        }
+                                    },
+                                    code
+                                ),
+                                _react2.default.createElement(_fontAwesomeButton2.default, {
+                                    className: this.state.toggleCode ? 'fa-angle-up' : 'fa-angle-down',
+                                    size: 28,
+                                    iconStyle: {
+                                        color: 'rgb(76, 211, 173)'
+                                    },
+                                    hoverStyle: { color: 'rgb(60,60,60)' },
+                                    parentStyle: {
+                                        left: '50%',
+                                        bottom: 10,
+                                        transform: 'translate(-50%, 0)',
+                                        position: 'absolute'
+                                    },
+                                    onClick: function onClick() {
+
+                                        _this3.setState({
+                                            toggleCode: !_this3.state.toggleCode
+                                        });
+                                    }
+                                })
                             )
                         );
                     }
@@ -78504,7 +78540,7 @@ module.exports = {
     'shiftjis': {
         type: '_dbcs',
         table: function table() {
-            return __webpack_require__(853);
+            return __webpack_require__(855);
         },
         encodeAdd: { '\xA5': 0x5C, '\u203E': 0x7E },
         encodeSkipVals: [{ from: 0xED40, to: 0xF940 }]
@@ -78521,7 +78557,7 @@ module.exports = {
     'eucjp': {
         type: '_dbcs',
         table: function table() {
-            return __webpack_require__(851);
+            return __webpack_require__(853);
         },
         encodeAdd: { '\xA5': 0x5C, '\u203E': 0x7E }
     },
@@ -78569,7 +78605,7 @@ module.exports = {
             return __webpack_require__(230).concat(__webpack_require__(358));
         },
         gb18030: function gb18030() {
-            return __webpack_require__(852);
+            return __webpack_require__(854);
         }
     },
 
@@ -78587,7 +78623,7 @@ module.exports = {
     'cp949': {
         type: '_dbcs',
         table: function table() {
-            return __webpack_require__(850);
+            return __webpack_require__(852);
         }
     },
 
@@ -78637,7 +78673,7 @@ module.exports = {
     'big5hkscs': {
         type: '_dbcs',
         table: function table() {
-            return __webpack_require__(357).concat(__webpack_require__(849));
+            return __webpack_require__(357).concat(__webpack_require__(851));
         },
         encodeSkipVals: [0xa2cc]
     },
@@ -121420,6 +121456,281 @@ function extend() {
 
 /***/ }),
 /* 848 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ButtonBase = function (_React$Component) {
+    _inherits(ButtonBase, _React$Component);
+
+    function ButtonBase(props) {
+        _classCallCheck(this, ButtonBase);
+
+        var _this = _possibleConstructorReturn(this, (ButtonBase.__proto__ || Object.getPrototypeOf(ButtonBase)).call(this, props));
+
+        _this.state = {
+            mouseOver: false,
+            className: _this.props.className
+        };
+
+        return _this;
+    }
+
+    _createClass(ButtonBase, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var _state = this.state,
+                mouseOver = _state.mouseOver,
+                className = _state.className;
+            var _props = this.props,
+                primary = _props.primary,
+                secondary = _props.secondary,
+                onClick = _props.onClick,
+                onMouseOver = _props.onMouseOver,
+                _onMouseLeave = _props.onMouseLeave,
+                size = _props.size;
+
+
+            var parentStyle = _extends({ width: '100%', textAlign: 'center', display: 'inline-block' }, this.props.parentStyle, { cursor: 'pointer' });
+
+            return _react2.default.createElement(
+                'span',
+                {
+                    style: parentStyle,
+                    onClick: function onClick() {
+
+                        if (_this2.props.onClick) {
+                            _this2.props.onClick();
+                        }
+                    },
+                    onMouseEnter: function onMouseEnter() {
+
+                        if (onMouseOver) {
+                            onMouseOver();
+                        }
+
+                        _this2.setState({
+                            mouseOver: true
+                        });
+                    },
+
+                    onMouseLeave: function onMouseLeave() {
+
+                        if (_onMouseLeave) {
+                            _onMouseLeave();
+                        }
+
+                        _this2.setState({
+                            mouseOver: false
+                        });
+                    }
+                },
+                _react2.default.createElement(
+                    'div',
+                    {
+                        style: {
+                            width: size,
+                            height: size,
+                            position: 'absolute',
+                            display: 'inline-block',
+                            top: 0,
+                            left: 0,
+                            overflow: 'hidden',
+                            cursor: 'pointer'
+                        }
+                    },
+                    secondary
+                ),
+                _react2.default.createElement(
+                    'div',
+                    {
+                        style: {
+                            width: size,
+                            height: size,
+                            position: 'absolute',
+                            display: 'inline-block',
+                            top: 0,
+                            left: 0,
+                            overflow: 'hidden'
+                        }
+                    },
+                    primary
+                )
+            );
+        }
+    }]);
+
+    return ButtonBase;
+}(_react2.default.Component);
+
+exports.default = ButtonBase;
+
+/***/ }),
+/* 849 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _buttonBase = __webpack_require__(848);
+
+var _buttonBase2 = _interopRequireDefault(_buttonBase);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FontAwesomeButton = function (_React$Component) {
+    _inherits(FontAwesomeButton, _React$Component);
+
+    function FontAwesomeButton(props) {
+        _classCallCheck(this, FontAwesomeButton);
+
+        var _this = _possibleConstructorReturn(this, (FontAwesomeButton.__proto__ || Object.getPrototypeOf(FontAwesomeButton)).call(this, props));
+
+        _this.state = {
+            mouseOver: false
+        };
+
+        return _this;
+    }
+
+    _createClass(FontAwesomeButton, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var _props = this.props,
+                size = _props.size,
+                parentStyle = _props.parentStyle,
+                iconStyle = _props.iconStyle,
+                hoverStyle = _props.hoverStyle,
+                className = _props.className,
+                _onClick = _props.onClick;
+
+
+            var _parentStyle = _extends({}, parentStyle, {
+                width: size,
+                height: size
+
+            });
+
+            var primaryIconStyle = _extends({
+                fontSize: size
+            }, iconStyle, {
+                width: '100%',
+                textAlign: 'center',
+                transition: '.25s all',
+                position: 'absolute',
+                top: 0,
+                left: 0
+            });
+
+            if (this.state.mouseOver) {
+
+                primaryIconStyle = _extends({}, primaryIconStyle, hoverStyle);
+            }
+
+            var primary = _react2.default.createElement('i', { className: '' + ('fa ' + className), style: primaryIconStyle });
+
+            return this.props.url ? _react2.default.createElement(
+                'a',
+                { href: this.props.url, target: '_blank' },
+                _react2.default.createElement(_buttonBase2.default, {
+                    onMouseOver: function onMouseOver() {
+
+                        _this2.setState({
+                            mouseOver: true
+                        });
+                    },
+
+                    onMouseLeave: function onMouseLeave() {
+
+                        _this2.setState({
+                            mouseOver: false
+                        });
+                    },
+                    onClick: function onClick() {
+                        if (_onClick) {
+                            _onClick();
+                        }
+                    },
+                    parentStyle: _parentStyle,
+                    size: size,
+                    primary: primary
+                })
+            ) : _react2.default.createElement(_buttonBase2.default, {
+                onMouseOver: function onMouseOver() {
+
+                    _this2.setState({
+                        mouseOver: true
+                    });
+                },
+
+                onMouseLeave: function onMouseLeave() {
+
+                    _this2.setState({
+                        mouseOver: false
+                    });
+                },
+                onClick: function onClick() {
+                    if (_onClick) {
+                        _onClick();
+                    }
+                },
+                parentStyle: _parentStyle,
+                size: size,
+                primary: primary
+            });
+        }
+    }]);
+
+    return FontAwesomeButton;
+}(_react2.default.Component);
+
+exports.default = FontAwesomeButton;
+
+/***/ }),
+/* 850 */
 /***/ (function(module, exports) {
 
 function webpackEmptyContext(req) {
@@ -121428,11 +121739,11 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 848;
+webpackEmptyContext.id = 850;
 
 
 /***/ }),
-/* 849 */
+/* 851 */
 /***/ (function(module, exports) {
 
 module.exports = [
@@ -121941,7 +122252,7 @@ module.exports = [
 ];
 
 /***/ }),
-/* 850 */
+/* 852 */
 /***/ (function(module, exports) {
 
 module.exports = [
@@ -124324,7 +124635,7 @@ module.exports = [
 ];
 
 /***/ }),
-/* 851 */
+/* 853 */
 /***/ (function(module, exports) {
 
 module.exports = [
@@ -125149,7 +125460,7 @@ module.exports = [
 ];
 
 /***/ }),
-/* 852 */
+/* 854 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -125574,7 +125885,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 853 */
+/* 855 */
 /***/ (function(module, exports) {
 
 module.exports = [
@@ -126125,13 +126436,13 @@ module.exports = [
 ];
 
 /***/ }),
-/* 854 */
+/* 856 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 855 */
+/* 857 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

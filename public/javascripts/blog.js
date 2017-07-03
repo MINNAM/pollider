@@ -5069,13 +5069,92 @@ var ElementView = function (_React$Component) {
 
                     break;
 
+                case 'code':
+                    {
+
+                        var lines = model.content.split(/\r\n|\r|\n/).length;
+                        var lineNumbers = [];
+
+                        for (var i = 0; i < lines; i++) {
+
+                            lineNumbers.push(_react2.default.createElement(
+                                'div',
+                                {
+                                    key: i
+                                },
+                                i + 1
+                            ));
+                        }
+
+                        var code = _react2.default.createElement(
+                            'div',
+                            {
+                                className: 'code',
+                                ref: 'code',
+                                style: {
+                                    display: 'inline-block',
+                                    color: 'rgb(220,220,220)',
+                                    padding: '5px 20px 5px 5px',
+                                    fontFamily: 'Courier',
+                                    letterSpacing: '0px',
+                                    lineHeight: '21px',
+                                    fontSize: 14,
+                                    width: 500,
+                                    position: 'absolute'
+                                }
+                            },
+                            _react2.default.createElement(
+                                'div',
+                                {
+                                    style: {
+                                        width: 25,
+                                        float: 'left',
+                                        textAlign: 'right',
+                                        color: 'rgb(160,160,160)'
+                                    }
+                                },
+                                lineNumbers
+                            ),
+                            _react2.default.createElement('div', {
+                                style: {
+                                    width: 'calc(100% - 25px)',
+                                    float: 'left',
+                                    paddingLeft: 20,
+                                    lineHeight: '21px !important'
+                                },
+                                dangerouslySetInnerHTML: { __html: model.content }
+                            })
+                        );
+
+                        return _react2.default.createElement(
+                            'div',
+                            {
+                                ref: 'element',
+                                className: 'col-sm-' + col.width
+                            },
+                            _react2.default.createElement(
+                                'div',
+                                {
+                                    style: {
+                                        // width : '100%',
+                                        display: 'block',
+                                        overflow: 'auto',
+                                        height: this.refs.code ? this.refs.code.offsetHeight : 200,
+                                        whiteSpace: 'nowrap',
+                                        position: 'relative',
+                                        width: '100%',
+                                        background: 'rgb(0, 14, 29)'
+                                    }
+                                },
+                                code
+                            )
+                        );
+                    }
+
                 default:
                     return _react2.default.createElement('div', {
                         ref: 'element',
                         className: 'col-sm-' + col.width,
-                        style: {
-                            width: '100%'
-                        },
                         dangerouslySetInnerHTML: { __html: model.content }
                     });
 

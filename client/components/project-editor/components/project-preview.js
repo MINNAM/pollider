@@ -113,14 +113,91 @@ class ElementView extends React.Component {
 
             break;
 
+            case 'code' : {
+
+                const lines = model.content.split(/\r\n|\r|\n/).length;
+                const lineNumbers = [];
+
+                for ( let i = 0; i < lines; i++ ) {
+
+                    lineNumbers.push(
+                        <div
+                            key = { i }
+                        >{ i + 1}</div>
+
+                    )
+
+                }
+
+                const code = <div
+                    className = { 'code' }
+                    ref = 'code'
+                    style = {{
+                        display : 'inline-block',
+                        color : 'rgb(220,220,220)',
+                        padding : '5px 20px 5px 5px',
+                        fontFamily : 'Courier',
+                        letterSpacing : '0px',
+                        lineHeight : '21px',
+                        fontSize : 14,
+                        width : 500,
+                        position : 'absolute'
+                    }}
+                >
+                    <div
+                        style = {{
+                            width : 25,
+                            float : 'left',
+                            textAlign : 'right',
+                            color : 'rgb(160,160,160)',
+                        }}
+                    >
+                    {
+                        lineNumbers
+                    }
+                    </div>
+                    <div
+                        style = {{
+                            width : 'calc(100% - 25px)',
+                            float : 'left',
+                            paddingLeft : 20,
+                            lineHeight : '21px !important',
+                        }}
+                        dangerouslySetInnerHTML = {{ __html : model.content }}
+                    >
+                    </div>
+                </div>
+
+                return (
+                    <div
+                        ref = 'element'
+                        className = { 'col-sm-' + col.width }
+                    >
+                        <div
+                            style = {{
+                                // width : '100%',
+                                display : 'block',
+                                overflow : 'auto',
+                                height : this.refs.code ? this.refs.code.offsetHeight : 200,
+                                whiteSpace : 'nowrap',
+                                position : 'relative',
+                                width : '100%',
+                                background : 'rgb(0, 14, 29)',
+                            }}
+                        >
+                            { code }
+                        </div>
+                    </div>
+                )
+
+
+            }
+
             default:
                 return (
                     <div
                         ref = 'element'
                         className = { 'col-sm-' + col.width }
-                        style = {{
-                            width : '100%'
-                        }}
                         dangerouslySetInnerHTML = {{ __html : model.content }}
                     />
 

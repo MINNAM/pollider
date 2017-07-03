@@ -106,7 +106,7 @@ class Element extends React.Component {
 
         switch ( data.type ) {
 
-            case 0 :
+            case 'delete-element' :
                 this.props.handleActionChange(
                     null,
                     {
@@ -116,6 +116,8 @@ class Element extends React.Component {
                     this.props.parentModel
 
                 );
+
+            break;
 
             case 'resize-image':
                 this.props.handleActionChange(
@@ -146,7 +148,7 @@ class Element extends React.Component {
         const actions = [
             <MenuItem
                 primaryText = "Delete"
-                value       = {{ type : 0 }}
+                value       = {{ type : 'delete-element' }}
             />
         ];
 

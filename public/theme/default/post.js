@@ -32,9 +32,9 @@ class Post extends React.Component {
         return (
             <Body
                 model           = { model }
-                displayHeader         = { this.props.displayHeader }
-                toggleProfile = { this.props.toggleProfile }
-                toggleContact = { this.props.toggleContact }
+                displayHeader   = { this.props.displayHeader }
+                toggleProfile   = { this.props.toggleProfile }
+                toggleContact   = { this.props.toggleContact }
                 displayPostInfo = { true }
                 hintFold        = { this.props.hintFold }
             >

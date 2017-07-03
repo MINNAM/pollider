@@ -105,7 +105,7 @@ class Contact extends React.Component {
                         position      : 'absolute',
                         top           : '50%',
                         transform     : 'translate(-50%,-50%)',
-                        width         : 450,
+                        width         : 500 ,
                     }}
                     onClick = {(  event )=>{
 

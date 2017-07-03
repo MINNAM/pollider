@@ -13520,36 +13520,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Calendar = function Calendar(props) {
-
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-    var month = props.month,
-        day = props.day,
-        year = props.year;
-
-
-    return _react2.default.createElement(
-        'div',
-        null,
-        _react2.default.createElement(
-            'span',
-            { style: { fontSize: 12, display: 'block', textAlign: 'center', textTransform: 'uppercase' } },
-            months[month]
-        ),
-        _react2.default.createElement(
-            'span',
-            { style: { fontSize: 24, display: 'block', textAlign: 'center', marginTop: -5.5 } },
-            day
-        ),
-        _react2.default.createElement(
-            'span',
-            { style: { fontSize: 12, display: 'block', textAlign: 'center', marginTop: -1.5 } },
-            year
-        )
-    );
-};
-
 var Body = function (_React$Component) {
     _inherits(Body, _React$Component);
 
@@ -13577,15 +13547,10 @@ var Body = function (_React$Component) {
     }
 
     _createClass(Body, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
+        key: 'offsetRight',
+        value: function offsetRight(element) {
 
-            this.setState({
-
-                navTop: 0,
-                initialNavTop: this.refs['children-container'].getBoundingClientRect().top - 2
-
-            });
+            if (document) return (document.body.offsetWidth - element.offsetWidth) / 2;
         }
     }, {
         key: 'render',
@@ -13595,7 +13560,8 @@ var Body = function (_React$Component) {
             var _props = this.props,
                 model = _props.model,
                 children = _props.children,
-                displayPostInfo = _props.displayPostInfo;
+                displayPostInfo = _props.displayPostInfo,
+                displayHeader = _props.displayHeader;
 
 
             var date = model.modified_date ? new Date(model.modified_date) : new Date(model.created_date);
@@ -13605,6 +13571,19 @@ var Body = function (_React$Component) {
             if (this.state.scrollY > 10) {
 
                 scrollTopStyle = { opacity: 1, marginTop: 0, color: 'rgb(156, 156, 156)' };
+            }
+
+            var navFixed = false;
+            var navRight = '';
+            var navTop = void 0;
+
+            if (this.refs.nav) {
+
+                navFixed = this.state.scrollY > this.refs.nav.parentNode.parentNode.parentNode.offsetTop;
+
+                navRight = navFixed ? this.offsetRight(this.refs.nav.parentNode) : '';
+
+                navTop = screen.availHeight / 4 + 10;
             }
 
             return _react2.default.createElement(
@@ -13635,19 +13614,17 @@ var Body = function (_React$Component) {
                                 id: 'post-nav',
                                 ref: 'nav',
                                 style: {
-                                    position: typeof window !== 'undefined' ? !this.props.displayHeader ? 'fixed' : this.state.scrollY < (window.outerHeight + (screen.availHeight - (screen.availHeight - window.outerHeight) - window.innerHeight)) / 4 ? 'absolute' : 'fixed' : '',
-                                    marginRight: typeof window !== 'undefined' ? !this.props.displayHeader ? this.state.scrollRight : this.state.scrollY < (window.outerHeight + (screen.availHeight - (screen.availHeight - window.outerHeight) - window.innerHeight)) / 4 ? 0 : this.state.scrollRight : '',
-                                    top: '50%',
-                                    transform: 'translate(0,-50%)',
-                                    zIndex: 20
+                                    position: navFixed ? 'fixed' : 'absolute',
+                                    marginRight: 0,
+                                    top: navTop,
+                                    zIndex: 20,
+                                    right: navRight
                                 }
                             },
                             _react2.default.createElement(
                                 'div',
                                 {
-                                    style: {
-                                        marginRight: 20
-                                    }
+                                    style: {}
                                 },
                                 _react2.default.createElement(_fontAwesomeButton2.default, {
                                     className: 'fa-user-o',
@@ -13810,18 +13787,8 @@ var Body = function (_React$Component) {
                                         _react2.default.createElement(
                                             'span',
                                             { style: { marginRight: 3 } },
-                                            ', Jan 28 2012'
-                                        ),
-                                        _react2.default.createElement(_literallyClock2.default, {
-                                            hour: date.getHours(),
-                                            minute: date.getMinutes(),
-                                            second: date.getSeconds(),
-                                            size: 17,
-                                            colors: {
-                                                second: 'rgb(76, 211, 173)'
-                                            },
-                                            style: { marginTop: 4, float: 'right' }
-                                        })
+                                            ', Jan 28 2012 ' + (date.getHours() >= 12 ? 'PM' : 'AM')
+                                        )
                                     )
                                 })
                             )
@@ -57658,7 +57625,7 @@ var Contact = function (_React$Component) {
                             position: 'absolute',
                             top: '50%',
                             transform: 'translate(-50%,-50%)',
-                            width: 450
+                            width: 500
                         },
                         onClick: function onClick(event) {
 

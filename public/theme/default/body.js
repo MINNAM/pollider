@@ -13,36 +13,6 @@ import Project from '../../../client/components/project-editor/model/project';
 
 import LiterallyClock from './components/literally-clock/components/literally-clock.js';
 
-const Calendar = ( props ) => {
-
-    const months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-    ];
-
-    const { month, day, year } = props;
-
-
-    return (
-        <div>
-            <span style = {{ fontSize : 12, display : 'block', textAlign : 'center', textTransform : 'uppercase'}}>{ months[ month ]}</span>
-            <span style = {{ fontSize : 24, display : 'block', textAlign : 'center', marginTop : -5.5 }}>{ day }</span>
-            <span style = {{ fontSize : 12, display : 'block', textAlign : 'center', marginTop : -1.5 }}>{ year }</span>
-        </div>
-    );
-
-}
-
 
 class Body extends React.Component {
 
@@ -56,7 +26,7 @@ class Body extends React.Component {
 
             this.state = { scrollY : window.scrollY, navTop  : 0 };
 
-            window.addEventListener( 'scroll', () => {
+            window.addEventListener( 'scroll', () => {                
 
                 this.setState({
                     scrollY : window.scrollY
@@ -69,22 +39,16 @@ class Body extends React.Component {
 
     }
 
-    componentDidMount () {
+    offsetRight ( element ) {
 
-        this.setState({
-
-            navTop : 0,
-            initialNavTop : this.refs[ 'children-container' ].getBoundingClientRect().top - 2
-
-        });
-
-
+        if ( document )
+            return (document.body.offsetWidth - ( element.offsetWidth) ) / 2;
 
     }
 
     render () {
 
-        const { model, children, displayPostInfo } = this.props;
+        const { model, children, displayPostInfo, displayHeader } = this.props;
 
         const date = model.modified_date ? new Date( model.modified_date ) : new Date( model.created_date );
 
@@ -95,6 +59,22 @@ class Body extends React.Component {
             scrollTopStyle = {  opacity : 1, marginTop: 0 , color : 'rgb(156, 156, 156)' };
 
         }
+
+        let navFixed = false;
+        let navRight = '';
+        let navTop;
+
+        if ( this.refs.nav ) {
+
+            navFixed = this.state.scrollY > this.refs.nav.parentNode.parentNode.parentNode.offsetTop;
+
+            navRight = navFixed ? this.offsetRight( this.refs.nav.parentNode ) : '';
+
+            navTop = (screen.availHeight / 4) + 10;
+
+
+        }
+
 
         return (
             <div
@@ -120,16 +100,16 @@ class Body extends React.Component {
                             id    = 'post-nav'
                             ref   = 'nav'
                             style = {{
-                                position : typeof( window ) !== 'undefined' ? (!this.props.displayHeader ? 'fixed' : ( this.state.scrollY < (window.outerHeight + ((screen.availHeight - (screen.availHeight-window.outerHeight)) - window.innerHeight) ) /4  ? 'absolute' : 'fixed' )) : '',
-                                marginRight : typeof( window ) !== 'undefined' ? (!this.props.displayHeader ? this.state.scrollRight : ( this.state.scrollY < (window.outerHeight + ((screen.availHeight - (screen.availHeight-window.outerHeight)) - window.innerHeight) ) / 4  ? 0 : this.state.scrollRight )) : '',
-                                top : '50%',
-                                transform : 'translate(0,-50%)',
-                                zIndex    : 20
+                                position : navFixed ? 'fixed' : 'absolute',
+                                marginRight : 0,
+                                top : navTop,
+                                zIndex    : 20,
+                                right : navRight
                             }}
                         >
                             <div
                                 style = {{
-                                    marginRight : 20
+
                                 }}
                             >
                                 <FontAwesomeButton
@@ -142,7 +122,7 @@ class Body extends React.Component {
                                     parentStyle = {{
                                         marginBottom : 40,
                                         position     : 'relative',
-                                        float        : 'right'
+                                        float : 'right'
                                     }}
                                     onClick = {() => {
 
@@ -161,7 +141,7 @@ class Body extends React.Component {
                                     parentStyle = {{
                                         marginBottom : 40,
                                         position     : 'relative',
-                                        float        : 'right'
+                                        float : 'right'
                                     }}
                                     onClick = {() => {
 
@@ -181,7 +161,7 @@ class Body extends React.Component {
                                     parentStyle = {{
                                         marginBottom : 40,
                                         position     : 'relative',
-                                        float        : 'right'
+                                        float : 'right'
                                     }}
                                     onClick = { () => {
 
@@ -289,17 +269,7 @@ class Body extends React.Component {
                                         <span>
                                             {'by '}
                                             <a>{`${model.first_name} ${model.last_name}`}</a>
-                                            <span style = {{ marginRight : 3 }}>{`, Jan 28 2012`}</span>
-                                            <LiterallyClock
-                                                hour = { date.getHours() }
-                                                minute = { date.getMinutes() }
-                                                second = { date.getSeconds() }
-                                                size = {17}
-                                                colors = {{
-                                                    second : 'rgb(76, 211, 173)'
-                                                }}
-                                                style = {{ marginTop : 4, float : 'right' }}
-                                            />
+                                            <span style = {{ marginRight : 3 }}>{`, Jan 28 2012 ${date.getHours() >= 12 ? 'PM' : 'AM' }` }</span>
                                         </span>
                                     }
                                 />

@@ -62956,7 +62956,7 @@ var ElementView = function (_React$Component) {
                                     display: 'inline-block',
                                     color: 'rgb(220,220,220)',
                                     padding: '5px 20px 5px 5px',
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'monaco',
                                     letterSpacing: '0px',
                                     lineHeight: '21px',
                                     fontSize: 14,

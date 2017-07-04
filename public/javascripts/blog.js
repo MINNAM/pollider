@@ -33106,7 +33106,8 @@ var Index = function (_React$Component) {
                 _react2.default.createElement(_profile2.default, {
                     display: displayProfile,
                     toggle: this.toggleProfile.bind(this),
-                    toggleContact: this.toggleContact
+                    toggleContact: this.toggleContact,
+                    model: model
                 })
             );
         }
@@ -58834,6 +58835,10 @@ var _closeButton = __webpack_require__(46);
 
 var _closeButton2 = _interopRequireDefault(_closeButton);
 
+var _fontAwesomeButton = __webpack_require__(47);
+
+var _fontAwesomeButton2 = _interopRequireDefault(_fontAwesomeButton);
+
 var _input = __webpack_require__(83);
 
 var _input2 = _interopRequireDefault(_input);
@@ -58845,10 +58850,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var LANGUAGES = ['Android', 'C++', 'Javascript', 'MYSQL', 'MongoDB', 'Node.js', 'PHP', 'SuperCollider'];
-
-var APPLICATIONS = ['Illustrator', 'Photoshop', 'Protools'];
 
 var Profile = function (_React$Component) {
     _inherits(Profile, _React$Component);
@@ -58870,7 +58871,8 @@ var Profile = function (_React$Component) {
 
             var _props = this.props,
                 display = _props.display,
-                toggle = _props.toggle;
+                toggle = _props.toggle,
+                model = _props.model;
 
 
             return _react2.default.createElement(
@@ -58912,6 +58914,32 @@ var Profile = function (_React$Component) {
                         hoverStyle: { stroke: 'rgb(160,160,160)' },
                         size: 17,
                         onClick: toggle
+                    }),
+                    _react2.default.createElement(_fontAwesomeButton2.default, {
+                        className: 'fa-vimeo',
+                        size: 24,
+                        iconStyle: { color: 'rgb(180,180,180)' },
+                        hoverStyle: { color: 'rgb(120,120,120)' },
+                        parentStyle: {
+                            marginTop: 15,
+                            marginRight: 15,
+                            float: 'right',
+                            position: 'relative'
+                        },
+                        url: 'https://vimeo.com/jabuem'
+                    }),
+                    _react2.default.createElement(_fontAwesomeButton2.default, {
+                        className: 'fa-github',
+                        size: 24,
+                        iconStyle: { color: 'rgb(180,180,180)' },
+                        hoverStyle: { color: 'rgb(120,120,120)' },
+                        parentStyle: {
+                            marginTop: 15,
+                            marginRight: 20,
+                            float: 'right',
+                            position: 'relative'
+                        },
+                        url: 'https://github.com/MINNAM'
                     }),
                     _react2.default.createElement(
                         'div',
@@ -59017,7 +59045,8 @@ var Profile = function (_React$Component) {
                                     position: 'absolute',
                                     bottom: 0,
                                     left: 0,
-                                    transition: '.25s all'
+                                    transition: '.25s all',
+                                    display: 'none' //model.status == 'private' ? 'inline' : 'none'
                                 },
 
                                 onMouseEnter: function onMouseEnter() {
@@ -59030,9 +59059,8 @@ var Profile = function (_React$Component) {
                                     _this2.setState({
                                         downloadMouseEnter: false
                                     });
-                                },
+                                }
 
-                                onClick: function onClick() {}
                             },
                             'Download CV'
                         )

@@ -362,6 +362,7 @@ class Index extends React.Component {
                     display  = { displayProfile }
                     toggle = { this.toggleProfile.bind( this ) }
                     toggleContact = { this.toggleContact }
+                    model = { model }
                 />
             </div>
 

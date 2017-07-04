@@ -1,26 +1,7 @@
 import React from 'react';
 import CloseButton from './components/ui/buttons/close-button.js';
+import FontAwesomeButton from './components/ui/buttons/font-awesome-button.js';
 import Input from './components/input.js';
-
-const LANGUAGES = [
-    'Android',
-    'C++',
-    'Javascript',
-    'MYSQL',
-    'MongoDB',
-    'Node.js',
-    'PHP',
-    'SuperCollider',
-]
-
-const APPLICATIONS = [
-
-    'Illustrator',
-    'Photoshop',
-    'Protools',
-
-]
-
 
 
 class Profile extends React.Component {
@@ -35,7 +16,8 @@ class Profile extends React.Component {
     }
 
     render () {
-        const { display, toggle } = this.props;
+
+        const { display, toggle, model } = this.props;
 
         return (
 
@@ -75,6 +57,32 @@ class Profile extends React.Component {
                         hoverStyle  = {{ stroke : 'rgb(160,160,160)' }}
                         size    = { 17 }
                         onClick = { toggle }
+                    />
+                    <FontAwesomeButton
+                        className   = 'fa-vimeo'
+                        size        = { 24 }
+                        iconStyle   = {{ color: 'rgb(180,180,180)' }}
+                        hoverStyle  = {{ color : 'rgb(120,120,120)' }}
+                        parentStyle = {{
+                            marginTop : 15,
+                            marginRight : 15,
+                            float     : 'right',
+                            position  : 'relative'
+                        }}
+                        url         = { 'https://vimeo.com/jabuem' }
+                    />
+                    <FontAwesomeButton
+                        className   = 'fa-github'
+                        size        = { 24 }
+                        iconStyle   = {{ color : 'rgb(180,180,180)' }}
+                        hoverStyle  = {{ color : 'rgb(120,120,120)' }}
+                        parentStyle = {{
+                            marginTop   : 15,
+                            marginRight : 20,
+                            float       : 'right',
+                            position    : 'relative'
+                        }}
+                        url =  { 'https://github.com/MINNAM' }
                     />
                     <div
                         style = {{
@@ -158,7 +166,8 @@ class Profile extends React.Component {
                                 position : 'absolute',
                                 bottom : 0,
                                 left : 0,
-                                transition : '.25s all'
+                                transition : '.25s all',
+                                display : 'none' //model.status == 'private' ? 'inline' : 'none'
                             }}
 
                             onMouseEnter = { () => {
@@ -173,10 +182,6 @@ class Profile extends React.Component {
                                 })
                             }}
 
-
-                            onClick = {() => {
-
-                            }}
                         >
                             Download CV
                         </button>

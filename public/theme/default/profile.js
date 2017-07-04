@@ -79,7 +79,7 @@ class Profile extends React.Component {
                     <div
                         style = {{
                             background : 'white',
-                            padding    : '50px 15px 90px 15px',
+                            padding    : '50px 15px 60px 15px',
                         }}
                     >
                         <span
@@ -143,68 +143,6 @@ class Profile extends React.Component {
                             </span>
                         </div>
 
-                        <div
-                            style = {{
-                                marginTop : 20,
-                                marginBottom : 20
-                            }}
-                        >
-                            <span
-                                style = {{
-                                    borderBottom : '2px solid rgb(220,220,220)',
-                                    margin : '10px 0 10px 0',
-                                    display : 'block'
-                                }}
-                            />
-                            <p
-                                style = {{
-                                    marginTop : 15
-                                }}
-                            >
-                                {
-                                    LANGUAGES.map( ( element, key ) => {
-
-                                        return (
-                                            <span
-                                                style = {{
-                                                    fontSize: 15,
-                                                    marginTop: 0,
-                                                    letterSpacing: 1,
-                                                    fontFamily: 'hind',
-                                                    fontWeight: 300,
-                                                }}
-                                            >{`${element}, `}</span>
-                                        )
-
-                                    })
-                                }
-                                <span
-                                    style = {{
-                                        borderBottom : '2px solid rgb(220,220,220)',
-                                        margin : '10px 0 10px 0',
-                                        display : 'block'
-                                    }}
-                                />
-                                {
-                                    APPLICATIONS.map( ( element, key ) => {
-
-                                        return (
-                                            <span
-                                                style = {{
-                                                    fontSize: 15,
-                                                    marginTop: 0,
-                                                    letterSpacing: 1,
-                                                    fontFamily: 'hind',
-                                                    fontWeight: 300,
-                                                }}
-                                            >{`${element}, `}</span>
-                                        )
-
-                                    })
-                                }
-                            </p>
-                        </div>
-
                         <button
                             style = {{
                                 background : `rgba(76, 211, 173,${this.state.downloadMouseEnter ? 1 : 0.9  })`,
@@ -218,7 +156,7 @@ class Profile extends React.Component {
                                 outline : 'none',
                                 width : '100%',
                                 position : 'absolute',
-                                bottom : 40,
+                                bottom : 0,
                                 left : 0,
                                 transition : '.25s all'
                             }}
@@ -241,43 +179,6 @@ class Profile extends React.Component {
                             }}
                         >
                             Download CV
-                        </button>
-                        <button
-                            style = {{
-                                background : `rgba(76, 211, 173,${this.state.contactMouseEnter ? 1 : 0.9  })`,
-                                border : 'none',
-                                color : 'white',
-                                float : 'right',
-                                fontWeight : 500,
-                                height : 40,
-                                letterSpacing : '1px',
-                                lineHeight : '40px',
-                                outline : 'none',
-                                width : '100%',
-                                position : 'absolute',
-                                bottom : 0,
-                                left : 0,
-                                transition : '.25s all'
-                            }}
-
-                            onMouseEnter = { () => {
-                                this.setState({
-                                    contactMouseEnter : true
-                                })
-                            }}
-
-                            onMouseLeave = { () => {
-                                this.setState({
-                                    contactMouseEnter : false
-                                })
-                            }}
-
-
-                            onClick = {() => {
-                                this.props.toggleContact();
-                            }}
-                        >
-                            Contact
                         </button>
                     </div>
                 </div>

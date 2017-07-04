@@ -20,6 +20,8 @@ import Index from '../public/theme/default/index.js';
 import HomePage from '../public/theme/default/home-page.js';
 import _Post from '../public/theme/default/post.js';
 
+import Mail from './mail.js';
+
 
 const routes   = createRoutes(appRouter());
 const database = new Database();
@@ -286,21 +288,58 @@ router.post( '/contact', ( req, res ) => {
 
     if ( req.body ) {
 
-
-
         req.body.map( ( element ) => {
 
             data[ element.id ] = element.value
 
         });
 
+        const mail = new Mail();
+
+        mail.send({
+            from    : data[ 'email' ],
+            to      : 'nsm12889@gmail.com',
+            subject : `Message from ${ data['first_name'] } ${ data['last_name'] } ${ data['company'] ? `@ ${ data['company'] }` : '' }`,
+            text    : data[ 'message' ]
+
+        }, ( sent ) => {
+
+            mail.send({
+                from    : 'nsm12889@gmail.com',
+                to      : data[ 'email' ],
+                subject : `Sung Min Nam | Contact Receipt`,
+                html    : `
+                    <div>
+                        <p>
+                            Hello ${ data[ 'first_name' ] },
+                            <br />
+                            <br />
+                            Thank you for your inquiry. <br />
+                            I'll get back to you soon!
+                            <br />
+                            <br />
+                            Sung Min
+                            <br />
+                            <br />
+                            -----------------------------------
+                            ${ data[ 'message' ] }
+
+                        </p>
+                    </div>
+                `
+
+            }, ( sent ) => {
+
+                res.send( sent );
+
+            });
+
+
+
+        });
+
     }
-
-    console.log( data );
-
-    res.send( data );
-
-
+    
 });
 
 const handleContainer = function ( row, res ) {

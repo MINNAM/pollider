@@ -1,15 +1,16 @@
 var nodemailer = require('nodemailer');
 var xoauth2 = require('xoauth2');
+import request    from 'request';
 
 
 class Mail {
 
     constructor () {
 
-        this.user          = "eric@startsmartedu.com";
-        this.client_secret = 'Wufk8Br064zHAv8Kge4dV2k9';
-        this.refresh_token = '1/SIHSv8_CFFZo5OtQ-Yqoza371yyICd6C9kDRX_b1U2A1NymtxwN6_B9mwTwTB5v-';
-        this.client_id     = '521648276911-9kht2f7ugj52lq91nkh58vq3c0qu5hmq.apps.googleusercontent.com';
+        this.user          = "nsm12889@gmail.com";
+        this.client_secret = 'sPcOSXz411zYY86lqBt-EPM2';
+        this.refresh_token = '1/N_db7Q7KHUCEhauHP16iJhcYuJuJK3xBQqnYZb-JLBd3Ax8gu9F406ypGvyKcITs';
+        this.client_id     = '518157074136-9vl3cgjaup45hk583v0bq9mvncdpdget.apps.googleusercontent.com';
 
     }
 
@@ -34,16 +35,6 @@ class Mail {
             }
 
         );
-
-    }
-
-    html () {
-
-        return `
-
-
-
-        `;
 
     }
 
@@ -78,19 +69,14 @@ class Mail {
             // send mail with defined transport object
             transporter.sendMail( mailOptions, function( error, info ){
 
-                if ( error ) {
-
-                    console.log( error );
-
-                }
-
-                console.log( info );
+                if ( !error )
+                    done( true );
 
             });
 
-        })
+        });
     }
 
 }
 
-const mail = new Mail();
+export default Mail;

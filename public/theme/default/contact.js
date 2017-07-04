@@ -62,9 +62,9 @@ class Contact extends React.Component {
 
     send ( done ) {
 
-        // this.setState({
-        //     sending : true
-        // });
+        this.setState({
+            sending : true
+        });
 
         $.ajax({
 
@@ -75,7 +75,10 @@ class Contact extends React.Component {
             dataType    : "json",
             success     : ( response ) => {
 
-                console.log( response );
+                this.setState({
+                    sending : false,
+                    sent : true
+                });
 
             }
 

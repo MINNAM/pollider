@@ -57697,10 +57697,11 @@ var Contact = function (_React$Component) {
     _createClass(Contact, [{
         key: 'send',
         value: function send(done) {
+            var _this2 = this;
 
-            // this.setState({
-            //     sending : true
-            // });
+            this.setState({
+                sending: true
+            });
 
             _jquery2.default.ajax({
 
@@ -57711,7 +57712,10 @@ var Contact = function (_React$Component) {
                 dataType: "json",
                 success: function success(response) {
 
-                    console.log(response);
+                    _this2.setState({
+                        sending: false,
+                        sent: true
+                    });
                 }
 
             });
@@ -57731,7 +57735,7 @@ var Contact = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             var _props = this.props,
                 display = _props.display,
@@ -57798,7 +57802,7 @@ var Contact = function (_React$Component) {
                                             label: element.label,
                                             value: element.value,
                                             error: element.error,
-                                            disabled: _this2.state.sent,
+                                            disabled: _this3.state.sent,
                                             required: element.required,
                                             onChange: function onChange(value) {
                                                 var _data = [].concat(_toConsumableArray(data));
@@ -57806,7 +57810,7 @@ var Contact = function (_React$Component) {
                                                 _data[key].value = value;
                                                 _data[key].error = false;
 
-                                                _this2.setState({ _data: data });
+                                                _this3.setState({ _data: data });
                                             }
                                         });
                                         break;
@@ -57818,7 +57822,7 @@ var Contact = function (_React$Component) {
                                             key: key,
                                             label: element.label,
                                             value: element.value,
-                                            disabled: _this2.state.sent || _this2.state.sending,
+                                            disabled: _this3.state.sent || _this3.state.sending,
                                             multiline: true,
                                             error: element.error,
                                             required: element.required,
@@ -57828,7 +57832,7 @@ var Contact = function (_React$Component) {
                                                 _data[key].value = value;
                                                 _data[key].error = false;
 
-                                                _this2.setState({ _data: data });
+                                                _this3.setState({ _data: data });
                                             },
                                             max: 500
                                         });
@@ -57859,20 +57863,20 @@ var Contact = function (_React$Component) {
                                 },
 
                                 onMouseEnter: function onMouseEnter() {
-                                    _this2.setState({
+                                    _this3.setState({
                                         submitMouseEnter: true
                                     });
                                 },
 
                                 onMouseLeave: function onMouseLeave() {
-                                    _this2.setState({
+                                    _this3.setState({
                                         submitMouseEnter: false
                                     });
                                 },
 
                                 onClick: function onClick() {
 
-                                    var _data = [].concat(_toConsumableArray(_this2.state.data));
+                                    var _data = [].concat(_toConsumableArray(_this3.state.data));
 
                                     _data.map(function (element) {
 
@@ -57920,14 +57924,14 @@ var Contact = function (_React$Component) {
                                         }
                                     });
 
-                                    _this2.setState({
+                                    _this3.setState({
 
                                         data: _data
                                     });
 
                                     var errors = 0;
 
-                                    _this2.state.data.map(function (element) {
+                                    _this3.state.data.map(function (element) {
 
                                         if (element.error) {
 
@@ -57937,7 +57941,7 @@ var Contact = function (_React$Component) {
 
                                     if (errors == 0) {
 
-                                        _this2.send(function () {
+                                        _this3.send(function () {
 
                                             // toggle();
 
@@ -58914,7 +58918,7 @@ var Profile = function (_React$Component) {
                         {
                             style: {
                                 background: 'white',
-                                padding: '50px 15px 90px 15px'
+                                padding: '50px 15px 60px 15px'
                             }
                         },
                         _react2.default.createElement(
@@ -58997,69 +59001,6 @@ var Profile = function (_React$Component) {
                             )
                         ),
                         _react2.default.createElement(
-                            'div',
-                            {
-                                style: {
-                                    marginTop: 20,
-                                    marginBottom: 20
-                                }
-                            },
-                            _react2.default.createElement('span', {
-                                style: {
-                                    borderBottom: '2px solid rgb(220,220,220)',
-                                    margin: '10px 0 10px 0',
-                                    display: 'block'
-                                }
-                            }),
-                            _react2.default.createElement(
-                                'p',
-                                {
-                                    style: {
-                                        marginTop: 15
-                                    }
-                                },
-                                LANGUAGES.map(function (element, key) {
-
-                                    return _react2.default.createElement(
-                                        'span',
-                                        {
-                                            style: {
-                                                fontSize: 15,
-                                                marginTop: 0,
-                                                letterSpacing: 1,
-                                                fontFamily: 'hind',
-                                                fontWeight: 300
-                                            }
-                                        },
-                                        element + ', '
-                                    );
-                                }),
-                                _react2.default.createElement('span', {
-                                    style: {
-                                        borderBottom: '2px solid rgb(220,220,220)',
-                                        margin: '10px 0 10px 0',
-                                        display: 'block'
-                                    }
-                                }),
-                                APPLICATIONS.map(function (element, key) {
-
-                                    return _react2.default.createElement(
-                                        'span',
-                                        {
-                                            style: {
-                                                fontSize: 15,
-                                                marginTop: 0,
-                                                letterSpacing: 1,
-                                                fontFamily: 'hind',
-                                                fontWeight: 300
-                                            }
-                                        },
-                                        element + ', '
-                                    );
-                                })
-                            )
-                        ),
-                        _react2.default.createElement(
                             'button',
                             {
                                 style: {
@@ -59074,7 +59015,7 @@ var Profile = function (_React$Component) {
                                     outline: 'none',
                                     width: '100%',
                                     position: 'absolute',
-                                    bottom: 40,
+                                    bottom: 0,
                                     left: 0,
                                     transition: '.25s all'
                                 },
@@ -59094,44 +59035,6 @@ var Profile = function (_React$Component) {
                                 onClick: function onClick() {}
                             },
                             'Download CV'
-                        ),
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                style: {
-                                    background: 'rgba(76, 211, 173,' + (this.state.contactMouseEnter ? 1 : 0.9) + ')',
-                                    border: 'none',
-                                    color: 'white',
-                                    float: 'right',
-                                    fontWeight: 500,
-                                    height: 40,
-                                    letterSpacing: '1px',
-                                    lineHeight: '40px',
-                                    outline: 'none',
-                                    width: '100%',
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    left: 0,
-                                    transition: '.25s all'
-                                },
-
-                                onMouseEnter: function onMouseEnter() {
-                                    _this2.setState({
-                                        contactMouseEnter: true
-                                    });
-                                },
-
-                                onMouseLeave: function onMouseLeave() {
-                                    _this2.setState({
-                                        contactMouseEnter: false
-                                    });
-                                },
-
-                                onClick: function onClick() {
-                                    _this2.props.toggleContact();
-                                }
-                            },
-                            'Contact'
                         )
                     )
                 )

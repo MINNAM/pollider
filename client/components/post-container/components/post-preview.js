@@ -90,25 +90,33 @@ class PostPreview extends React.Component {
                         style = {{
                             height  : 270,
                             width   : '100%',
-                            overflow: 'hidden'
+                            overflow: 'hidden',
+                            position : 'relative'
                         }}
                     >
+                        {
+                            this.props.update ? <iframe
+                                src       = { this.props.update ? this.props.hyperlink + '/' + model._hyperlink : '' }
+                                className = { 'preview' }
+                                style     = {{
 
-                        <iframe
-                            src       = { this.props.update ? this.props.hyperlink + '/' + model._hyperlink : '' }
-                            className = { 'preview' }
-                            style     = {{
+                                    display : 'inline-block',
+                                    height  : 270 * 4,
+                                    width   : '400%',
+                                    border : 'none',
+                                    transform    : 'scale( 0.25 )',
+                                    transformOrigin : '0 0'
 
-                                display : 'inline-block',
-                                height  : 270 * 4,
-                                width   : '400%',
-                                border : 'none',
-                                transform    : 'scale( 0.25 )',
-                                transformOrigin : '0 0'
-
-                            }}
-                        />
-
+                                }}
+                            /> : <CircularProgress
+                                style = {{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)'
+                                }}
+                            />
+                        }
 
                     </div>
                 );

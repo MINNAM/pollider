@@ -30965,6 +30965,8 @@ var PostContainer = function (_React$Component) {
 
             model.getPosts(this.props.postType, function () {
 
+                console.log(model.posts);
+
                 for (var key in model.posts) {
 
                     model.posts[key].update();
@@ -31747,10 +31749,11 @@ var PostContainer = function (_React$Component) {
 
                     var element = model[key];
 
-                    if (element.container > 0) {
+                    // if ( element.container > 0 ) {
 
-                        posts.push(this.populatePost(key, null, element));
-                    }
+                    posts.push(this.populatePost(key, null, element));
+
+                    // }
                 }
             }
 
@@ -32279,6 +32282,8 @@ var PostContainer = function () {
                     post.postContainerHyperlink = this.model.hyperlink;
 
                     this.posts[post.id] = post;
+
+                    console.log(this.posts[post.id]);
                 }
 
                 return this.posts[key];
@@ -59468,10 +59473,11 @@ var PostPreview = function (_React$Component) {
                             style: {
                                 height: 270,
                                 width: '100%',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                position: 'relative'
                             }
                         },
-                        _react2.default.createElement('iframe', {
+                        this.props.update ? _react2.default.createElement('iframe', {
                             src: this.props.update ? this.props.hyperlink + '/' + model._hyperlink : '',
                             className: 'preview',
                             style: {
@@ -59483,6 +59489,13 @@ var PostPreview = function (_React$Component) {
                                 transform: 'scale( 0.25 )',
                                 transformOrigin: '0 0'
 
+                            }
+                        }) : _react2.default.createElement(_CircularProgress2.default, {
+                            style: {
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)'
                             }
                         })
                     );

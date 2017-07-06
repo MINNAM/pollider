@@ -367,7 +367,7 @@ class Post {
                         rows[ 0 ].post_type_id,
                         rows[ 0 ].post_data_type_id,
                         rows[ 0 ].name,
-                        rows[ 0 ].name,
+                        rows[ 0 ].hyperlink,
                         null,
                         null,
                         null,
@@ -386,8 +386,6 @@ class Post {
                             ( err, posts ) => {
 
                                 const post = posts[ 0 ];
-
-                                console.log( 'alias', post );
 
                                 res.send({
 

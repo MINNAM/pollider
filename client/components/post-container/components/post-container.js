@@ -64,6 +64,8 @@ class PostContainer extends React.Component {
 
         model.getPosts( this.props.postType,  () => {
 
+            console.log( model.posts );
+
             for ( let key in model.posts ) {
 
                 model.posts[ key ].update();
@@ -925,11 +927,11 @@ class PostContainer extends React.Component {
 
                 let element = model[ key ];
 
-                if ( element.container > 0 ) {
+                // if ( element.container > 0 ) {
 
                     posts.push( this.populatePost( key, null, element ) );
 
-                }
+                // }
             }
         }
 

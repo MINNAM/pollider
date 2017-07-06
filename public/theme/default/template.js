@@ -33,9 +33,6 @@ export default ({ body, title, initialState }) => {
         font += `<link href="${ element }" rel="stylesheet" />`;
     });
 
-    console.log ( FONT, font );
-
-
     return `
     <!DOCTYPE html>
     <html>
@@ -56,7 +53,7 @@ export default ({ body, title, initialState }) => {
         ${
             font
         }
-        <link rel="hello" type="image/png" href="/images/favicon1.png"/>
+        <link rel="shortcut icon" href="/images/favicon.png"/>
         <link rel="stylesheet" href="/stylesheets/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.css" />

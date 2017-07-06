@@ -269,7 +269,7 @@ class Body extends React.Component {
                                     content = {
                                         <span>
                                             {'by '}
-                                            <a>{`${model.first_name} ${model.last_name}`}</a>
+                                            <span style = {{ fontWeight : 'bold' }}>{ `${model.first_name} ${model.last_name}` }</span>
                                             <span style = {{ marginRight : 3 }}>{`, Jan 28 2012 ${date.getHours() >= 12 ? 'PM' : 'AM' }` }</span>
                                         </span>
                                     }

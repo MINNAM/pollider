@@ -2992,7 +2992,7 @@ var CallbackQueue = __webpack_require__(98);
 var PooledClass = __webpack_require__(19);
 var ReactFeatureFlags = __webpack_require__(106);
 var ReactReconciler = __webpack_require__(20);
-var Transaction = __webpack_require__(41);
+var Transaction = __webpack_require__(42);
 
 var invariant = __webpack_require__(1);
 
@@ -3813,7 +3813,7 @@ module.exports = DOMProperty;
 
 module.exports = Stream;
 
-var EE = __webpack_require__(36).EventEmitter;
+var EE = __webpack_require__(37).EventEmitter;
 var inherits = __webpack_require__(16);
 
 inherits(Stream, EE);
@@ -4844,7 +4844,7 @@ module.exports = emptyObject;
 
 
 var DOMNamespaces = __webpack_require__(56);
-var setInnerHTML = __webpack_require__(43);
+var setInnerHTML = __webpack_require__(44);
 
 var createMicrosoftUnsafeLocalFunction = __webpack_require__(63);
 var setTextContent = __webpack_require__(121);
@@ -4977,7 +4977,7 @@ var _textStyle = __webpack_require__(294);
 
 var _textStyle2 = _interopRequireDefault(_textStyle);
 
-var _fontAwesomeButton = __webpack_require__(47);
+var _fontAwesomeButton = __webpack_require__(34);
 
 var _fontAwesomeButton2 = _interopRequireDefault(_fontAwesomeButton);
 
@@ -5539,7 +5539,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _prodInvariant = __webpack_require__(3);
 
-var EventPluginRegistry = __webpack_require__(38);
+var EventPluginRegistry = __webpack_require__(39);
 var EventPluginUtils = __webpack_require__(57);
 var ReactErrorUtils = __webpack_require__(61);
 
@@ -6072,6 +6072,147 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(5);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _buttonBase = __webpack_require__(131);
+
+var _buttonBase2 = _interopRequireDefault(_buttonBase);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FontAwesomeButton = function (_React$Component) {
+    _inherits(FontAwesomeButton, _React$Component);
+
+    function FontAwesomeButton(props) {
+        _classCallCheck(this, FontAwesomeButton);
+
+        var _this = _possibleConstructorReturn(this, (FontAwesomeButton.__proto__ || Object.getPrototypeOf(FontAwesomeButton)).call(this, props));
+
+        _this.state = {
+            mouseOver: false
+        };
+
+        return _this;
+    }
+
+    _createClass(FontAwesomeButton, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var _props = this.props,
+                size = _props.size,
+                parentStyle = _props.parentStyle,
+                iconStyle = _props.iconStyle,
+                hoverStyle = _props.hoverStyle,
+                className = _props.className,
+                _onClick = _props.onClick;
+
+
+            var _parentStyle = _extends({}, parentStyle, {
+                width: size,
+                height: size
+
+            });
+
+            var primaryIconStyle = _extends({
+                fontSize: size
+            }, iconStyle, {
+                width: '100%',
+                textAlign: 'center',
+                transition: '.25s all',
+                position: 'absolute',
+                top: 0,
+                left: 0
+            });
+
+            if (this.state.mouseOver) {
+
+                primaryIconStyle = _extends({}, primaryIconStyle, hoverStyle);
+            }
+
+            var primary = _react2.default.createElement('i', { className: '' + ('fa ' + className), style: primaryIconStyle });
+
+            return this.props.url ? _react2.default.createElement(
+                'a',
+                { href: this.props.url, target: '_blank' },
+                _react2.default.createElement(_buttonBase2.default, {
+                    onMouseOver: function onMouseOver() {
+
+                        _this2.setState({
+                            mouseOver: true
+                        });
+                    },
+
+                    onMouseLeave: function onMouseLeave() {
+
+                        _this2.setState({
+                            mouseOver: false
+                        });
+                    },
+                    onClick: function onClick() {
+                        if (_onClick) {
+                            _onClick();
+                        }
+                    },
+                    parentStyle: _parentStyle,
+                    size: size,
+                    primary: primary
+                })
+            ) : _react2.default.createElement(_buttonBase2.default, {
+                onMouseOver: function onMouseOver() {
+
+                    _this2.setState({
+                        mouseOver: true
+                    });
+                },
+
+                onMouseLeave: function onMouseLeave() {
+
+                    _this2.setState({
+                        mouseOver: false
+                    });
+                },
+                onClick: function onClick() {
+                    if (_onClick) {
+                        _onClick();
+                    }
+                },
+                parentStyle: _parentStyle,
+                size: size,
+                primary: primary
+            });
+        }
+    }]);
+
+    return FontAwesomeButton;
+}(_react2.default.Component);
+
+exports.default = FontAwesomeButton;
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 /* Pollider */
@@ -6236,7 +6377,7 @@ var Post = function () {
 exports.default = Post;
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6597,7 +6738,7 @@ var Project = function (_ProjectBase) {
 exports.default = Project;
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6876,7 +7017,7 @@ function isUndefined(arg) {
 }
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6985,7 +7126,7 @@ exports.setTyped = function (on) {
 exports.setTyped(TYPED_OK);
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7246,7 +7387,7 @@ module.exports = EventPluginRegistry;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7264,7 +7405,7 @@ module.exports = EventPluginRegistry;
 
 var _assign = __webpack_require__(6);
 
-var EventPluginRegistry = __webpack_require__(38);
+var EventPluginRegistry = __webpack_require__(39);
 var ReactEventEmitterMixin = __webpack_require__(221);
 var ViewportMetrics = __webpack_require__(115);
 
@@ -7579,7 +7720,7 @@ var ReactBrowserEventEmitter = _assign({}, ReactEventEmitterMixin, {
 module.exports = ReactBrowserEventEmitter;
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7656,7 +7797,7 @@ SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 module.exports = SyntheticMouseEvent;
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7887,7 +8028,7 @@ module.exports = TransactionImpl;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8015,7 +8156,7 @@ function escapeTextContentForBrowser(text) {
 module.exports = escapeTextContentForBrowser;
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8118,7 +8259,7 @@ if (ExecutionEnvironment.canUseDOM) {
 module.exports = setInnerHTML;
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8833,7 +8974,7 @@ Url.prototype.parseHost = function () {
 };
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8902,7 +9043,7 @@ var Heading = function Heading(props) {
 exports.default = Heading;
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9025,147 +9166,6 @@ var CloseButton = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = CloseButton;
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(5);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _buttonBase = __webpack_require__(131);
-
-var _buttonBase2 = _interopRequireDefault(_buttonBase);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FontAwesomeButton = function (_React$Component) {
-    _inherits(FontAwesomeButton, _React$Component);
-
-    function FontAwesomeButton(props) {
-        _classCallCheck(this, FontAwesomeButton);
-
-        var _this = _possibleConstructorReturn(this, (FontAwesomeButton.__proto__ || Object.getPrototypeOf(FontAwesomeButton)).call(this, props));
-
-        _this.state = {
-            mouseOver: false
-        };
-
-        return _this;
-    }
-
-    _createClass(FontAwesomeButton, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            var _props = this.props,
-                size = _props.size,
-                parentStyle = _props.parentStyle,
-                iconStyle = _props.iconStyle,
-                hoverStyle = _props.hoverStyle,
-                className = _props.className,
-                _onClick = _props.onClick;
-
-
-            var _parentStyle = _extends({}, parentStyle, {
-                width: size,
-                height: size
-
-            });
-
-            var primaryIconStyle = _extends({
-                fontSize: size
-            }, iconStyle, {
-                width: '100%',
-                textAlign: 'center',
-                transition: '.25s all',
-                position: 'absolute',
-                top: 0,
-                left: 0
-            });
-
-            if (this.state.mouseOver) {
-
-                primaryIconStyle = _extends({}, primaryIconStyle, hoverStyle);
-            }
-
-            var primary = _react2.default.createElement('i', { className: '' + ('fa ' + className), style: primaryIconStyle });
-
-            return this.props.url ? _react2.default.createElement(
-                'a',
-                { href: this.props.url, target: '_blank' },
-                _react2.default.createElement(_buttonBase2.default, {
-                    onMouseOver: function onMouseOver() {
-
-                        _this2.setState({
-                            mouseOver: true
-                        });
-                    },
-
-                    onMouseLeave: function onMouseLeave() {
-
-                        _this2.setState({
-                            mouseOver: false
-                        });
-                    },
-                    onClick: function onClick() {
-                        if (_onClick) {
-                            _onClick();
-                        }
-                    },
-                    parentStyle: _parentStyle,
-                    size: size,
-                    primary: primary
-                })
-            ) : _react2.default.createElement(_buttonBase2.default, {
-                onMouseOver: function onMouseOver() {
-
-                    _this2.setState({
-                        mouseOver: true
-                    });
-                },
-
-                onMouseLeave: function onMouseLeave() {
-
-                    _this2.setState({
-                        mouseOver: false
-                    });
-                },
-                onClick: function onClick() {
-                    if (_onClick) {
-                        _onClick();
-                    }
-                },
-                parentStyle: _parentStyle,
-                size: size,
-                primary: primary
-            });
-        }
-    }]);
-
-    return FontAwesomeButton;
-}(_react2.default.Component);
-
-exports.default = FontAwesomeButton;
 
 /***/ }),
 /* 48 */
@@ -19715,7 +19715,7 @@ var ReactDOMComponentTree = __webpack_require__(7);
 var ReactInstrumentation = __webpack_require__(9);
 
 var createMicrosoftUnsafeLocalFunction = __webpack_require__(63);
-var setInnerHTML = __webpack_require__(43);
+var setInnerHTML = __webpack_require__(44);
 var setTextContent = __webpack_require__(121);
 
 function getNodeAfter(parentNode, node) {
@@ -22141,7 +22141,7 @@ var Stream;
   try {
     Stream = __webpack_require__(18);
   } catch (_) {} finally {
-    if (!Stream) Stream = __webpack_require__(36).EventEmitter;
+    if (!Stream) Stream = __webpack_require__(37).EventEmitter;
   }
 })();
 /*</replacement>*/
@@ -22693,7 +22693,7 @@ if (!process.browser && process.env.READABLE_STREAM === 'disable' && Stream) {
 var ClientRequest = __webpack_require__(276);
 var extend = __webpack_require__(284);
 var statusCodes = __webpack_require__(144);
-var url = __webpack_require__(44);
+var url = __webpack_require__(45);
 
 var http = exports;
 
@@ -23548,21 +23548,21 @@ var _directory = __webpack_require__(288);
 
 var _directory2 = _interopRequireDefault(_directory);
 
-var _heading = __webpack_require__(45);
+var _heading = __webpack_require__(46);
 
 var _heading2 = _interopRequireDefault(_heading);
 
-var _fontAwesomeButton = __webpack_require__(47);
+var _fontAwesomeButton = __webpack_require__(34);
 
 var _fontAwesomeButton2 = _interopRequireDefault(_fontAwesomeButton);
 
 var _projectPreview = __webpack_require__(28);
 
-var _post = __webpack_require__(34);
+var _post = __webpack_require__(35);
 
 var _post2 = _interopRequireDefault(_post);
 
-var _project = __webpack_require__(35);
+var _project = __webpack_require__(36);
 
 var _project2 = _interopRequireDefault(_project);
 
@@ -23839,8 +23839,8 @@ var Body = function (_React$Component) {
                                         null,
                                         'by ',
                                         _react2.default.createElement(
-                                            'a',
-                                            null,
+                                            'span',
+                                            { style: { fontWeight: 'bold' } },
                                             model.first_name + ' ' + model.last_name
                                         ),
                                         _react2.default.createElement(
@@ -24107,7 +24107,7 @@ var _wrapper = __webpack_require__(48);
 
 var _wrapper2 = _interopRequireDefault(_wrapper);
 
-var _heading = __webpack_require__(45);
+var _heading = __webpack_require__(46);
 
 var _heading2 = _interopRequireDefault(_heading);
 
@@ -28302,7 +28302,7 @@ module.exports = ReactDOMSelect;
 var _assign = __webpack_require__(6);
 
 var ReactUpdates = __webpack_require__(13);
-var Transaction = __webpack_require__(41);
+var Transaction = __webpack_require__(42);
 
 var emptyFunction = __webpack_require__(12);
 
@@ -28788,7 +28788,7 @@ var _prodInvariant = __webpack_require__(3);
 var DOMLazyTree = __webpack_require__(27);
 var DOMProperty = __webpack_require__(17);
 var React = __webpack_require__(21);
-var ReactBrowserEventEmitter = __webpack_require__(39);
+var ReactBrowserEventEmitter = __webpack_require__(40);
 var ReactCurrentOwner = __webpack_require__(14);
 var ReactDOMComponentTree = __webpack_require__(7);
 var ReactDOMContainerInfo = __webpack_require__(101);
@@ -28804,7 +28804,7 @@ var ReactUpdates = __webpack_require__(13);
 var emptyObject = __webpack_require__(26);
 var instantiateReactComponent = __webpack_require__(67);
 var invariant = __webpack_require__(1);
-var setInnerHTML = __webpack_require__(43);
+var setInnerHTML = __webpack_require__(44);
 var shouldUpdateReactComponent = __webpack_require__(69);
 var warning = __webpack_require__(2);
 
@@ -29398,7 +29398,7 @@ module.exports = ReactPropTypesSecret;
 var _assign = __webpack_require__(6);
 
 var PooledClass = __webpack_require__(19);
-var Transaction = __webpack_require__(41);
+var Transaction = __webpack_require__(42);
 var ReactInstrumentation = __webpack_require__(9);
 var ReactServerUpdateQueue = __webpack_require__(233);
 
@@ -29772,8 +29772,8 @@ module.exports = isTextInputElement;
 
 
 var ExecutionEnvironment = __webpack_require__(8);
-var escapeTextContentForBrowser = __webpack_require__(42);
-var setInnerHTML = __webpack_require__(43);
+var escapeTextContentForBrowser = __webpack_require__(43);
+var setInnerHTML = __webpack_require__(44);
 
 /**
  * Set the textContent property of a node, ensuring that whitespace is preserved
@@ -30340,7 +30340,7 @@ var Duplex;
 Readable.ReadableState = ReadableState;
 
 /*<replacement>*/
-var EE = __webpack_require__(36).EventEmitter;
+var EE = __webpack_require__(37).EventEmitter;
 
 var EElistenerCount = function EElistenerCount(emitter, type) {
   return emitter.listeners(type).length;
@@ -30353,7 +30353,7 @@ var Stream;
   try {
     Stream = __webpack_require__(18);
   } catch (_) {} finally {
-    if (!Stream) Stream = __webpack_require__(36).EventEmitter;
+    if (!Stream) Stream = __webpack_require__(37).EventEmitter;
   }
 })();
 /*</replacement>*/
@@ -32722,7 +32722,7 @@ var _button = __webpack_require__(286);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _closeButton = __webpack_require__(46);
+var _closeButton = __webpack_require__(47);
 
 var _closeButton2 = _interopRequireDefault(_closeButton);
 
@@ -32730,11 +32730,11 @@ var _fold = __webpack_require__(132);
 
 var _fold2 = _interopRequireDefault(_fold);
 
-var _fontAwesomeButton = __webpack_require__(47);
+var _fontAwesomeButton = __webpack_require__(34);
 
 var _fontAwesomeButton2 = _interopRequireDefault(_fontAwesomeButton);
 
-var _heading = __webpack_require__(45);
+var _heading = __webpack_require__(46);
 
 var _heading2 = _interopRequireDefault(_heading);
 
@@ -38589,8 +38589,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * a request API compatible with window.fetch
  */
 
-var parse_url = __webpack_require__(44).parse;
-var resolve_url = __webpack_require__(44).resolve;
+var parse_url = __webpack_require__(45).parse;
+var resolve_url = __webpack_require__(45).resolve;
 var http = __webpack_require__(79);
 var https = __webpack_require__(161);
 var zlib = __webpack_require__(143);
@@ -38864,7 +38864,7 @@ Fetch.Request = Request;
  * Request class contains server only options
  */
 
-var parse_url = __webpack_require__(44).parse;
+var parse_url = __webpack_require__(45).parse;
 var Headers = __webpack_require__(53);
 var Body = __webpack_require__(52);
 
@@ -39046,7 +39046,7 @@ module.exports = {
 "use strict";
 
 
-var utils = __webpack_require__(37);
+var utils = __webpack_require__(38);
 var trees = __webpack_require__(185);
 var adler32 = __webpack_require__(94);
 var crc32 = __webpack_require__(95);
@@ -41193,7 +41193,7 @@ module.exports = function inflate_fast(strm, start) {
 "use strict";
 
 
-var utils = __webpack_require__(37);
+var utils = __webpack_require__(38);
 var adler32 = __webpack_require__(94);
 var crc32 = __webpack_require__(95);
 var inflate_fast = __webpack_require__(182);
@@ -42823,7 +42823,7 @@ exports.inflateUndermine = inflateUndermine;
 "use strict";
 
 
-var utils = __webpack_require__(37);
+var utils = __webpack_require__(38);
 
 var MAXBITS = 15;
 var ENOUGH_LENS = 852;
@@ -43141,7 +43141,7 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
 "use strict";
 
 
-var utils = __webpack_require__(37);
+var utils = __webpack_require__(38);
 
 /* Public constants ==========================================================*/
 /* ===========================================================================*/
@@ -46228,7 +46228,7 @@ module.exports = DefaultEventPluginOrder;
 
 var EventPropagators = __webpack_require__(31);
 var ReactDOMComponentTree = __webpack_require__(7);
-var SyntheticMouseEvent = __webpack_require__(40);
+var SyntheticMouseEvent = __webpack_require__(41);
 
 var eventTypes = {
   mouseEnter: {
@@ -47884,8 +47884,8 @@ var DOMNamespaces = __webpack_require__(56);
 var DOMProperty = __webpack_require__(17);
 var DOMPropertyOperations = __webpack_require__(99);
 var EventPluginHub = __webpack_require__(30);
-var EventPluginRegistry = __webpack_require__(38);
-var ReactBrowserEventEmitter = __webpack_require__(39);
+var EventPluginRegistry = __webpack_require__(39);
+var ReactBrowserEventEmitter = __webpack_require__(40);
 var ReactDOMComponentFlags = __webpack_require__(100);
 var ReactDOMComponentTree = __webpack_require__(7);
 var ReactDOMInput = __webpack_require__(209);
@@ -47897,7 +47897,7 @@ var ReactMultiChild = __webpack_require__(226);
 var ReactServerRenderingTransaction = __webpack_require__(113);
 
 var emptyFunction = __webpack_require__(12);
-var escapeTextContentForBrowser = __webpack_require__(42);
+var escapeTextContentForBrowser = __webpack_require__(43);
 var invariant = __webpack_require__(1);
 var isEventSupported = __webpack_require__(68);
 var shallowEqual = __webpack_require__(50);
@@ -49823,7 +49823,7 @@ var DOMChildrenOperations = __webpack_require__(55);
 var DOMLazyTree = __webpack_require__(27);
 var ReactDOMComponentTree = __webpack_require__(7);
 
-var escapeTextContentForBrowser = __webpack_require__(42);
+var escapeTextContentForBrowser = __webpack_require__(43);
 var invariant = __webpack_require__(1);
 var validateDOMNesting = __webpack_require__(70);
 
@@ -50295,7 +50295,7 @@ module.exports = {
 
 
 var DOMProperty = __webpack_require__(17);
-var EventPluginRegistry = __webpack_require__(38);
+var EventPluginRegistry = __webpack_require__(39);
 var ReactComponentTreeHook = __webpack_require__(10);
 
 var warning = __webpack_require__(2);
@@ -51048,7 +51048,7 @@ var EventPluginHub = __webpack_require__(30);
 var EventPluginUtils = __webpack_require__(57);
 var ReactComponentEnvironment = __webpack_require__(60);
 var ReactEmptyComponent = __webpack_require__(105);
-var ReactBrowserEventEmitter = __webpack_require__(39);
+var ReactBrowserEventEmitter = __webpack_require__(40);
 var ReactHostComponent = __webpack_require__(107);
 var ReactUpdates = __webpack_require__(13);
 
@@ -51716,10 +51716,10 @@ var _assign = __webpack_require__(6);
 
 var CallbackQueue = __webpack_require__(98);
 var PooledClass = __webpack_require__(19);
-var ReactBrowserEventEmitter = __webpack_require__(39);
+var ReactBrowserEventEmitter = __webpack_require__(40);
 var ReactInputSelection = __webpack_require__(108);
 var ReactInstrumentation = __webpack_require__(9);
-var Transaction = __webpack_require__(41);
+var Transaction = __webpack_require__(42);
 var ReactUpdateQueue = __webpack_require__(62);
 
 /**
@@ -52773,7 +52773,7 @@ var SyntheticClipboardEvent = __webpack_require__(238);
 var SyntheticEvent = __webpack_require__(15);
 var SyntheticFocusEvent = __webpack_require__(241);
 var SyntheticKeyboardEvent = __webpack_require__(243);
-var SyntheticMouseEvent = __webpack_require__(40);
+var SyntheticMouseEvent = __webpack_require__(41);
 var SyntheticDragEvent = __webpack_require__(240);
 var SyntheticTouchEvent = __webpack_require__(244);
 var SyntheticTransitionEvent = __webpack_require__(245);
@@ -53124,7 +53124,7 @@ module.exports = SyntheticCompositionEvent;
 
 
 
-var SyntheticMouseEvent = __webpack_require__(40);
+var SyntheticMouseEvent = __webpack_require__(41);
 
 /**
  * @interface DragEvent
@@ -53431,7 +53431,7 @@ module.exports = SyntheticTransitionEvent;
 
 
 
-var SyntheticMouseEvent = __webpack_require__(40);
+var SyntheticMouseEvent = __webpack_require__(41);
 
 /**
  * @interface WheelEvent
@@ -54233,7 +54233,7 @@ module.exports = getVendorPrefixedEventName;
 
 
 
-var escapeTextContentForBrowser = __webpack_require__(42);
+var escapeTextContentForBrowser = __webpack_require__(43);
 
 /**
  * Escapes attribute value to prevent scripting attacks.
@@ -57618,7 +57618,7 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _closeButton = __webpack_require__(46);
+var _closeButton = __webpack_require__(47);
 
 var _closeButton2 = _interopRequireDefault(_closeButton);
 
@@ -58008,7 +58008,7 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _heading = __webpack_require__(45);
+var _heading = __webpack_require__(46);
 
 var _heading2 = _interopRequireDefault(_heading);
 
@@ -58199,7 +58199,7 @@ var _wrapper = __webpack_require__(48);
 
 var _wrapper2 = _interopRequireDefault(_wrapper);
 
-var _closeButton = __webpack_require__(46);
+var _closeButton = __webpack_require__(47);
 
 var _closeButton2 = _interopRequireDefault(_closeButton);
 
@@ -58207,7 +58207,7 @@ var _fold = __webpack_require__(132);
 
 var _fold2 = _interopRequireDefault(_fold);
 
-var _fontAwesomeButton = __webpack_require__(47);
+var _fontAwesomeButton = __webpack_require__(34);
 
 var _fontAwesomeButton2 = _interopRequireDefault(_fontAwesomeButton);
 
@@ -58521,11 +58521,11 @@ var _thumbnail2 = _interopRequireDefault(_thumbnail);
 
 var _projectPreview = __webpack_require__(28);
 
-var _post = __webpack_require__(34);
+var _post = __webpack_require__(35);
 
 var _post2 = _interopRequireDefault(_post);
 
-var _project = __webpack_require__(35);
+var _project = __webpack_require__(36);
 
 var _project2 = _interopRequireDefault(_project);
 
@@ -58637,11 +58637,11 @@ var _thumbnail2 = _interopRequireDefault(_thumbnail);
 
 var _projectPreview = __webpack_require__(28);
 
-var _post = __webpack_require__(34);
+var _post = __webpack_require__(35);
 
 var _post2 = _interopRequireDefault(_post);
 
-var _project = __webpack_require__(35);
+var _project = __webpack_require__(36);
 
 var _project2 = _interopRequireDefault(_project);
 
@@ -58745,11 +58745,11 @@ var _body = __webpack_require__(82);
 
 var _body2 = _interopRequireDefault(_body);
 
-var _post = __webpack_require__(34);
+var _post = __webpack_require__(35);
 
 var _post2 = _interopRequireDefault(_post);
 
-var _project = __webpack_require__(35);
+var _project = __webpack_require__(36);
 
 var _project2 = _interopRequireDefault(_project);
 
@@ -58831,11 +58831,11 @@ var _react = __webpack_require__(5);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _closeButton = __webpack_require__(46);
+var _closeButton = __webpack_require__(47);
 
 var _closeButton2 = _interopRequireDefault(_closeButton);
 
-var _fontAwesomeButton = __webpack_require__(47);
+var _fontAwesomeButton = __webpack_require__(34);
 
 var _fontAwesomeButton2 = _interopRequireDefault(_fontAwesomeButton);
 

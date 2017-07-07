@@ -31087,27 +31087,88 @@ var PostContainer = function (_React$Component) {
                 });
             } else {
 
-                this.state.model.checkPostExist(id, this.state.destination, name, hyperlink, function (exists) {
+                if (this.state.destination == null) {
 
-                    if (!exists) {
+                    this.state.model.checkPostExist(id, 'null', name, hyperlink, function (exists) {
 
-                        _this3.reallocatePost(parentId, id, _this3.state.destination);
-                    }
-                });
+                        console.log('ex', exists);
+
+                        if (!exists) {
+
+                            _this3.reallocatePost(parentId, id, null);
+                        }
+                    });
+                } else {
+
+                    this.state.model.checkPostExist(id, this.state.destination, name, hyperlink, function (exists) {
+
+                        if (!exists) {
+
+                            console.log('tttt', parentId, id, _this3.state.destination);
+
+                            _this3.reallocatePost(parentId, id, _this3.state.destination);
+                        }
+                    });
+                }
             }
         }
     }, {
         key: 'reallocatePost',
         value: function reallocatePost(parentId, id, destination) {
 
-            if (parentId == destination || id == destination || parentId == null) {
+            if (parentId == destination || id == destination) {
 
                 return false;
             }
 
             var posts = this.state.model;
-            /* Find an element to copy, duplicate, and change it's field, parentId, to destination */
+
+            if (parentId == null) {
+
+                var _temp = posts.copyPost(posts.posts[id], destination);
+
+                var _destinationPost = posts.posts[destination];
+
+                _destinationPost.children[id] = _temp;
+                _destinationPost.children[id].parent_id = destination;
+                _destinationPost.children[id].parentNode = _destinationPost;
+
+                _destinationPost.children[id].update();
+
+                posts.posts[id] = null;
+
+                delete posts.posts[id];
+
+                this.setState({ Posts: posts, selected: _destinationPost.children[id] });
+
+                posts.updatePost(_destinationPost.children[id]); // at backend also
+
+                return _destinationPost.children[id];
+            }
+
             var temp = posts.copyPost(posts.navigateParent(posts.posts, parentId).children[id], destination);
+
+            if (destination == null) {
+
+                posts.posts[id] = temp;
+
+                posts.posts[id].parentNode = null;
+
+                posts.posts[id].update();
+
+                posts.navigateParent(posts.posts, parentId).children[id] = null;
+
+                delete posts.navigateParent(posts.posts, parentId).children[id];
+
+                this.setState({ Posts: posts, selected: posts.posts[id] });
+
+                posts.updatePost(posts.posts[id]); // at backend also
+
+                return posts.posts[id];
+            }
+
+            /* Find an element to copy, duplicate, and change it's field, parentId, to destination */
+
             /* Find a destination element, exclude if it's destination is one of it's child */
             var destinationPost = posts.navigateParent(posts.posts, destination, id);
 
@@ -31117,7 +31178,7 @@ var PostContainer = function (_React$Component) {
                 destinationPost.children[id].parent_id = destination;
                 destinationPost.children[id].parentNode = destinationPost;
 
-                destinationPost.children[id].update();
+                destinationPost.children[id].update(); // updating hyperlink
 
                 posts.navigateParent(posts.posts, parentId).children[id] = null;
 
@@ -31125,7 +31186,8 @@ var PostContainer = function (_React$Component) {
 
                 this.setState({ Posts: posts, selected: destinationPost.children[id] });
 
-                posts.updatePost(destinationPost.children[id]);
+                posts.updatePost(destinationPost.children[id]); // at backend also
+
 
                 return destinationPost.children[id];
             }
@@ -31181,6 +31243,9 @@ var PostContainer = function (_React$Component) {
                     upload: self.upload.bind(self),
                     setUpdatePreview: function setUpdatePreview(updatePreview) {
                         _this4.setState({ updatePreview: updatePreview });
+                    },
+                    handleTopLevelPlacer: function handleTopLevelPlacer(displayTopLevelPlacer) {
+                        _this4.setState({ displayTopLevelPlacer: displayTopLevelPlacer });
                     },
                     insertPost: function insertPost(target, file, dataType) {
 
@@ -31306,46 +31371,12 @@ var PostContainer = function (_React$Component) {
 
                     parentId = this.state.selected.id;
                 }
+            } else {
+
+                parentId = null;
             }
 
             switch (value) {
-
-                /* New Folder */
-                case 0:
-
-                    this.handleActionDialogOpen({
-
-                        actionModel: [{
-
-                            title: 'New folder',
-                            field: 'name',
-                            dataType: 'debounce-text',
-                            option: 'PARENT_NULL',
-                            parentModel: this.props.model,
-                            selected: null
-
-                        }],
-                        actions: {
-
-                            execute: function execute(param) {
-
-                                var folder = Object.assign(param, {
-
-                                    container: 1,
-                                    parent_id: null,
-                                    post_data_type_id: 1,
-                                    size: -1
-
-                                });
-
-                                _this6.insertPost(folder);
-                            }
-
-                        }
-
-                    });
-
-                    break;
 
                 /* New Subfolder */
                 case 1:
@@ -31353,7 +31384,7 @@ var PostContainer = function (_React$Component) {
                     this.handleActionDialogOpen({
 
                         actionModel: [{
-                            title: 'New Subfolder',
+                            title: 'New Folder',
                             field: 'name',
                             dataType: 'debounce-text',
                             model: this.props.model,
@@ -31366,7 +31397,7 @@ var PostContainer = function (_React$Component) {
 
                             execute: function execute(param) {
 
-                                var subfolder = Object.assign(param, {
+                                var folder = Object.assign(param, {
 
                                     container: 1,
                                     parent_id: parentId,
@@ -31375,7 +31406,7 @@ var PostContainer = function (_React$Component) {
 
                                 });
 
-                                _this6.insertPost(subfolder);
+                                _this6.insertPost(folder);
                             }
 
                         }
@@ -31636,7 +31667,7 @@ var PostContainer = function (_React$Component) {
                             'div',
                             {
                                 key: key,
-                                className: 'selected-item-label' + (element.parent_id == null ? ' none-movable-item' : '')
+                                className: 'selected-item-label'
                             },
                             element.name
                         ));
@@ -31652,7 +31683,7 @@ var PostContainer = function (_React$Component) {
 
                     return _react2.default.createElement(
                         'div',
-                        { className: 'selected-item-label' + (element.parent_id == null ? ' none-movable-item' : '') },
+                        { className: 'selected-item-label' },
                         element.name
                     );
                 }
@@ -31787,6 +31818,20 @@ var PostContainer = function (_React$Component) {
                                     padding: '0 10px'
                                 }
                             },
+                            _react2.default.createElement(
+                                'i',
+                                {
+                                    className: 'material-icons',
+                                    style: {
+                                        lineHeight: '48px',
+                                        float: 'left',
+                                        fontSize: 20,
+                                        marginRight: 5,
+                                        color: 'rgb(200,200,200)'
+                                    }
+                                },
+                                'search'
+                            ),
                             _react2.default.createElement(_AutoComplete2.default, {
                                 style: {
                                     marginLeft: 0,
@@ -31809,7 +31854,7 @@ var PostContainer = function (_React$Component) {
                                 }, 'float', 'right'),
 
                                 onClick: this.handleActionMenuOpen.bind(this),
-                                icon: 'more_vert',
+                                label: 'Actions',
                                 iconStyle: {
                                     color: 'rgb(60,60,60)'
                                 }
@@ -31835,8 +31880,7 @@ var PostContainer = function (_React$Component) {
                                             fontSize: 14
                                         }
                                     },
-                                    _react2.default.createElement(_MenuItem2.default, { value: 0, disabled: this.state.selectMultiple, primaryText: 'New Folder' }),
-                                    _react2.default.createElement(_MenuItem2.default, { value: 1, disabled: this.state.selectMultiple || this.state.selected == null, primaryText: 'New Subfolder' }),
+                                    _react2.default.createElement(_MenuItem2.default, { value: 1, disabled: this.state.selectMultiple, primaryText: 'New Folder' }),
                                     _react2.default.createElement(_MenuItem2.default, { value: 2, disabled: this.state.selectMultiple, primaryText: 'New ' + this.props.postType.name_singular }),
                                     _react2.default.createElement(_Divider2.default, null),
                                     _react2.default.createElement(_MenuItem2.default, { value: 3, disabled: this.state.selectMultiple || this.state.selected !== null, primaryText: 'Duplicate' }),
@@ -31850,9 +31894,78 @@ var PostContainer = function (_React$Component) {
                         _react2.default.createElement(
                             'div',
                             { style: { height: 'calc(100% - 7px)', marginTop: -3, position: 'relative' } },
+                            _react2.default.createElement('div', {
+                                style: {
+                                    width: '100%',
+                                    height: this.state.displayTopLevelPlacer ? 120 : 0,
+                                    transition: '.5s all',
+                                    background: 'white'
+                                }
+                            }),
                             _react2.default.createElement(
                                 'div',
-                                { style: { height: 'calc(100% - 100px)', overflow: 'auto', backgroundImage: "url( '" + _mConfig2.default.backendUrl + "../images/post-list-background.png' )", backgroundAttachment: 'local' } },
+                                {
+                                    style: _extends({
+                                        position: 'absolute',
+                                        width: '100%',
+                                        height: this.state.displayTopLevelPlacer ? 120 : 0,
+                                        left: 0,
+                                        top: 0,
+                                        transition: '.25s all',
+                                        display: 'inline-block',
+                                        zIndex: 1,
+                                        overflow: 'hidden',
+                                        textTransform: 'uppercase',
+                                        fontWeight: 500,
+                                        fontSize: 13,
+                                        fontFamily: 'Roboto',
+                                        textAlign: 'center',
+                                        lineHeight: '120px'
+                                    }, this.state.topLevelPlacerStyle),
+                                    onDragEnter: function onDragEnter() {
+
+                                        _this8.setState({
+                                            topLevelPlacerStyle: {
+                                                background: 'rgb(220, 220, 220)',
+                                                color: 'white'
+                                            }
+                                        });
+                                    },
+                                    onDragLeave: function onDragLeave() {
+
+                                        _this8.setState({
+                                            topLevelPlacerStyle: {
+                                                background: '',
+                                                color: ''
+                                            }
+                                        });
+                                    },
+                                    onDragOver: function onDragOver(event) {
+
+                                        event.preventDefault();
+                                    },
+                                    onDrop: function onDrop(event) {
+
+                                        _this8.setDestination(null);
+                                    },
+                                    draggable: true
+                                },
+                                'Drop here to place at the top level'
+                            ),
+                            _react2.default.createElement(
+                                'div',
+                                {
+                                    style: {
+                                        height: 'calc(100% - 100px)',
+                                        overflow: 'auto',
+                                        backgroundImage: "url( '" + _mConfig2.default.backendUrl + "../images/post-list-background.png' )",
+                                        backgroundAttachment: 'local'
+                                    },
+                                    onMouseUp: function onMouseUp(event) {
+
+                                        _this8.setState({ selected: null });
+                                    }
+                                },
                                 posts /* Adding Posts*/
 
                             )
@@ -31914,6 +32027,11 @@ var PostContainer = function (_React$Component) {
                                     color: 'rgb(60,60,60)'
                                 }
 
+                            }) : '',
+                            this.state.mainEdit ? _react2.default.createElement(_seperator2.default, {
+                                style: {
+                                    marginTop: 18
+                                }
                             }) : ''
                         ),
                         _react2.default.createElement(
@@ -32282,8 +32400,6 @@ var PostContainer = function () {
                     post.postContainerHyperlink = this.model.hyperlink;
 
                     this.posts[post.id] = post;
-
-                    console.log(this.posts[post.id]);
                 }
 
                 return this.posts[key];
@@ -59672,7 +59788,6 @@ var Post = function (_React$Component) {
         };
 
         _this.isUploading = false;
-        _this.dragRefernce = 0;
 
         return _this;
     }
@@ -59735,7 +59850,7 @@ var Post = function (_React$Component) {
         key: 'onDragStart',
         value: function onDragStart(event) {
 
-            this.dragRefernce = 0;
+            this.props.handleTopLevelPlacer(true);
 
             var img = document.createElement('img');
             img.src = _mConfig2.default.backendUrl + "../img/blank.png";
@@ -59795,8 +59910,6 @@ var Post = function (_React$Component) {
         key: 'onDragEnter',
         value: function onDragEnter() {
 
-            this.dragRefernce = Math.min(this.dragRefernce + 1, 1);
-
             this.setState({
                 style: {
                     background: 'rgb(245,245,245)'
@@ -59809,11 +59922,7 @@ var Post = function (_React$Component) {
 
             this.setState({
 
-                style: {
-
-                    background: ''
-
-                }
+                style: { background: '' }
 
             });
         }
@@ -59825,9 +59934,11 @@ var Post = function (_React$Component) {
     }, {
         key: 'onDragEnd',
         value: function onDragEnd(event) {
+            var _this2 = this;
 
             this.props.reallocateModel(this.props.model.parent_id, this.props.model.id, this.props.model.name, this.props.model.hyperlink);
             this.setState({ style: { background: '' } });
+            this.props.handleTopLevelPlacer(false);
 
             (0, _jquery2.default)('#selected-item').css({
 
@@ -59837,7 +59948,10 @@ var Post = function (_React$Component) {
 
             });
 
-            this.props.setUpdatePreview(true);
+            setTimeout(function () {
+
+                _this2.props.setUpdatePreview(true);
+            }, 501);
         }
 
         /**
@@ -59855,6 +59969,8 @@ var Post = function (_React$Component) {
 
 
             event.preventDefault();
+
+            this.props.handleTopLevelPlacer(false);
 
             this.setState({ style: { background: '' } });
 
@@ -59889,8 +60005,6 @@ var Post = function (_React$Component) {
                             if (dataType) {
 
                                 this.props.insertPost(this.props.model, files[i], dataType);
-
-                                console.log('jiji', this.props.model);
                             } else {
 
                                 this.props.insertPost(this.props.model, files[i], 9);
@@ -60006,73 +60120,80 @@ var Post = function (_React$Component) {
 
             return _react2.default.createElement(
                 'div',
-                null,
+                {
+                    style: {
+                        positon: 'relative'
+                    }
+                },
                 _react2.default.createElement(
                     'div',
-                    {
-                        className: 'folder-inner-container',
-                        style: _extends({}, style, {
-                            position: 'relative',
-                            overflow: 'hidden',
-                            cursor: 'pointer'
-                        }),
-                        draggable: true,
-
-                        onMouseUp: this.onMouseUp.bind(this),
-                        onMouseDown: this.onMouseDown.bind(this),
-                        onMouseLeave: this.onMouseLeave.bind(this),
-                        onMouseEnter: this.onMouseEnter.bind(this),
-
-                        onDragStart: this.onDragStart.bind(this),
-                        onDrop: this.onDrop.bind(this),
-                        onDragEnd: this.onDragEnd.bind(this),
-                        onDragEnter: this.onDragEnter.bind(this),
-                        onDragLeave: this.onDragLeave.bind(this),
-                        onDragOver: this.onDragOver.bind(this)
-                    },
+                    null,
                     _react2.default.createElement(
-                        _TouchRipple2.default,
-                        null,
-                        _react2.default.createElement(_postIcon2.default, {
-                            model: this.props.model,
-                            style: {
-                                width: 35,
-                                height: 35
-                            }
+                        'div',
+                        {
+                            className: 'folder-inner-container',
+                            style: _extends({}, style, {
+                                position: 'relative',
+                                overflow: 'hidden',
+                                cursor: 'pointer'
+                            }),
+                            draggable: true,
 
-                        }),
+                            onMouseUp: this.onMouseUp.bind(this),
+                            onMouseDown: this.onMouseDown.bind(this),
+                            onMouseLeave: this.onMouseLeave.bind(this),
+                            onMouseEnter: this.onMouseEnter.bind(this),
+                            onDragStart: this.onDragStart.bind(this),
+                            onDrop: this.onDrop.bind(this),
+                            onDragEnd: this.onDragEnd.bind(this),
+                            onDragEnter: this.onDragEnter.bind(this),
+                            onDragLeave: this.onDragLeave.bind(this),
+                            onDragOver: this.onDragOver.bind(this)
+                        },
                         _react2.default.createElement(
-                            'span',
-                            {
+                            _TouchRipple2.default,
+                            null,
+                            _react2.default.createElement(_postIcon2.default, {
+                                model: this.props.model,
                                 style: {
-                                    display: 'inline-block',
-                                    marginTop: 0,
-                                    marginLeft: 7.5
+                                    width: 35,
+                                    height: 35
                                 }
-                            },
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'file-name', style: textStyle },
-                                this.props.model.name
-                            ),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'file-date', style: textStyle },
-                                (0, _utility.formatDate)(this.props.model.created_date)
-                            )
-                        ),
-                        this.checkFileToUpload(),
-                        this.state.uploadStatus > -1 ? this.state.uploadStatus == 100 ? _react2.default.createElement(_Avatar2.default, { style: { position: 'absolute', right: 0, top: 10, background: 'none' }, color: '#00BCD4', icon: _react2.default.createElement(_check2.default, null) }) : _react2.default.createElement(_CircularProgress2.default, { mode: 'determinate', value: this.state.uploadStatus, size: 0.5, style: { float: 'right', marginTop: -4 } }) : '',
-                        this.displayDropdownButton()
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { style: { paddingLeft: 20, display: this.state.displayChildren ? '' : 'none' } },
-                    this.props.children ? this.props.children.map(function (element, key) {
 
-                        return element;
-                    }) : ''
+                            }),
+                            _react2.default.createElement(
+                                'span',
+                                {
+                                    style: {
+                                        display: 'inline-block',
+                                        marginTop: 0,
+                                        marginLeft: 7.5
+                                    }
+                                },
+                                _react2.default.createElement(
+                                    'span',
+                                    { className: 'file-name', style: textStyle },
+                                    this.props.model.name
+                                ),
+                                _react2.default.createElement(
+                                    'span',
+                                    { className: 'file-date', style: textStyle },
+                                    (0, _utility.formatDate)(this.props.model.created_date)
+                                )
+                            ),
+                            this.checkFileToUpload(),
+                            this.state.uploadStatus > -1 ? this.state.uploadStatus == 100 ? _react2.default.createElement(_Avatar2.default, { style: { position: 'absolute', right: 0, top: 10, background: 'none' }, color: '#00BCD4', icon: _react2.default.createElement(_check2.default, null) }) : _react2.default.createElement(_CircularProgress2.default, { mode: 'determinate', value: this.state.uploadStatus, size: 0.5, style: { float: 'right', marginTop: -4 } }) : '',
+                            this.displayDropdownButton()
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { style: { paddingLeft: 20, display: this.state.displayChildren ? '' : 'none' } },
+                        this.props.children ? this.props.children.map(function (element, key) {
+
+                            return element;
+                        }) : ''
+                    )
                 )
             );
         }

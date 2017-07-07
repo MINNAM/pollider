@@ -198,15 +198,39 @@ class PostContainer extends React.Component {
 
         } else {
 
-            this.state.model.checkPostExist( id, this.state.destination, name, hyperlink, ( exists ) => {
+            if ( this.state.destination == null ) {
 
-                if ( !exists ) {
+                this.state.model.checkPostExist( id, 'null', name, hyperlink, ( exists ) => {
 
-                    this.reallocatePost( parentId, id, this.state.destination );
+                    console.log( 'ex', exists );
 
-                }
+                    if ( !exists ) {
 
-            });
+                        this.reallocatePost( parentId, id, null );
+
+                    }
+
+                });
+
+            } else {
+
+
+
+                this.state.model.checkPostExist( id, this.state.destination, name, hyperlink, ( exists ) => {
+
+                    if ( !exists ) {
+
+                        console.log ( 'tttt', parentId, id, this.state.destination );
+
+                        this.reallocatePost( parentId, id, this.state.destination );
+
+                    }
+
+                });
+
+            }
+
+
 
         }
 
@@ -214,15 +238,67 @@ class PostContainer extends React.Component {
 
     reallocatePost ( parentId, id, destination ) {
 
-        if ( parentId == destination || id == destination || parentId == null ) {
+        if ( parentId == destination || id == destination ) {
 
             return false;
 
         }
 
-        const posts         = this.state.model;
+        const posts = this.state.model;
+
+
+        if ( parentId == null ) {
+
+            let temp  = posts.copyPost( posts.posts[ id ], destination );
+
+            let destinationPost = posts.posts[ destination ];
+
+
+
+            destinationPost.children[ id ] = temp;
+            destinationPost.children[ id ].parent_id  = destination;
+            destinationPost.children[ id ].parentNode = destinationPost;
+
+            destinationPost.children[ id ].update();
+
+            posts.posts[ id ] = null;
+
+            delete posts.posts[ id ];
+
+            this.setState({ Posts : posts, selected : destinationPost.children[ id ] });
+
+            posts.updatePost( destinationPost.children[ id ] ); // at backend also
+
+            return destinationPost.children[ id ];
+
+        }
+
+        let temp  = posts.copyPost( posts.navigateParent( posts.posts, parentId ).children[ id ], destination );
+
+
+        if ( destination == null ) {
+
+            posts.posts[ id ] = temp;
+
+            posts.posts[ id ].parentNode = null;
+
+            posts.posts[ id ].update();
+
+            posts.navigateParent( posts.posts, parentId ).children[ id ] = null;
+
+            delete posts.navigateParent( posts.posts, parentId ).children[ id ];
+
+            this.setState({ Posts : posts, selected : posts.posts[ id ] });
+
+            posts.updatePost( posts.posts[ id ] ); // at backend also
+
+            return posts.posts[ id ];
+
+        }
+
+
         /* Find an element to copy, duplicate, and change it's field, parentId, to destination */
-        let temp            = posts.copyPost( posts.navigateParent( posts.posts, parentId ).children[ id ], destination );
+
         /* Find a destination element, exclude if it's destination is one of it's child */
         let destinationPost = posts.navigateParent( posts.posts, destination, id );
 
@@ -232,7 +308,7 @@ class PostContainer extends React.Component {
             destinationPost.children[ id ].parent_id = destination;
             destinationPost.children[ id ].parentNode = destinationPost;
 
-            destinationPost.children[ id ].update();
+            destinationPost.children[ id ].update(); // updating hyperlink
 
             posts.navigateParent( posts.posts, parentId ).children[ id ] = null;
 
@@ -240,7 +316,7 @@ class PostContainer extends React.Component {
 
             this.setState({ Posts : posts, selected : destinationPost.children[ id ] });
 
-            posts.updatePost( destinationPost.children[ id ] );
+            posts.updatePost( destinationPost.children[ id ] ); // at backend also
 
 
 
@@ -303,6 +379,7 @@ class PostContainer extends React.Component {
                 setUpdatePreview = { ( updatePreview) => {
                     this.setState({ updatePreview });
                 } }
+                handleTopLevelPlacer  = { ( displayTopLevelPlacer ) => { this.setState({ displayTopLevelPlacer }) } }
                 insertPost      = {
 
                     ( target, file, dataType ) => {
@@ -449,50 +526,13 @@ class PostContainer extends React.Component {
 
             }
 
+        } else {
+
+            parentId = null;
+
         }
 
         switch ( value ) {
-
-            /* New Folder */
-            case 0:
-
-                this.handleActionDialogOpen({
-
-                    actionModel : [
-                        {
-
-                            title    : 'New folder',
-                            field    : 'name',
-                            dataType : 'debounce-text',
-                            option   : 'PARENT_NULL',
-                            parentModel  : this.props.model,
-                            selected : null
-
-                        }
-
-                    ],
-                    actions : {
-
-                        execute : ( param ) => {
-
-                            const folder = Object.assign( param,  {
-
-                                container         : 1,
-                                parent_id         : null,
-                                post_data_type_id : 1,
-                                size              : -1,
-
-                            });
-
-                            this.insertPost( folder );
-
-                        }
-
-                    }
-
-                });
-
-            break;
 
             /* New Subfolder */
             case 1:
@@ -501,7 +541,7 @@ class PostContainer extends React.Component {
 
                     actionModel : [
                         {
-                            title       : 'New Subfolder',
+                            title       : 'New Folder',
                             field       : 'name',
                             dataType    : 'debounce-text',
                             model       : this.props.model,
@@ -515,7 +555,7 @@ class PostContainer extends React.Component {
 
                         execute : ( param ) => {
 
-                            const subfolder = Object.assign( param, {
+                            const folder = Object.assign( param, {
 
                                 container         : 1,
                                 parent_id         : parentId,
@@ -524,7 +564,7 @@ class PostContainer extends React.Component {
 
                             });
 
-                            this.insertPost( subfolder );
+                            this.insertPost( folder );
 
                         }
 
@@ -806,7 +846,7 @@ class PostContainer extends React.Component {
 
                         <div
                             key       = { key }
-                            className = { 'selected-item-label' + ( element.parent_id == null ? ' none-movable-item' : '' ) }
+                            className = { 'selected-item-label' }
                         >
                             { element.name }
                         </div>
@@ -826,7 +866,7 @@ class PostContainer extends React.Component {
                 let element = this.state.selected;
 
                 return (
-                    <div className = { 'selected-item-label' + ( element.parent_id == null ? ' none-movable-item' : '' ) } >
+                    <div className = { 'selected-item-label' } >
                         { element.name }
                     </div>
                 );
@@ -957,6 +997,16 @@ class PostContainer extends React.Component {
                                 padding : '0 10px'
                             }}
                         >
+                            <i
+                                className="material-icons"
+                                style = {{
+                                    lineHeight : '48px',
+                                    float : 'left',
+                                    fontSize : 20,
+                                    marginRight : 5,
+                                    color : 'rgb(200,200,200)'
+                                }}
+                            >{ 'search' }</i>
                             <AutoComplete
                                 style = {{
                                     marginLeft : 0,
@@ -980,7 +1030,7 @@ class PostContainer extends React.Component {
                                 }}
 
                                 onClick = { this.handleActionMenuOpen.bind( this ) }
-                                icon  = { 'more_vert' }
+                                label = { 'Actions' }
                                 iconStyle = {{
                                     color : 'rgb(60,60,60)'
                                 }}
@@ -1011,8 +1061,7 @@ class PostContainer extends React.Component {
                                         fontSize : 14
                                     }}
                                 >
-                                    <MenuItem value = { 0 } disabled = { this.state.selectMultiple } primaryText="New Folder" />
-                                    <MenuItem value = { 1 } disabled = { this.state.selectMultiple || this.state.selected == null } primaryText="New Subfolder" />
+                                    <MenuItem value = { 1 } disabled = { this.state.selectMultiple } primaryText="New Folder" />
                                     <MenuItem value = { 2 } disabled = { this.state.selectMultiple } primaryText = {'New ' + this.props.postType.name_singular } />
                                     <Divider/>
                                     <MenuItem value = { 3 } disabled = { this.state.selectMultiple || this.state.selected !== null } primaryText="Duplicate" />
@@ -1041,11 +1090,88 @@ class PostContainer extends React.Component {
                         </div>
 
                         <div style = {{ height: 'calc(100% - 7px)', marginTop: -3, position: 'relative' }}>
-                            <div style = {{ height: 'calc(100% - 100px)', overflow: 'auto', backgroundImage: "url( '" + CONFIG.backendUrl + "../images/post-list-background.png' )", backgroundAttachment: 'local' }}>
+                            <div
+                                style = {{
+                                    width : '100%',
+                                    height : this.state.displayTopLevelPlacer ? 120 : 0,
+                                    transition : '.5s all',
+                                    background : 'white'
+                                }}
+                            />
+
+                            <div
+                                style = {{
+                                    position : 'absolute',
+                                    width : '100%',
+                                    height : this.state.displayTopLevelPlacer ? 120 : 0,
+                                    left : 0,
+                                    top : 0,
+                                    transition : '.25s all',
+                                    display : 'inline-block',
+                                    zIndex : 1,
+                                    overflow : 'hidden',
+                                    textTransform: 'uppercase',
+                                    fontWeight: 500,
+                                    fontSize: 13,
+                                    fontFamily : 'Roboto',
+                                    textAlign : 'center',
+                                    lineHeight : '120px',
+                                    ...this.state.topLevelPlacerStyle
+                                }}
+                                onDragEnter = { () => {
+
+                                    this.setState({
+                                        topLevelPlacerStyle : {
+                                            background : 'rgb(220, 220, 220)',
+                                            color : 'white'
+                                        }
+                                    })
+
+                                }}
+                                onDragLeave = { () => {
+
+                                    this.setState({
+                                        topLevelPlacerStyle : {
+                                            background : '',
+                                            color : ''
+                                        }
+                                    })
+
+                                }}
+                                onDragOver = { ( event ) => {
+
+                                    event.preventDefault();
+
+                                }}
+                                onDrop = { ( event ) => {
+
+                                    this.setDestination( null );
+
+                                }}
+                                draggable = { true }
+                            >
+                                Drop here to place at the top level
+                            </div>
+                            <div
+                                style = {{
+                                    height: 'calc(100% - 100px)',
+                                    overflow: 'auto',
+                                    backgroundImage: "url( '" + CONFIG.backendUrl + "../images/post-list-background.png' )",
+                                    backgroundAttachment: 'local'
+                                }}
+                                onMouseUp = { ( event ) => {
+
+                                    this.setState({ selected : null });
+
+                                }}
+                            >
+
                                 {
                                   posts /* Adding Posts*/
                                 }
+
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -1096,13 +1222,15 @@ class PostContainer extends React.Component {
 
                                 /> : ''
                             }
+
                             {
-                                // this.state.mainEdit ? <Seperator
-                                //     style = {{
-                                //         marginTop : 18
-                                //     }}
-                                // /> : ''
+                                this.state.mainEdit ? <Seperator
+                                    style = {{
+                                        marginTop : 18
+                                    }}
+                                    /> : ''
                             }
+
 
                         </div>
                         <div className = "row" style = {{ margin: 0, height: 'calc(100% - 112px)', overflow: 'auto', padding: '2.5% 2.5% 0 2.5%', boxSizing : 'border-box' }}>

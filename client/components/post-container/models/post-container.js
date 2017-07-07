@@ -141,11 +141,7 @@ class PostContainer {
 
             this.posts[ post.id ] = post;
 
-            console.log( this.posts[ post.id ] );
-
           }
-
-
 
           return this.posts[ key ];
 

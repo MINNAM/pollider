@@ -140,15 +140,14 @@ class Install {
             ],
             postDateTypes : [
 
-                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 1, 'root_folder' );`,
-                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 2, 'folder' );`,
-                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 3, 'image' );`,
-                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 4, 'text' );`,
-                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 5, 'audio' );`,
-                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 6, 'video' );`,
-                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 7, 'post' );`,
-                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 8, 'application' );`,
-                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 9, 'other' );`,
+                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 1, 'folder' );`,
+                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 2, 'image' );`,
+                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 3, 'text' );`,
+                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 4, 'audio' );`,
+                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 5, 'video' );`,
+                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 6, 'post' );`,
+                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 7, 'application' );`,
+                `INSERT INTO ${ config ? (config.table_prefix ? config.table_prefix + '_' : '') : '' }post_data_type ( \`id\`, \`name\` ) VALUES ( 8, 'other' );`,
 
             ]
 

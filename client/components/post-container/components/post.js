@@ -31,7 +31,6 @@ class Post extends React.Component {
         };
 
         this.isUploading  = false;
-        this.dragRefernce = 0;
 
     }
 
@@ -93,10 +92,10 @@ class Post extends React.Component {
     */
     onDragStart ( event ) {
 
-        this.dragRefernce = 0;
+        this.props.handleTopLevelPlacer( true );
 
-        var img = document.createElement( 'img' );
-        img.src = CONFIG.backendUrl + "../img/blank.png";
+        const img = document.createElement( 'img' );
+        img.src   = CONFIG.backendUrl + "../img/blank.png";
 
         event.dataTransfer.setData( "text/html", "" );
         event.dataTransfer.setDragImage( img, 0, 0);
@@ -160,8 +159,6 @@ class Post extends React.Component {
 
     onDragEnter () {
 
-        this.dragRefernce = Math.min( this.dragRefernce + 1, 1 ) ;
-
         this.setState({
             style : {
                 background : 'rgb(245,245,245)'
@@ -169,16 +166,11 @@ class Post extends React.Component {
         })
 
     }
-
     onDragLeave () {
 
         this.setState({
 
-            style : {
-
-                background : ''
-
-            }
+            style : { background : '' }
 
         });
 
@@ -187,11 +179,11 @@ class Post extends React.Component {
     /**
     *   Call reallocateModel to set dragged element's new parent and reset background color.
     */
-    onDragEnd ( event ) {
+    onDragEnd ( event ) {        
 
         this.props.reallocateModel( this.props.model.parent_id, this.props.model.id, this.props.model.name, this.props.model.hyperlink );
         this.setState({ style : { background : '' }});
-
+        this.props.handleTopLevelPlacer( false );
 
         $( '#selected-item' ).css({
 
@@ -201,7 +193,13 @@ class Post extends React.Component {
 
         });
 
-        this.props.setUpdatePreview( true );
+        setTimeout( () => {
+
+            this.props.setUpdatePreview( true );
+
+        }, 501 )
+
+
 
     }
 
@@ -218,6 +216,8 @@ class Post extends React.Component {
         } = this.props.model;
 
         event.preventDefault();
+
+        this.props.handleTopLevelPlacer( false );
 
         this.setState({ style : { background : '' } });
 
@@ -254,8 +254,6 @@ class Post extends React.Component {
                     if ( dataType ) {
 
                         this.props.insertPost( this.props.model, files[ i ], dataType );
-
-                        console.log( 'jiji', this.props.model );
 
                     } else {
 
@@ -398,76 +396,81 @@ class Post extends React.Component {
 
         return (
 
-            <div >
+            <div
+                style = {{
+                    positon : 'relative'
+                }}
+            >
+                <div>
+                <div
+                    className    = { 'folder-inner-container' }
+                    style = {{
+                        ...style,
+                        position : 'relative',
+                        overflow : 'hidden',
+                        cursor   : 'pointer'
+                    }}
+                    draggable    = { true }
 
-                    <div
-                        className    = { 'folder-inner-container' }
-                        style = {{
-                            ...style,
-                            position : 'relative',
-                            overflow : 'hidden',
-                            cursor   : 'pointer'
-                        }}
-                        draggable    = { true }
+                    onMouseUp = { this.onMouseUp.bind( this ) }
+                    onMouseDown = { this.onMouseDown.bind( this ) }
+                    onMouseLeave = { this.onMouseLeave.bind( this ) }
+                    onMouseEnter = { this.onMouseEnter.bind( this ) }
+                    onDragStart  = { this.onDragStart.bind( this ) }
+                    onDrop       = { this.onDrop.bind( this ) }
+                    onDragEnd    = { this.onDragEnd.bind( this ) }
+                    onDragEnter  = { this.onDragEnter.bind( this ) }
+                    onDragLeave  = { this.onDragLeave.bind( this ) }
+                    onDragOver   = { this.onDragOver.bind( this ) }
+                >
+                    <TouchRipple>
+                        <PostIcon
+                            model = { this.props.model }
+                            style = {{
+                                width : 35,
+                                height : 35
+                            }}
 
-                        onMouseUp = { this.onMouseUp.bind( this ) }
-                        onMouseDown = { this.onMouseDown.bind( this ) }
-                        onMouseLeave = { this.onMouseLeave.bind( this ) }
-                        onMouseEnter = { this.onMouseEnter.bind( this ) }
+                        />
+                        <span
+                            style = {{
+                                display : 'inline-block',
+                                marginTop : 0,
+                                marginLeft : 7.5
+                            }}
+                        >
+                            <span className = { 'file-name' } style = { textStyle }>{ this.props.model.name }</span>
+                            <span className = { 'file-date' } style = { textStyle }>{ formatDate( this.props.model.created_date ) }</span>
+                        </span>
+                            { this.checkFileToUpload() }
 
-                        onDragStart  = { this.onDragStart.bind( this ) }
-                        onDrop       = { this.onDrop.bind( this ) }
-                        onDragEnd    = { this.onDragEnd.bind( this ) }
-                        onDragEnter  = { this.onDragEnter.bind( this ) }
-                        onDragLeave  = { this.onDragLeave.bind( this ) }
-                        onDragOver   = { this.onDragOver.bind( this ) }
-                    >
-                        <TouchRipple>
-                            <PostIcon
-                                model = { this.props.model }
-                                style = {{
-                                    width : 35,
-                                    height : 35
-                                }}
+                            {
+                                this.state.uploadStatus > -1 ?
 
-                            />
-                            <span
-                                style = {{
-                                    display : 'inline-block',
-                                    marginTop : 0,
-                                    marginLeft : 7.5
-                                }}
-                            >
-                                <span className = { 'file-name' } style = { textStyle }>{ this.props.model.name }</span>
-                                <span className = { 'file-date' } style = { textStyle }>{ formatDate( this.props.model.created_date ) }</span>
-                            </span>
-                             { this.checkFileToUpload() }
+                                    (this.state.uploadStatus == 100 ?
+                                        <Avatar style = {{ position: 'absolute', right: 0, top: 10, background: 'none' }} color = {'#00BCD4'} icon = { <Check /> } />
+                                        : <CircularProgress mode="determinate" value = { this.state.uploadStatus } size = {0.5} style = {{ float: 'right', marginTop: -4}}/>)
 
-                             { this.state.uploadStatus > -1 ?
+                                    : ''
 
-                               (this.state.uploadStatus == 100 ?
-                                 <Avatar style = {{ position: 'absolute', right: 0, top: 10, background: 'none' }} color = {'#00BCD4'} icon = { <Check /> } />
-                                : <CircularProgress mode="determinate" value = { this.state.uploadStatus } size = {0.5} style = {{ float: 'right', marginTop: -4}}/>)
+                            }
 
-                                : ''
+                            { this.displayDropdownButton() }
+                     </TouchRipple>
+                </div>
 
-                              }
+                <div style = {{ paddingLeft: 20, display : this.state.displayChildren ? '' : 'none' }}>
+                    {
 
-                             { this.displayDropdownButton() }
-                         </TouchRipple>
-                    </div>
+                        this.props.children ? this.props.children.map( function ( element, key ) {
 
-                    <div style = {{ paddingLeft: 20, display : this.state.displayChildren ? '' : 'none' }}>
-                        {
+                            return element;
 
-                            this.props.children ? this.props.children.map( function ( element, key ) {
+                        }) : ''
+                    }
 
-                                return element;
-
-                            }) : ''
-                        }
-
-                    </div>
+                </div>
+                </div>
 
             </div>
 

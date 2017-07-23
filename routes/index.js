@@ -1,96 +1,58 @@
 import express from 'express';
-import request from 'request';
-import fs      from 'fs';
-import url     from 'url';
-import mime    from 'mime';
-
-import React, {Component}                   from 'react';
-import {renderToString}                     from 'react-dom/server';
+import fs from 'fs';
+import url from 'url';
+import mime from 'mime';
+import React, {Component} from 'react';
+import {renderToString} from 'react-dom/server';
 import {RouterContext, match, createRoutes} from 'react-router';
 
 import appRouter from '../client/router.js';
 
 import Database from '../src/models/database.js';
-import Post     from '../src/models/post';
-import User     from '../src/models/user';
-import Install  from '../src/models/install';
+import Site from '../src/models/site';
+import Post from '../src/models/post';
+import User from '../src/models/user';
 
 import Template from '../public/theme/default/template.js';
 import Index from '../public/theme/default/index.js';
-import HomePage from '../public/theme/default/home-page.js';
-import _Post from '../public/theme/default/post.js';
 
-import Mail from './mail.js';
+import {customRoutes} from './custom-routes/'
 
-
-const routes   = createRoutes(appRouter());
+const routes = createRoutes(appRouter());
 const database = new Database();
-const post     = new Post();
-const user     = new User();
-const install  = new Install();
+const site = new Site();
+const post = new Post();
+const user = new User();
 
+const router = express.Router();
 
-
-fs.readFile(__dirname + '/../src/db-config.js', 'utf8', (err, data) =>  {
-
+fs.readFile(__dirname + '/../src/db-config.json', 'utf8', (error, data) =>  {
     try {
-
         const db_config = JSON.parse( data.toString().trim() );
 
         database.initiate({
-
             host               : db_config.host,
             user               : db_config.user,
             password           : db_config.password,
             database           : db_config.name,
             table_prefix       : db_config.table_prefix,
             multipleStatements : true,
-
         });
 
+        site.updateConnection(database);
         post.updateConnection(database);
-        user.updateConnection( database );
+        user.updateConnection(database);
 
-    } catch ( e ) {
-
-        console.log( e );
-
+    } catch (error) {
+        console.log(error);
     }
-
 });
 
-
-class DataProvider extends Component {
-    getChildContext() {
-        return {data: this.props.data};
-    }
-
-    render() {
-        return <RouterContext {...this.props}/>;
-    }
-}
-
-DataProvider.propTypes = {
-    data: React.PropTypes.object
-};
-
-DataProvider.childContextTypes = {
-    data: React.PropTypes.object
-};
-
-/*eslint-disable*/
-const router = express.Router();
-/*eslint-enable*/
-
-
 router.get('/admin', (req, res) => {
-
-    var sess = req.session;
+    const sess = req.session;
 
     if ( !sess.username ) {
-
         res.redirect( '/login' );
-
     } else {
 
         const {headers} = req;
@@ -123,110 +85,34 @@ router.get('/admin', (req, res) => {
         });
 
     }
-
-
-
-
 });
 
-router.get('/install', (req, res) => {
 
-    const { headers } = req;
+router.get('/login', (req, res) => {
+    const {
+        headers
+    } = req;
 
-    match({routes, location: req.url}, (error, redirectLocation, renderProps) => {
-
-        if (error) {
-
-            res.status( 500 ).send( error.message );
-
-        } else if (redirectLocation) {
-
-            res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-
-        } else if (renderProps) {
-
-            const content = renderToString(<RouterContext {...renderProps} />);
-
-            res.render('index', {title: 'Install | Pollider', data : false, content});
-
-        } else {
-
-            res.status(404).send('Not Found');
-
-        }
-
-    });
-
-});
-
-router.get( '/login', (req, res) => {
-
-    const { headers } = req;
-
-
-    match( {routes, location: req.url }, (error, redirectLocation, renderProps) => {
+    match({routes, location: req.url }, (error, redirectLocation, renderProps) => {
 
         if (error) {
-
             res.status(500).send(error.message);
-
         } else if (redirectLocation) {
-
             res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-
         } else if (renderProps) {
-
             const content = renderToString(<RouterContext {...renderProps} />);
 
-            res.render( 'index', {title: 'Install | Pollider', data : false, content });
-
+            res.render( 'index', {title: 'Login | Pollider', data : false, content });
         } else {
-
             res.status(404).send('Not Found');
-
         }
-
     });
-
 });
 
-
-router.get( '/setting', (req, res) => {
-
-    const { headers } = req;
-
-    match({routes, location: req.url}, (error, redirectLocation, renderProps) => {
-
-        if (error) {
-
-            res.status(500).send(error.message);
-
-        } else if (redirectLocation) {
-
-            res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-
-        } else if (renderProps) {
-
-            const content = renderToString(<RouterContext {...renderProps} />);
-
-            res.render( 'index', {title: 'Install | Pollider', data : false, content });
-
-        } else {
-
-            res.status(404).send('Not Found');
-
-        }
-
-    });
-
-});
-
-
-router.post( '/user-login', ( req, res ) => { user.login( req, res ); });
-router.post( '/user-logout', ( req, res ) => { user.logout( req, res ); });
-
-router.get( '/get-user-info', ( req, res ) => { user.getInfo( req, res ) });
-
+router.post('/user-login', ( req, res ) => { user.login( req, res ); });
+router.post('/user-logout', ( req, res ) => { user.logout( req, res ); });
+router.post('/user-get-detail', (req, res) => { user.getDetail(req, res) });
+router.get('/get-user-info', ( req, res ) => { user.get( req, res ) });
 router.get('/get-posts?', ( req, res ) => { post.getPosts( req, res ); });
 router.get('/get-blog?', ( req, res ) => { post.getBlog( req, res ); });
 router.get('/get-post?', ( req, res ) => { post.getPost( req, res ); });
@@ -237,122 +123,27 @@ router.get('/get-post-data', ( req, res ) => { post.getPostData( req, res ); });
 router.get('/get-post-data-types', ( req, res ) => { post.getPostDataTypes( req, res ); });
 router.get('/get-post-by-id', ( req, res ) => { post.getPostById( req, res ); });
 router.get('/check-post-exist', ( req, res ) => { post.checkPostExist( req, res ); });
-
-
-
 router.post( '/insert-post', ( req, res ) => { post.insertPost( req, res ); } );
 router.post( '/create-alias', ( req, res ) => { post.createAlias( req, res ); } );
 router.post( '/update-post', ( req, res ) => { post.updatePost( req, res ); });
 router.post( '/delete-post', ( req, res ) => { post.deletePost( req, res ); } );
 router.post( '/upload-file', ( req, res ) => {  post.uploadFile( req, res ); } );
-router.post( '/add-post-reference', ( req, res ) => { /*post.addPostReferece( req, res );*/ res.send( true ) } );
-
-router.post( '/install', ( req, res ) => {
-
-    install.createConfig( req, res, () => {
-
-        fs.readFile( __dirname + '/../src/db-config.js', 'utf8', ( err, data ) =>  {
-
-            const db_config = JSON.parse( data.toString().trim() );
-
-            database.initiate({
-
-                host               : db_config.host,
-                user               : db_config.user,
-                password           : db_config.password,
-                database           : db_config.name,
-                table_prefix       : db_config.table_prefix,
-                multipleStatements : true,
-
-            });
-
-            install.updateConnection( database );
-            post.updateConnection( database );
-            user.updateConnection( database );
-
-            install.installDatabase( req, res, db_config, () => {
-
-                install.installUser( req, res, db_config );
-
-            });
-
-        });
-
-    });
-
-});
-
-router.post( '/contact', ( req, res ) => {
-
-    const data = [];
-
-    if ( req.body ) {
-
-        req.body.map( ( element ) => {
-
-            data[ element.id ] = element.value
-
-        });
-
-        const mail = new Mail();
-
-        mail.send({
-            from    : data[ 'email' ],
-            to      : 'nsm12889@gmail.com',
-            subject : `Message from ${ data['first_name'] } ${ data['last_name'] } ${ data['company'] ? `@ ${ data['company'] }` : '' }`,
-            text    : data[ 'message' ]
-
-        }, ( sent ) => {
-
-            mail.send({
-                from    : 'nsm12889@gmail.com',
-                to      : data[ 'email' ],
-                subject : `Sung Min Nam | Contact Receipt`,
-                html    : `
-                    <div>
-                        <p>
-                            Hello ${ data[ 'first_name' ] },
-                            <br />
-                            <br />
-                            Thank you for your inquiry. <br />
-                            I'll get back to you soon!
-                            <br />
-                            <br />
-                            Sung Min
-                            <br />
-                            <br />
-                            -----------------------------------
-                            ${ data[ 'message' ] }
-
-                        </p>
-                    </div>
-                `
-
-            }, ( sent ) => {
-
-                res.send( sent );
-
-            });
 
 
+/* User defined routes */
+customRoutes(router);
 
-        });
-
-    }
-    
-});
 
 const handleContainer = function ( row, res ) {
 
-
     post.getBlog({
 
-        parentId : row.id,
+        parentId : row.alias_id ? row.alias_id : row.id,
         parentStatus : row.status,
         postDataCount : row.post_data_count,
         postTypeId : 1,
         container : false,
-        parentHyperlink : 'projects',
+        parentHyperlink : '',
         hyperlink : row.hyperlink,
         postDataCount : row.post_data_count
 
@@ -385,42 +176,44 @@ const handleContainer = function ( row, res ) {
 }
 
 router.get('/', (req, res) => {
+    post._getPostType((postTypes) => {
+        let home = {};
 
-    post.getBlog({
+        postTypes.map(postType => {
+            if (postType.home == 1) {
+                home = postType;
+            }
+        });
 
-        postTypeId : 1,
-        container : false,
-        hyperlink : 'projects'
+        post.getBlog({
+            postTypeId: 1,
+            container: false,
+            hyperlink: ''
+        }, ( posts ) => {
+            user._get((_user) => {
+                const initialState = {
+                    model : {
+                        ..._user,
+                        hyperlinks: [{
+                            name: home.name,
+                            hyperlink : ''
+                        }]
+                    },
+                    children: posts,
+                    displayHeader: true,
+                    type: 'home'
+                };
 
-    }, ( posts ) => {
+                const content = renderToString(<Index {...initialState }></Index>);
 
-        const initialState = {
-            model : {
-                first_name : 'Min',
-                last_name : 'Nam',
-                hyperlinks : [{
-                    name : 'Projects',
-                    hyperlink : 'projects'
-                }]
-            },
-            children : posts,
-            displayHeader : true,
-            type : 'home'
-
-        };
-        const content = renderToString(
-                <Index {...initialState }></Index>
-         );
-
-
-        res.send( Template({
-            body : content,
-            title : `Sung Min Nam | Web Developer`,
-            initialState : JSON.stringify( initialState )
-        }));
-
+                res.send( Template({
+                    body : content,
+                    title : `Sung Min Nam | Web Developer`,
+                    initialState : JSON.stringify(initialState)
+                }));
+            });
+        });
     });
-
 });
 
 
@@ -428,124 +221,200 @@ router.get('/*', ( req, res ) => {
 
     const links = req.originalUrl.replace( '//', '/').split('/');
 
-    post.getPostTypeByHyperlink({
+    post._getPostType((postTypes) => {
+        let home = {};
 
-        hyperlink : links[ 1 ]
+        postTypes.map(postType => {
+            if (postType.home == 1) {
+                home = postType;
+            }
+        });
 
-    }, ( postType ) => {
+        post.getPostByHyperlink({
+            links: links.slice(1),
+            index: 0,
+            postTypeId: home.id,
+            parentId: null,
+            hyperlinks: [{
+                name: home.name,
+                hyperlink : ''
+            }]
 
-        if ( links.length > 2 ) {
+        }, (postByHyperlink) => {
 
-            if ( postType ) {
+            const _post = Object.assign({ ...postByHyperlink, post_data_count : home.post_data_count, hyperlink : req.originalUrl });
 
-                post.getPostByHyperlink({
+            if ( !postByHyperlink ) {
 
-                    links : links.slice(2),
-                    index : 0,
-                    postTypeId : postType.id,
-                    parentId : null,
-                    hyperlinks : [{
-                        name : 'Projects',
-                        hyperlink : links[ 1 ]
-                    }]
+                post.getPostTypeByHyperlink({
 
-                }, ( post ) => {
+                    hyperlink : links[ 1 ]
 
-                    const _post = Object.assign({ ...post, post_data_count : postType.post_data_count, hyperlink : req.originalUrl });
+                }, ( postType ) => {
 
-                    if ( !post ) {
+                    if ( links.length > 2 ) {
 
-                        res.send( 'not found' );
+                        if ( postType ) {
+
+                            post.getPostByHyperlink({
+
+                                links : links.slice(2),
+                                index : 0,
+                                postTypeId : postType.id,
+                                parentId : null,
+                                hyperlinks : [{
+                                    name : 'Projects',
+                                    hyperlink : links[ 1 ]
+                                }]
+
+                            }, ( post ) => {
+
+                                const _post = Object.assign({ ...post, post_data_count : postType.post_data_count, hyperlink : req.originalUrl });
+
+                                if ( !post ) {
+
+                                    res.send( 'not found' );
+
+                                } else {
+
+                                    if ( post.extension && post.path ) {
+
+                                        const path = __dirname + '/../src' + post.path + post.filename + '.' + post.extension;
+
+                                        var file = fs.readFileSync( path );
+
+                                        res.writeHead(200, {'Content-Type': mime.lookup( path ) });
+                                        res.end(file, 'binary');
+
+                                    } else {
+
+                                        if ( post.container == 1 ) {
+
+                                            handleContainer( _post, res );
+
+                                        } else {
+
+                                            const initialState = {
+
+                                                model : { ...post },
+                                                type  : 'post',
+                                                displayProfile : false
+
+                                            };
+
+                                            const content = renderToString( <Index {...initialState }/> );
+
+                                            res.send( Template({
+
+                                                body         : content,
+                                                title        : `Sung Min Nam | ${ post.name }`,
+                                                initialState : JSON.stringify(initialState)
+
+                                            }));
+
+                                        }
+
+                                    }
+
+                                }
+
+                            })
+
+                        }
 
                     } else {
 
-                        if ( post.extension && post.path ) {
+                        if ( postType.home == 1  ) {
 
-                            const path = __dirname + '/../src' + post.path + post.filename + '.' + post.extension;
-
-                            var file = fs.readFileSync( path );
-
-                            res.writeHead(200, {'Content-Type': mime.lookup( path ) });
-                            res.end(file, 'binary');
+                            res.redirect('/');
 
                         } else {
 
-                            if ( post.container == 1 ) {
+                            post.getBlog({
 
-                                handleContainer( _post, res );
+                                postTypeId : postType.id,
+                                container : false,
+                                hyperlink : req.originalUrl
 
-                            } else {
+                            }, ( posts ) => {
 
                                 const initialState = {
-
-                                    model : { ...post },
-                                    type  : 'post',
-                                    displayProfile : false
+                                    model : {
+                                        first_name : 'Min',
+                                        last_name : 'Nam',
+                                    },
+                                    displayProfile : true,
+                                    model : posts,
+                                    type : 'home'
 
                                 };
+                                const content = renderToString(
+                                        <Index {...initialState }></Index>
+                                 );
 
-                                const content = renderToString( <Index {...initialState }/> );
 
                                 res.send( Template({
-
-                                    body         : content,
+                                    body : content,
                                     title        : `Sung Min Nam | ${ post.name }`,
-                                    initialState : JSON.stringify(initialState)
-
+                                    initialState : JSON.stringify( initialState )
                                 }));
 
-                            }
+                            });
 
                         }
 
                     }
 
-                })
+                });
 
-            }
 
-        } else {
 
-            if ( postType.home == 1  ) {
-
-                res.redirect('/');
 
             } else {
 
-                post.getBlog({
+                if ( postByHyperlink.extension && postByHyperlink.path ) {
 
-                    postTypeId : postType.id,
-                    container : false,
-                    hyperlink : req.originalUrl
+                    const path = __dirname + '/../src' + postByHyperlink.path + postByHyperlink.filename + '.' + postByHyperlink.extension;
 
-                }, ( posts ) => {
+                    var file = fs.readFileSync( path );
 
-                    const initialState = {
-                        model : {
-                            first_name : 'Min',
-                            last_name : 'Nam',
-                        },
-                        displayProfile : true,
-                        model : posts,
-                        type : 'home'
+                    res.writeHead(200, {'Content-Type': mime.lookup( path ) });
+                    res.end(file, 'binary');
 
-                    };
-                    const content = renderToString(
-                            <Index {...initialState }></Index>
-                     );
+                } else {
 
+                    if ( postByHyperlink.container == 1 ) {
 
-                    res.send( Template({
-                        body : content,
-                        title        : `Sung Min Nam | ${ post.name }`,
-                        initialState : JSON.stringify( initialState )
-                    }));
+                        handleContainer( _post, res );
 
-                });
+                    } else {
+
+                        const initialState = {
+
+                            model : { ...postByHyperlink },
+                            type  : 'post',
+                            displayProfile : false
+
+                        };
+
+                        const content = renderToString( <Index {...initialState }/> );
+
+                        res.send(Template({
+
+                            body         : content,
+                            title        : `Sung Min Nam | ${postByHyperlink.name}`,
+                            initialState : JSON.stringify(initialState)
+
+                        }));
+
+                    }
+
+                }
 
             }
 
-        }
+        })
+
 
     });
 

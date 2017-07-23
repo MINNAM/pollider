@@ -2,7 +2,7 @@ import React from 'react';
 import CloseButton from './components/ui/buttons/close-button.js';
 import Input from './components/input.js';
 import $ from 'jquery';
-import CONFIG from '../../../client/models/m-config.js';
+import {SITE} from '../../../client/global.js';
 
 const NOT_NULL = 0;
 const EMAIL    = 1;
@@ -68,7 +68,7 @@ class Contact extends React.Component {
 
         $.ajax({
 
-            url         : CONFIG.backendUrl + 'contact',
+            url         : SITE.url + '/contact',
             type        : "POST",
             data        : JSON.stringify( this.state.data ),
             contentType : "application/json; charset=utf-8",

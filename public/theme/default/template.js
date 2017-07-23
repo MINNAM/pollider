@@ -1,29 +1,22 @@
 import FONT from './font.js';
 
-const displayRobot = ( model ) => {
-
-    console.log( 'robot', model );
-
-    if ( !model ) {
-        return ''
+const displayRobot = (model) => {
+    if (!model) {
+        return '';
     }
 
     const parentStatus = model.parentStatus;
-    const status       = model.status;
+    const status = model.status;
 
-    if ( parentStatus == 'hidden' || parentStatus == 'private' ) {
-
+    if (parentStatus == 'hidden' || parentStatus == 'private') {
         return `<meta name="ROBOTS" content="NOINDEX, FOLLOW" />`;
 
-    } else if ( status == 'private' || status == 'hidden' ) {
-
+    } else if (status == 'private' || status == 'hidden') {
         return `<meta name="ROBOTS" content="NOINDEX, FOLLOW" />`;
-
     }
 
     return '';
-
-}
+};
 
 export default ({ body, title, initialState }) => {
 
@@ -40,16 +33,6 @@ export default ({ body, title, initialState }) => {
         <title>${title}</title>
         <meta name="viewport" content="width=device-width" />
         ${ displayRobot( JSON.parse( initialState ).model ) }
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-          ga('create', 'UA-101742383-1', 'none');
-          ga('send', 'pageview');
-
-        </script>
         ${
             font
         }
@@ -62,7 +45,7 @@ export default ({ body, title, initialState }) => {
       </head>
 
       <body>
-        <div id="pollider">${body}</div>
+        <div id="pollider-public">${body}</div>
       </body>
       <script src="/javascripts/blog.js"></script>
     </html>

@@ -1,9 +1,9 @@
 import React   from 'react';
 import Wrapper from './wrapper';
 import Heading from './components/heading.js';
-import CONFIG from '../../../client/models/m-config.js';
-import { ElementView } from '../../../client/components/project-editor/components/project-preview';
-import Element         from '../../../client/components/project-editor/model/element';
+import {SITE} from '../../../client/global.js';
+import {ElementView} from '../../../client/project-view/';
+import Element from '../../../client/project-editor/models/element';
 
 const NavItem = ( props ) => {
 
@@ -42,8 +42,6 @@ class Thumbnail extends React.Component {
         }
 
         const { model } = this.props;
-
-        console.log( model.data[ 'Thumbnail' ].content);
 
         if ( model.data[ 'Thumbnail' ].content ) {
 
@@ -84,8 +82,6 @@ class Thumbnail extends React.Component {
 
         const { name, index, description, thumbnails, type, hyperlink } = this.props;
         const { mouseOver } = this.state;
-
-        console.log( type );
 
         return (
 
@@ -134,7 +130,7 @@ class Thumbnail extends React.Component {
                     }}
                 >
                     <a
-                        href  = { `${ CONFIG.backendUrl }${ hyperlink }`}
+                        href  = { `${ SITE.url }${ hyperlink }`}
                         style = {{
                             color : 'rgb(60,60,60)',
                             textDecoration : 'none'
@@ -191,11 +187,12 @@ class Thumbnail extends React.Component {
                         >
                             {
                                 this.state.thumbnails.map( ( element, key ) => {
+
                                     return (
                                         <img
                                             key       = { key }
                                             className = { this.state.selected == key ? 'thumbnail-item-selected' : 'thumbnail-item' }
-                                            src       = { `${ CONFIG.backendUrl }${element._hyperlink}`}
+                                            src       = { `${ SITE.url}/${element._hyperlink}`}
                                             style      = {{
                                                 width : '100%',
                                                 position : 'absolute'

@@ -1,51 +1,40 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 class Wrapper extends React.Component {
 
-    constructor ( props ) {
-
-        super( props );
-
-
-
-    }
-
     componentDidMount () {
+        const {
+            onResize
+        } = this.props;
 
-        if ( this.props.onResize ) {
-
-            this.props.onResize( window.getComputedStyle( this.refs[ 'inner-content' ] ).marginRight );
-
-            window.addEventListener( 'resize', () => {
-
+        if (onResize) {
+            onResize(window.getComputedStyle(this.refs[ 'inner-content' ] ).marginRight);
+            window.addEventListener('resize', () => {
                 this.props.onResize( window.getComputedStyle( this.refs[ 'inner-content' ] ).marginRight );
-
             });
-
         }
-
     }
-
 
     render () {
-
-        const { children, style, innerStyle } = this.props;
-
+        const {
+            children,
+            style,
+            innerStyle
+        } = this.props;
         return (
             <div
                 className = 'content'
-                style     = { style }
+                style = { style }
             >
                 <div
                     className = 'inner-content'
-                    style     = { innerStyle }
-                    ref       = 'inner-content'
+                    style = {innerStyle}
+                    ref = 'inner-content'
                 >
-                    { children }
+                    {children}
                 </div>
             </div>
-        )
-
+        );
     }
 
 }

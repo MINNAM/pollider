@@ -172,7 +172,6 @@ button {
 }
 #logo {
   height: 100%;
-  margin-left: 10px;
 }
 .menu-container {
   position: fixed;
@@ -184,7 +183,7 @@ button {
   background: #fff;
 }
 .empty-div {
-  transition: 0.5s ease;
+  transition: 0.3s ease;
 }
 .primary-menu {
   box-sizing: border-box;
@@ -193,7 +192,7 @@ button {
   padding-top: 7px;
   padding-right: 10px;
   padding-left: 10px;
-  border-bottom: 1px solid #ebebeb;
+  /*border-bottom: 1px solid #ebebeb;*/
 }
 .secondary-menu {
   position: absolute;
@@ -322,7 +321,6 @@ button {
 .project-preview {
   zoom: 1;
   border-radius: 3.5px;
-  box-shadow: 1px 1px 5px #3c3c3c;
 }
 .public-DraftEditor-content {
   height: calc(100% - 50px);

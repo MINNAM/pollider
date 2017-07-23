@@ -3,27 +3,10 @@ import React from 'react';
 import Body             from  './body.js';
 import Thumbnail         from './thumbnail.js';
 
-import { ProjectPreview } from '../../../client/components/project-editor/components/project-preview';
-
-import Post    from '../../../client/components/post-container/models/post';
-import Project from '../../../client/components/project-editor/model/project';
+import {createProjectView} from '../index.js';
 
 
 class PostContainer extends React.Component {
-
-    constructor ( props ) {
-
-        super( props );
-
-        const { model } = this.props;
-
-        const post    =  { ...new Post(), ...model };
-        const project = new Project({ model : post, projectField : 'Content' });
-
-
-        this.state = { project };
-
-    }
 
     render () {
 
@@ -41,12 +24,11 @@ class PostContainer extends React.Component {
             >
 
                 <div id = 'post-content'>
-                    <ProjectPreview model = { this.state.project } />
+                    {
+                        createProjectView(model)
+                    }
                     {
                         children ? children.map( ( element, key ) => {
-
-                            console.log( element.data  );
-
                             return (
 
                                     <Thumbnail
@@ -57,7 +39,7 @@ class PostContainer extends React.Component {
                                         parentModel = { this.props.model }
                                         name        = { element.name }
                                         hyperlink   = { element.hyperlink }
-                                        description = { element.data ? (element.data[ 'Description' ] ? element.data[ 'Description' ].content : '') : '' }                                        
+                                        description = { element.data ? (element.data[ 'Description' ] ? element.data[ 'Description' ].content : '') : '' }
                                     />
 
                             )

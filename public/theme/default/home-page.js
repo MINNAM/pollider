@@ -3,29 +3,11 @@ import React from 'react';
 import Body      from './body.js';
 import Thumbnail from './thumbnail.js';
 
-import { ProjectPreview } from '../../../client/components/project-editor/components/project-preview';
-
-import Post    from '../../../client/components/post-container/models/post';
-import Project from '../../../client/components/project-editor/model/project';
+import {createProjectView} from '../index.js';
 
 const PRIMARY_COLOR = 'rgb(76, 211, 173)';
 
-
 class HomePage extends React.Component {
-
-    constructor ( props ) {
-
-        super( props );
-
-        const { model } = this.props;
-
-        const post    =  { ...new Post(), ...model };
-        const project = new Project({ model : post, projectField : 'Content' });
-
-
-        this.state = { project };
-
-    }
 
     render () {
 
@@ -34,16 +16,16 @@ class HomePage extends React.Component {
         return (
 
             <Body
-                model           = { model }
-                profile         = { this.props.profile }
-                displayHeader         = { this.props.displayHeader }
+                model = { model }
+                profile = { this.props.profile }
+                displayHeader = { this.props.displayHeader }
                 toggleProfile = { this.props.toggleProfile }
                 toggleContact = { this.props.toggleContact }
                 displayPostInfo = { false }
-                hintFold        = { this.props.hintFold }
+                hintFold = { this.props.hintFold }
             >
                 <div id = 'post-content'>
-                    <ProjectPreview model = { this.state.project } />
+                    {createProjectView(model)}
                     {
                         children ? children.map( ( element, key ) => {
 
@@ -58,7 +40,7 @@ class HomePage extends React.Component {
                                     parentModel = { this.props.model }
                                     name        = { element.name }
                                     hyperlink   = { element.hyperlink }
-                                    description = { element.data ? (element.data[ 'Description' ] ? element.data[ 'Description' ].content : '') : '' }                                    
+                                    description = { element.data ? (element.data[ 'Description' ] ? element.data[ 'Description' ].content : '') : '' }
                                 />
                             )
                         }) : ''

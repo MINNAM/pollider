@@ -1,18 +1,10 @@
 import React from 'react';
-
-import Wrapper           from './wrapper';
-import Thumbnail         from './thumbnail.js';
-import Directory         from './directory.js';
-import Heading           from './components/heading.js';
+import Wrapper from './wrapper';
+import Thumbnail from './thumbnail.js';
+import Directory from './directory.js';
+import Heading from './components/heading.js';
 import FontAwesomeButton from './components/ui/buttons/font-awesome-button.js';
-
-import { ProjectPreview } from '../../../client/components/project-editor/components/project-preview';
-
-import Post    from '../../../client/components/post-container/models/post';
-import Project from '../../../client/components/project-editor/model/project';
-
-import LiterallyClock from './components/literally-clock/components/literally-clock.js';
-
+import PostHeader from './post-header.js';
 
 class Body extends React.Component {
 
@@ -51,8 +43,6 @@ class Body extends React.Component {
 
         const { model, children, displayPostInfo, displayHeader } = this.props;
 
-        const date = model.modified_date ? new Date( model.modified_date ) : new Date( model.created_date );
-
         let scrollTopStyle = {  opacity : 0, marginTop : 12.5, color : 'rgb(156, 156, 156)' };
 
         if ( this.state.scrollY > 10 ) {
@@ -76,209 +66,156 @@ class Body extends React.Component {
 
         }
 
-
         return (
             <div
                 id = 'post-body'
+                style = {{
+                    // transform: this.state.toggleProfile ? 'translate(-10%,0)' : 'translate(0,0)',
+                    // transition: '0.5s all'
+                }}
             >
                 <Wrapper
-                    onResize = { ( scrollRight ) => {
-
+                    onResize = {( scrollRight ) => {
                         this.setState({ scrollRight });
-
                     }}
                 />
+                    <Wrapper
+                        innerStyle = {{
+                            paddingBottom : 45,
+                            position : 'relative'
+                        }}
+                    >
+                        <div ref = 'container'  >
 
-                <Wrapper
-                    innerStyle = {{
-                        paddingBottom : 45,
-                        position : 'relative'
-                    }}
-                >
-                    <div ref = 'container'  >
-
-                        <div
-                            id    = 'post-nav'
-                            ref   = 'nav'
-                            style = {{
-                                position : navFixed ? 'fixed' : 'absolute',
-                                marginRight : 0,
-                                top : navTop,
-                                zIndex    : 20,
-                                right : navRight
-                            }}
-                        >
                             <div
+                                id    = 'post-nav'
+                                ref   = 'nav'
                                 style = {{
-
+                                    position : navFixed ? 'fixed' : 'absolute',
+                                    marginRight : 0,
+                                    top : navTop,
+                                    zIndex    : 20,
+                                    right : navRight
                                 }}
                             >
-                                <FontAwesomeButton
-                                    className   = 'fa-user-o'
-                                    size        = { 22 }
-                                    iconStyle   = {{
-                                        color : 'rgb(156, 156, 156)'
-                                    }}
-                                    hoverStyle  = {{ color : 'rgb(60,60,60)' }}
-                                    parentStyle = {{
-                                        marginBottom : 40,
-                                        position     : 'relative',
-                                        float : 'right'
-                                    }}
-                                    onClick = {() => {
-
-                                        this.props.toggleProfile();
-
-                                    }}
-                                />
-                                <FontAwesomeButton
-                                    className   = 'fa-envelope-o'
-                                    size        = { 24 }
-                                    iconStyle   = {{
-                                        color     : 'rgb(156, 156, 156)',
-                                        fontSize : 19
-                                    }}
-                                    hoverStyle  = {{ color : 'rgb(60,60,60)' }}
-                                    parentStyle = {{
-                                        marginBottom : 40,
-                                        position     : 'relative',
-                                        float : 'right'
-                                    }}
-                                    onClick = {() => {
-
-                                        this.props.toggleContact();
-
-                                    }}
-                                />
-                                <FontAwesomeButton
-                                    className   = 'fa-angle-up'
-                                    size        = { 24 }
-                                    iconStyle   = {{
-                                        color     : 'rgb(156, 156, 156)',
-                                        fontSize : 24,
-                                        opacity      : this.state.scrollY > 0 ? 1 : 0
-                                    }}
-                                    hoverStyle  = {{ color : 'rgb(60,60,60)' }}
-                                    parentStyle = {{
-                                        marginBottom : 40,
-                                        position     : 'relative',
-                                        float : 'right'
-                                    }}
-                                    onClick = { () => {
-
-                                        let startingY = window.scrollY;
-
-                                        let start     = 0;
-                                        let duration  = 1000;
-                                        let easing    = function (t) { return (--t)*t*t+1 }
-
-                                      // Bootstrap our animation - it will get called right before next frame shall be rendered.
-                                        window.requestAnimationFrame(function step(timestamp) {
-                                            if ( !start ) {
-                                                start = timestamp;
-                                            }
-
-                                            let time = timestamp - start
-                                            let percent = Math.min( time / duration, 1);
-
-                                            percent = easing( percent );
-
-                                            window.scrollTo( 0, startingY - (startingY * percent) )
-
-
-                                            if ( time < duration ) {
-
-                                                window.requestAnimationFrame( step );
-
-                                            }
-
-                                        });
-
-                                    }}
-                                />
-
-                            </div>
-
-                        </div>
-
-                        <div
-                            id = 'post-header'
-                            style = {{
-                                paddingBottom : displayPostInfo ? 5 : 0
-                            }}
-                        >
-                            <div style = {{ marginBottom : 35 }} >
-                                <span
+                                <div
                                     style = {{
-                                        display      : 'inline-block'
+
                                     }}
                                 >
-                                    <Directory
-                                        model = { model.hyperlinks }
-                                        onMouseEnter = { () => {
+                                    <FontAwesomeButton
+                                        className   = 'fa-user-o'
+                                        size        = { 22 }
+                                        iconStyle   = {{
+                                            color : 'rgb(156, 156, 156)'
+                                        }}
+                                        hoverStyle  = {{ color : 'rgb(60,60,60)' }}
+                                        parentStyle = {{
+                                            marginBottom : 40,
+                                            position     : 'relative',
+                                            float : 'right'
+                                        }}
+                                        onClick = {() => {
 
-                                            this.props.hintFold();
+                                            this.setState({
+                                                toggleProfile: !this.state.toggleProfile
+                                            })
+
                                         }}
                                     />
-                                </span>
+                                    <FontAwesomeButton
+                                        className   = 'fa-envelope-o'
+                                        size        = { 24 }
+                                        iconStyle   = {{
+                                            color     : 'rgb(156, 156, 156)',
+                                            fontSize : 19
+                                        }}
+                                        hoverStyle  = {{ color : 'rgb(60,60,60)' }}
+                                        parentStyle = {{
+                                            marginBottom : 40,
+                                            position     : 'relative',
+                                            float : 'right'
+                                        }}
+                                        onClick = {() => {
+
+                                            this.props.toggleContact();
+
+                                        }}
+                                    />
+                                    <FontAwesomeButton
+                                        className   = 'fa-angle-up'
+                                        size        = { 24 }
+                                        iconStyle   = {{
+                                            color     : 'rgb(156, 156, 156)',
+                                            fontSize : 24,
+                                            opacity      : this.state.scrollY > 0 ? 1 : 0
+                                        }}
+                                        hoverStyle  = {{ color : 'rgb(60,60,60)' }}
+                                        parentStyle = {{
+                                            marginBottom : 40,
+                                            position     : 'relative',
+                                            float : 'right'
+                                        }}
+                                        onClick = { () => {
+
+                                            let startingY = window.scrollY;
+
+                                            let start     = 0;
+                                            let duration  = 1000;
+                                            let easing    = function (t) { return (--t)*t*t+1 }
+
+                                          // Bootstrap our animation - it will get called right before next frame shall be rendered.
+                                            window.requestAnimationFrame(function step(timestamp) {
+                                                if ( !start ) {
+                                                    start = timestamp;
+                                                }
+
+                                                let time = timestamp - start
+                                                let percent = Math.min( time / duration, 1);
+
+                                                percent = easing( percent );
+
+                                                window.scrollTo( 0, startingY - (startingY * percent) )
+
+
+                                                if ( time < duration ) {
+
+                                                    window.requestAnimationFrame( step );
+
+                                                }
+
+                                            });
+
+                                        }}
+                                    />
+
+                                </div>
+
                             </div>
-                            <div
-                                style = {{
-                                    display : displayPostInfo ? 'inline' : 'none'
-                                }}
+
+                            <PostHeader
+                                model = { model }
+                                display = { displayPostInfo }
                             >
+                                <div style = {{ marginBottom : 35 }} >
+                                    <span
+                                        style = {{
+                                            display      : 'inline-block'
+                                        }}
+                                    >
+                                        <Directory
+                                            model = { model.hyperlinks }
+                                            onMouseEnter = { () => {
 
-                                <Heading
-                                    textColor = { 'rgb(120,120,120)' }
-                                    fontSize = { 18 }
-                                    content = {
-                                        model.data ?
-                                            (
-                                                model.data[ 'Description' ] ?
-                                                    <span>
-                                                        <i
-                                                            className="fa fa-lock"
-                                                            style = {{
-                                                                color:'rgb(100,100,100)',
-                                                                marginRight : 10,
-                                                                fontSize : 14,
-                                                                display : model.status != 'public' ? 'inline' : 'none'
-                                                            }}
-                                                        />
-                                                        { model.data[ 'Description' ].content }
-                                                    </span>
-                                                : ''
-                                            )
-                                        :
-                                            <i className="fa fa-lock" style = {{color:'rgb(120,120,120)', marginRight : 10, fontSize : 14, display : model.status != 'public' ? 'inline' : 'none' }}/>
-                                        }
-                                />
+                                                this.props.hintFold();
+                                            }}
+                                        />
+                                    </span>
+                                </div>
+                            </PostHeader>
 
-                                <h1 style = {{
-                                    fontFamily : 'hind',
-                                    letterSpacing : 1.2,
-                                    fontSize : 45,
-                                    color : 'rgb(40,40,40)',
-                                    marginTop : 14,
-                                    marginBottom: 12
-                                }}>{ model ? model.name : '' }</h1>
-                                <Heading
-                                    fontSize = { 13 }
-                                    textColor = { 'rgb(60,60,60)' }
-                                    bold      = { true }
-                                    content = {
-                                        <span>
-                                            {'by '}
-                                            <span style = {{ fontWeight : 'bold' }}>{ `${model.first_name} ${model.last_name}` }</span>
-                                            <span style = {{ marginRight : 3 }}>{`, Jan 28 2012 ${date.getHours() >= 12 ? 'PM' : 'AM' }` }</span>
-                                        </span>
-                                    }
-                                />
-                            </div>
                         </div>
-
-                    </div>
-                </Wrapper>
+                    </Wrapper>
                 <Wrapper>
                     <div ref = 'children-container'>
                         { children }
@@ -304,6 +241,59 @@ class Body extends React.Component {
                         />
                     </span>
                 </Wrapper>
+                <div
+                    style = {{
+                        width : '100%',
+                        height : 50,
+                        position : 'relative',
+                        marginTop : 7.5
+                    }}
+                >
+                    <Wrapper
+                        innerStyle = {{
+                            position : 'relative'
+                        }}
+                    >
+                        <span
+                            style = {{
+                                color         : 'rgb(120,120,120)',
+                                display       : 'inline-block',
+                                fontSize      : 12,
+                                height        : 50,
+                                letterSpacing : 2,
+                                lineHeight    : '50px'
+                            }}
+                        >
+                            {`${ model.first_name } ${ model.last_name} ©2017`}
+
+                        </span>
+                        <FontAwesomeButton
+                            className   = 'fa-vimeo'
+                            size        = { 25 }
+                            iconStyle   = {{ color: 'rgb(180,180,180)' }}
+                            hoverStyle  = {{ color : 'rgb(120,120,120)' }}
+                            parentStyle = {{
+                                marginTop : 10,
+                                float     : 'right',
+                                position  : 'relative'
+                            }}
+                            url         = { 'https://vimeo.com/jabuem' }
+                        />
+                        <FontAwesomeButton
+                            className   = 'fa-github'
+                            size        = { 25 }
+                            iconStyle   = {{ color : 'rgb(180,180,180)' }}
+                            hoverStyle  = {{ color : 'rgb(120,120,120)' }}
+                            parentStyle = {{
+                                marginTop   : 10,
+                                marginRight : 20,
+                                float       : 'right',
+                                position    : 'relative'
+                            }}
+                            url =  { 'https://github.com/MINNAM' }
+                        />
+                    </Wrapper>
+                </div>
             </div>
         )
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import Heading from './components/heading.js';
-import CONFIG from '../../../client/models/m-config.js';
+import {SITE} from '../../../client/global.js';
 
 class Hyperlink extends React.Component {
 
@@ -44,7 +44,7 @@ class Hyperlink extends React.Component {
                 }}
             >
                 <a
-                    href = { CONFIG.backendUrl + hyperlink }
+                    href = { SITE.url + hyperlink }
                     style = {{
                         textDecoration : 'none',
                         border : 'none',
@@ -116,11 +116,15 @@ const Directory = ( props ) => {
 
         for ( let i = 0; i < key; i++ ) {
 
-            hyperlink += `/${model[ i ].hyperlink}`;
+            hyperlink += model[ i ].hyperlink ? `/${model[ i ].hyperlink}` : '';
 
         }
 
+
+
         hyperlink += `/${element.hyperlink}`;
+
+        console.log( 'from dir', hyperlink);
 
         hyperlinks.push(
 

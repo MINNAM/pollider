@@ -21,16 +21,16 @@ class Post {
     */
     checkPostExist ( req, res ) {
 
-        const { id, parent_id, name, hyperlink } = req.query;
+        const { post_type_id, parent_id, hyperlink } = req.query;
 
         const sql    = `SELECT
-            id, name FROM ${ this.table_prefix }post
+            name FROM ${ this.table_prefix }post
             WHERE
-                id != ? AND
-                parent_id ${ parent_id != 'null' ? '= ?' : 'IS NULL' }
+                parent_id ${ parent_id ? '= ?' : 'IS NULL' }
                 AND hyperlink LIKE ?
+                AND post_type_id = ?
             `;
-        const fields = parent_id != 'null' ? [ id, parent_id, hyperlink ] : [ id, hyperlink ];
+        const fields = parent_id ? [parent_id, hyperlink, post_type_id] : [hyperlink, post_type_id];
 
         this.db.connection.query (
             sql,
@@ -143,25 +143,23 @@ class Post {
 
     }
 
-    deletePost ( req, res ) {
+    deletePost (req, res ) {
+        const {
+            posts
+        } = req.body;
 
-        const { posts }       = req.body;
-        const itemsToDelete   = []; // id
-        const paths           = [];
+        const itemsToDelete = []; // id
+        const paths = [];
 
-        const _posts          = JSON.parse( posts );
-
-
-
-        for ( let key in _posts ) {
+        for ( let key in posts ) {
 
             (( _key ) => {
 
-                itemsToDelete.push( _posts[ _key ].id );
+                itemsToDelete.push( posts[ _key ].id );
 
-                if ( _posts[ _key ].path ) {
+                if ( posts[ _key ].path ) {
 
-                    paths.push( __dirname + '/..' + _posts[ _key ].path );
+                    paths.push( __dirname + '/..' + posts[ _key ].path );
 
                 }
 
@@ -188,9 +186,6 @@ class Post {
         });
 
 
-
-         console.log( itemsToDelete );
-
         const _paths = Array.from( new Set( paths ) ); // to array
 
         _paths.map( ( path ) => {
@@ -208,8 +203,6 @@ class Post {
             `DELETE FROM ${ this.table_prefix }post WHERE id IN ?`,
             [[ itemsToDelete ]],
             ( err, row ) => {
-
-                console.log( err );
 
                 res.send( true );
 
@@ -370,7 +363,7 @@ class Post {
                         rows[ 0 ].hyperlink,
                         null,
                         null,
-                        null,
+                        rows[ 0 ].container,
                         rows[ 0 ].status,
                     ], ( err, rows ) => {
 
@@ -611,7 +604,9 @@ class Post {
 
                 if ( parent.parent_id != 'null' ) {
 
+
                     _hyperlink = this.buildHyperlink( parent.parent_id, parentPosts, `/${ parent.hyperlink + hyperlink }` );
+                    console.log( 'hyperlink', parent.hyperlink, _hyperlink );
 
                 }
 
@@ -678,7 +673,7 @@ class Post {
 
                         if ( post.container == 1 ) {
 
-                            children = { ...this.findChildren ( post.id, posts, children )};
+                            children = { ...this.findChildren ( post.alias_id ? post.alias_id : post.id, posts, children )};
 
                             for ( let key in children ) {
 
@@ -823,8 +818,6 @@ class Post {
 
                                 if ( !posts[ element.post_id ] ) {
 
-                                    console.log( element.hyperlink );
-
                                     posts[ element.post_id ] = {
 
                                         id            : element.post_id,
@@ -900,8 +893,6 @@ class Post {
 
                                     _posts.map( ( element, key ) => {
 
-                                        console.log( element.id, element.name );
-
                                         if ( parentId ) {
 
                                             _posts[ key ].hyperlink = parentHyperlink + this.buildHyperlink( element.id, rows, '' );
@@ -911,6 +902,8 @@ class Post {
                                             _posts[ key ].hyperlink = hyperlink + this.buildHyperlink( element.id, rows, '' );
 
                                         }
+
+                                        console.log('hello', _posts[ key ].hyperlink );
 
                                     });
 
@@ -1050,7 +1043,7 @@ class Post {
 
                                                 const _post = {
                                                     ...post,
-                                                    _hyperlink : postTypes[ 0 ].hyperlink + this.buildHyperlink( post.parent_id, rows, '' ) + '/' + post.hyperlink,
+                                                    _hyperlink : this.buildHyperlink( post.parent_id, rows, '' ) + '/' + post.hyperlink,
                                                     data : _postData
                                                 }
 
@@ -1390,21 +1383,23 @@ class Post {
     }
 
     getPostType ( req, res ) {
-
         this.db.connection.query (
-
             `SELECT * FROM ${ this.table_prefix }post_type;`,
-
             [],
-
             ( err, rows ) => {
-
                 res.send( rows );
-
             }
-
         );
+    }
 
+    _getPostType (done) {
+        this.db.connection.query (
+            `SELECT * FROM ${ this.table_prefix }post_type;`,
+            [],
+            ( err, rows ) => {
+                done( rows );
+            }
+        );
     }
 
     getPostData ( req, res ) {

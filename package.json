@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-loader": "^6.3.2",
@@ -25,6 +26,7 @@
     "draft-js-export-html": "^0.5.2",
     "express": "^4.14.1",
     "express-session": "^1.15.1",
+    "fetch": "^1.1.0",
     "formidable": "^1.0.17",
     "jquery": "^3.1.1",
     "jsdom": "^9.11.0",
@@ -33,6 +35,8 @@
     "morgan": "^1.7.0",
     "mysql": "^2.11.1",
     "node-sass": "^4.5.0",
+    "nodemailer": "^2.7.0",
+    "prompt": "^1.0.0",
     "pug": "~2.0.0-beta6",
     "react": "^15.4.2",
     "react-codemirror": "^0.3.0",
@@ -45,7 +49,6 @@
     "stylus": "^0.54.5",
     "superagent": "^2.0.0",
     "webpack": "2.2.1",
-    "xoauth2": "^1.2.0",
-    "nodemailer": "^2.7.0"
+    "xoauth2": "^1.2.0"
   }
 }

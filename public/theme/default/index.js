@@ -217,7 +217,8 @@ class Index extends React.Component {
                 <div
                     style = {{
                         opacity    : this.state.loaded ? 1 : 0,
-                        transition : '.4s ease all'
+                        transition : '.4s ease all',
+                        position : 'relative'
                     }}
                 >
                     <Wrapper
@@ -251,42 +252,49 @@ class Index extends React.Component {
                             This is a private post and will not be cached from search engines.
                         </div>
                     </Wrapper>
-                    <div ref = { 'header' }>
-                        <Header
-                            model         = { model }
-                            display       = { displayHeader }
-                            toggleContact = { this.toggleContact.bind( this ) }
-                            toggleHeader = { this.toggleHeader.bind( this ) }
-                            type          = { type == 'home' ? 0 : 1 }
-                        />
-                    </div>
+                    {
+
+                        // <div ref = { 'header' }>
+                        //     <Header
+                        //         model         = { model }
+                        //         display       = { displayHeader }
+                        //         toggleContact = { this.toggleContact.bind( this ) }
+                        //         toggleHeader = { this.toggleHeader.bind( this ) }
+                        //         type          = { type == 'home' ? 0 : 1 }
+                        //     />
+                        // </div>
+
+                    }
+
                     <header
                         id    = 'main-header'
                     >
-                        <Fold
-                            size        = { 58 }
-                            direction   = { 'right' }
-                            parentStyle = {{
-                                cursor  : 'pointer',
-                                display : displayHeader ? 'none' : '',
-                                left    : 0,
-                                top     : 0,
-                            }}
-                            topStyle = {{
-                                background : 'rgb(0, 14, 29)'
-                            }}
-                            onClick  = { () => {
-                                this.setState({ displayHeader : true })
-                            }}
-                            onMouseOver = { () => {
-                                this.setState({ foldMouseOver : true });
-                            }}
-                            onMouseLeave = { () => {
-                                this.setState({ foldMouseOver : false });
-                            }}
-                            foldMouseOver = { this.state.foldMouseOver }
-                        />
+                        {
+                            // <Fold
+                            //     size        = { 58 }
+                            //     direction   = { 'right' }
+                            //     parentStyle = {{
+                            //         cursor  : 'pointer',
+                            //         display : displayHeader ? 'none' : '',
+                            //         left    : 0,
+                            //         top     : 0,
+                            //     }}
+                            //     topStyle = {{
+                            //         background : 'rgb(0, 14, 29)'
+                            //     }}
+                            //     onClick  = { () => {
+                            //         this.setState({ displayHeader : true })
+                            //     }}
+                            //     onMouseOver = { () => {
+                            //         this.setState({ foldMouseOver : true });
+                            //     }}
+                            //     onMouseLeave = { () => {
+                            //         this.setState({ foldMouseOver : false });
+                            //     }}
+                            //     foldMouseOver = { this.state.foldMouseOver }
+                            // />
 
+                        }
                     </header>
                         {
                             content ? (
@@ -298,60 +306,7 @@ class Index extends React.Component {
                                 })
                             ) : ''
 
-                        }
-                    <div
-                        style = {{
-                            width : '100%',
-                            height : 50,
-                            position : 'relative',
-                            marginTop : 7.5
-                        }}
-                    >
-                        <Wrapper
-                            innerStyle = {{
-                                position : 'relative'
-                            }}
-                        >
-                            <span
-                                style = {{
-                                    color         : 'rgb(120,120,120)',
-                                    display       : 'inline-block',
-                                    fontSize      : 12,
-                                    height        : 50,
-                                    letterSpacing : 2,
-                                    lineHeight    : '50px'
-                                }}
-                            >
-                                {`${ model.first_name } ${ model.last_name} ©2017`}
-
-                            </span>
-                            <FontAwesomeButton
-                                className   = 'fa-vimeo'
-                                size        = { 25 }
-                                iconStyle   = {{ color: 'rgb(180,180,180)' }}
-                                hoverStyle  = {{ color : 'rgb(120,120,120)' }}
-                                parentStyle = {{
-                                    marginTop : 10,
-                                    float     : 'right',
-                                    position  : 'relative'
-                                }}
-                                url         = { 'https://vimeo.com/jabuem' }
-                            />
-                            <FontAwesomeButton
-                                className   = 'fa-github'
-                                size        = { 25 }
-                                iconStyle   = {{ color : 'rgb(180,180,180)' }}
-                                hoverStyle  = {{ color : 'rgb(120,120,120)' }}
-                                parentStyle = {{
-                                    marginTop   : 10,
-                                    marginRight : 20,
-                                    float       : 'right',
-                                    position    : 'relative'
-                                }}
-                                url =  { 'https://github.com/MINNAM' }
-                            />
-                        </Wrapper>
-                    </div>
+                        }                    
                 </div>
                 <Contact
                     display  = { displayContact }

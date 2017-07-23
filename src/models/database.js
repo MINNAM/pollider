@@ -1,11 +1,6 @@
-import mysql      from 'mysql';
+import mysql from 'mysql';
 
 class Database {
-
-    constructor() {
-
-
-    }
 
     initiate ( config ) {
 
@@ -19,7 +14,7 @@ class Database {
             this.handleDisconnect();
 
         }
-        
+
     }
 
     handleDisconnect() {

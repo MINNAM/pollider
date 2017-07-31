@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-import TEXT_STYLE from '../../../public/theme/default/text-style.js';
 import ColView from './col-view.js';
 
 class RowView extends Component {
@@ -35,7 +34,9 @@ class RowView extends Component {
     render () {
         const {
             model,
-            editor
+            editor,
+            handler,
+            handleDialogModel
         } = this.props;
 
         const {
@@ -58,6 +59,7 @@ class RowView extends Component {
                                 index = {key}
                                 model = {col}
                                 editor = {editor}
+                                handleDialogModel = {handleDialogModel}
                                 queueElement = {(element) => {
                                     elements[ key ] = element;
 
@@ -65,6 +67,7 @@ class RowView extends Component {
                                         elements
                                     });
                                 }}
+                                handler = {handler}
                             />
                         );
                     })

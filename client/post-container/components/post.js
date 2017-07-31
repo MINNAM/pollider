@@ -10,6 +10,7 @@ import TouchRipple from '../../../node_modules/material-ui/internal/TouchRipple'
 /* Pollider */
 import {
     SITE,
+    THEME,
     formatDate
 }   from '../../global.js';
 import PostIcon from './post-icon';
@@ -25,6 +26,11 @@ class Post extends Component {
 
     componentDidMount () {
         this.checkFileToUpload();
+        if (this.props.selected) {
+            if ( this.props.selected.id == this.props.model.id ) {
+                this.props.locatePost(this.refs.post);
+            }
+        }
     }
 
     onClick ( event ) {
@@ -123,17 +129,12 @@ class Post extends Component {
     }
 
     onDragOver ( event ) {
-
         event.preventDefault();
 
         this.setState({
-
-            style : {
-
-                background : 'rgb(245,245,245)'
-
+            style: {
+                background : 'rgb(180, 180, 180)'
             }
-
         });
 
         return false;
@@ -164,7 +165,9 @@ class Post extends Component {
     */
     onDragEnd ( event ) {
 
-        this.props.reallocateModel( this.props.model.parent_id, this.props.model.id, this.props.model.name, this.props.model.hyperlink );
+        this.props.reallocateModel( this.props.model.parent_id, this.props.model.id, this.props.model.name, this.props.model.hyperlink, () => {
+            this.props.setUpdatePreview( true );
+        });
         this.setState({ style : { background : '' }});
         this.props.handleTopLevelPlacer( false );
 
@@ -172,12 +175,6 @@ class Post extends Component {
 
         selectedItem.style.left = event.pageX + 20 + 'px';
         selectedItem.style.top = ( event.pageY - document.body.scrollTop ) + 'px';
-
-        setTimeout( () => {
-
-            this.props.setUpdatePreview( true );
-
-        }, 501 )
 
 
 
@@ -280,16 +277,58 @@ class Post extends Component {
 
     displayDropdownButton () {
 
-        if ( this.props.model.children ) {
+        const {
+            model,
+            selected
+        } = this.props;
+        const {
+            displayChildren
+        } = this.state;
 
-            if( Object.keys( this.props.model.children ).length > 0 ) {
+        let style = {};
 
+        if (selected) {
+            if (selected.id == model.id) {
+                style = {color: 'white'}
+            }
+        }
+
+        if (model.children) {
+
+            if (Object.keys(model.children).length > 0) {
 
                 // Possibly SVG Icon below is producing keyboardOnFocus error.
                 return (
 
-                    <span style = {{right: 10, top: 9, position: 'absolute'}} onClick = { this.handleDropdown.bind( this ) }>
-                        { this.state.displayChildren ? <KeyboardArrowUp style = {{ marginTop: 4 }} viewBox = { '0 0 18 18'}/> : <KeyboardArrowDown style = {{ marginTop: 4 }} viewBox = { '0 0 18 18'}/> }
+                    <span
+                        style = {{
+                            right: 10,
+                            top: 9,
+                            position: 'absolute'
+                        }}
+                        onClick = {
+                            this.handleDropdown.bind(this)
+                        }
+                    >
+                        {
+                            displayChildren ?
+                                <KeyboardArrowUp
+                                    style = {{
+                                        marginTop: 8,
+                                        marginRight: 9,
+                                        ...style
+                                    }}
+                                    viewBox = {'0 0 20 20'}
+                                /> :
+                                <KeyboardArrowDown
+                                    style = {{
+                                        marginTop: 8,
+                                        marginRight: 9,
+                                        ...style
+                                    }}
+                                    viewBox = {'0 0 20 20'}
+                                />
+                        }
                     </span>
 
                 );
@@ -380,6 +419,7 @@ class Post extends Component {
                 style = {{
                     positon : 'relative'
                 }}
+                ref = 'post'
             >
                 <div>
                     <div
@@ -426,8 +466,8 @@ class Post extends Component {
                                     this.state.uploadStatus > -1 ?
 
                                         (this.state.uploadStatus == 100 ?
-                                            <Avatar style = {{ position: 'absolute', right: 0, top: 10, background: 'none' }} color = {'#00BCD4'} icon = { <Check /> } />
-                                            : <CircularProgress mode="determinate" value = { this.state.uploadStatus } size = {0.5} style = {{ float: 'right', marginTop: -4}}/>)
+                                            <Avatar style = {{ position: 'absolute', right: 0, top: 10, background: 'none' }} color = {THEME.primaryColor} icon = { <Check /> } />
+                                            : <CircularProgress mode="determinate" value = { this.state.uploadStatus } color = {THEME.primaryColor} size = {0.5} style = {{ float: 'right', marginTop: -4}}/>)
 
                                         : ''
 

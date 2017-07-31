@@ -3,11 +3,11 @@ import React from 'react';
 import TouchRipple from '../../../node_modules/material-ui/internal/TouchRipple';
 
 const ICON_STYLE = {
-    fontSize: 20,
-    paddingRight: 8,
-    paddingLeft: 8,
-    lineHeight : '36px',
-    color : 'rgb(200,200,200)',
+    fontSize: 23,
+    paddingRight: 6.5,
+    paddingLeft: 6.5,
+    lineHeight: '36px',
+    color: 'rgb(200, 200, 200)'
 };
 
 class MaterialButton extends React.Component{
@@ -44,6 +44,10 @@ class MaterialButton extends React.Component{
 
         let value = this.props.value
 
+        const {
+            parentStyle
+        } = this.props;
+
         const disabledStyle = this.props.disabled ? { color : 'rgba(220,220,220)' } : {};
 
         return(
@@ -55,7 +59,6 @@ class MaterialButton extends React.Component{
                     position : 'relative',
                     display: 'inline-flex',
                     background : this.props.disabled ? '' : ( this.state.hover ? 'rgba(153,153,153,0.2)' : this.props.style ? this.props.style.background : ''  ),
-
                     transition : 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
                     cursor : 'pointer',
                     overflow: 'hidden'
@@ -85,7 +88,7 @@ class MaterialButton extends React.Component{
                 >
                     {
 
-                        this.props.disabled ?<span>
+                        this.props.disabled ? <span>
                             {
                                 this.props.icon ? <button
                                     value = { this.state.value }
@@ -114,38 +117,43 @@ class MaterialButton extends React.Component{
                                     { this.props.label }
                                 </span> : ''
                             }
-                        </span> : <TouchRipple>
-                            <span>
-                                {
-                                    this.props.icon ? <button
-                                        value = { this.state.value }
-                                        style =  {{
-                                            float : 'left',
-                                        }}
-                                    >
-                                        <i className="material-icons" style = {{ ...ICON_STYLE, ...this.props.iconStyle }}>{this.props.icon}</i>
-                                    </button> : ''
-                                }
-                                {
-                                    this.props.label ? <span
-                                        style = {{
-                                            position: 'relative',
-                                            paddingLeft : this.props.icon ? 0 : 12,
-                                            paddingRight: 12,
-                                            letterSpacing: 0,
-                                            textTransform: 'uppercase',
-                                            fontWeight: 500,
-                                            fontSize: 12,
-                                            lineHeight : '36px',
-                                            float : 'left',
-                                        }}
+                        </span> :
 
-                                    >
-                                        { this.props.label }
-                                    </span> : ''
-                                }
-                            </span>
-                        </TouchRipple>
+                                <TouchRipple
+                                    style = {{
+                                        overflow: '',
+                                        top: 0
+                                    }}
+                                >
+                                    {
+                                        this.props.icon ? <button
+                                            value = { this.state.value }
+                                            style =  {{
+                                                float : 'left',
+                                            }}
+                                        >
+                                            <i className="material-icons" style = {{ ...ICON_STYLE, ...this.props.iconStyle }}>{this.props.icon}</i>
+                                        </button> : ''
+                                    }
+                                    {
+                                        this.props.label ? <span
+                                            style = {{
+                                                position: 'relative',
+                                                paddingLeft : this.props.icon ? 0 : 12,
+                                                paddingRight: 12,
+                                                letterSpacing: 0,
+                                                textTransform: 'uppercase',
+                                                fontWeight: 500,
+                                                fontSize: 12,
+                                                lineHeight : '36px',
+                                                float : 'left',
+                                            }}
+
+                                        >
+                                            { this.props.label }
+                                        </span> : ''
+                                    }
+                                </TouchRipple>
 
                     }
 

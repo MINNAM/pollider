@@ -64,8 +64,6 @@ class PostPreview extends Component {
             loaded
         } = this.state;
 
-        console.log( 'post preview', this.props );
-
         switch ( model.hide.dataType ) {
             case 'root_folder':
             case 'folder':
@@ -121,6 +119,7 @@ class PostPreview extends Component {
                                 height: 270,
                                 width: '100%',
                                 backgroundPosition : 'center',
+                                backgroundSize: 'contain',
                                 backgroundImage : 'url(' + hyperlink + '/' + model._hyperlink + ')'
                             }}
                         />

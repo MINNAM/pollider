@@ -32,7 +32,7 @@ class Row extends React.Component {
         let documentHeight;
 
         if (this.props.model.parent) {
-            console.log( 'has parent', this.props.model.parent );
+
             documentHeight = this._row.parentNode.className == 'parent-row' ? '340px' : (this.props.model.parent.rows.length == 1 ? '100%' : '50%');
 
         } else {
@@ -66,6 +66,12 @@ class Row extends React.Component {
     }
 
     componentWillReceiveProps ( nextProps ) {
+
+        if (nextProps.model.parent) {
+            console.log(nextProps.model.parent);
+            if( nextProps.model.parent.rows.length > 1 && this._row.className != 'parent-row')
+                this._row.style.height = '50%';
+        }
 
         this.setState({
 

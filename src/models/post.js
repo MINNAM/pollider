@@ -565,6 +565,8 @@ class Post {
 
     getPost ( req, res ) {
 
+        console.log(req.query.id);
+
         this.db.connection.query (
 
             `SELECT
@@ -1043,7 +1045,7 @@ class Post {
 
                                                 const _post = {
                                                     ...post,
-                                                    _hyperlink : this.buildHyperlink( post.parent_id, rows, '' ) + '/' + post.hyperlink,
+                                                    _hyperlink : postTypes[ 0 ].hyperlink + this.buildHyperlink( post.parent_id, rows, '' ) + '/' + post.hyperlink,
                                                     data : _postData
                                                 }
 
@@ -1098,12 +1100,12 @@ class Post {
                     ON pt.id = pm.post_type_id
                 WHERE pt.hyperlink = ?
                 GROUP BY pt.id;`,
-
                 [ hyperlink ],
 
                 ( err, postTypes ) => {
 
-                    done( postTypes[ 0 ] );
+                    console.log(err, hyperlink, postTypes);
+                    done( postTypes[0] );
 
                 }
 
@@ -1149,10 +1151,12 @@ class Post {
             FROM ${this.table_prefix }post p
             INNER JOIN ${this.table_prefix }user u ON p.user_id
             WHERE
-                p.hyperlink = ? AND
+                p.hyperlink LIKE ? AND
                 post_type_id = ?
                 ${ parentId ? '' : 'AND p.parent_id IS NULL'};
             `;
+
+            console.log( sql, links[ index ], postTypeId );
 
             this.db.connection.query (
 
@@ -1166,23 +1170,17 @@ class Post {
 
                     let _row;
 
-                    rows.map ( ( row ) =>  {
+                    console.log( rows );
 
-                        if ( row.parent_id == parentId ) {
-
+                    rows.map ((row) =>  {
+                        if (row.parent_id == parentId) {
                             _row = row;
-
                         }
-
                     });
 
-
-                    if ( _row == null ) {
-
+                    if (_row == null) {
                         done( null );
-
                         return;
-
                     }
 
                     if ( index + 1 < links.length  ) {

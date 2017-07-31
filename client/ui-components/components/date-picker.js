@@ -28,45 +28,23 @@ class DatePicker extends React.Component {
             setError(false);
         }
 
-        setValues(values);
-    }
-
-    onTimeChange (event, date)  {
-        const {
-            field,
-            values,
-            setError,
-            setValues
-        } = this.props;
-
-        values[field].setHours(date.getHours());
-        values[field].setMinutes(date.getMinutes());
-        values[field].setSeconds(date.getSeconds());
-
-        if (values[field]) {
-            setError(false);
-        }
-
-        setValues(values);
+        setValues(new Date(values));
     }
 
     render () {
         const {
-            hintText
+            hintText,
+            defaultDate
         } = this.props;
 
         return (
             <div>
                 <_DatePicker
+                    defaultDate = {defaultDate}
                     textFieldStyle = {{width: '100%'}}
                     autoOk = {true}
                     hintText = {hintText}
                     onChange = {this.onDateChange.bind(this)}
-                />
-                <_TimePicker
-                    textFieldStyle = {{width: '100%'}}
-                    onChange = {this.onTimeChange.bind(this)}
-                    hintText = "12hr Format"
                 />
             </div>
        );

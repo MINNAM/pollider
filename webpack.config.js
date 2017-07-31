@@ -2,7 +2,6 @@ var path = require('path');
 
 module.exports = [{
     entry: './client/app.js',
-
     output: {
         filename: 'app.js',
         path: path.join('public/javascripts/')
@@ -23,12 +22,10 @@ module.exports = [{
 
 },{
     entry: './public/theme/default/browser.js',
-
     output: {
         filename: 'blog.js',
         path: path.join( __dirname + '/public/javascripts/')
     },
-
     module: {
         loaders: [
             {
@@ -40,6 +37,4 @@ module.exports = [{
             }
         ],
     }
-
-
 }];

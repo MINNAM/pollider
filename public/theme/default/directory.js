@@ -10,7 +10,6 @@ class Hyperlink extends React.Component {
         this.state = {
             mouseOver : false
         }
-
     }
 
     render () {
@@ -28,7 +27,8 @@ class Hyperlink extends React.Component {
                 }}
                 onMouseEnter = { () => {
 
-                    onMouseEnter();
+                    onMouseEnter ? onMouseEnter() : null;
+
 
                     this.setState({
                         mouseOver : true
@@ -44,7 +44,7 @@ class Hyperlink extends React.Component {
                 }}
             >
                 <a
-                    href = { SITE.url + hyperlink }
+                    href = { hyperlink }
                     style = {{
                         textDecoration : 'none',
                         border : 'none',
@@ -124,7 +124,6 @@ const Directory = ( props ) => {
 
         hyperlink += `/${element.hyperlink}`;
 
-        console.log( 'from dir', hyperlink);
 
         hyperlinks.push(
 

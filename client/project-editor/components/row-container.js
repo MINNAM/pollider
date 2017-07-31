@@ -41,7 +41,7 @@ class RowContainer extends React.Component {
                 {
                     this.props.model.rows.map( ( row, key ) => {
 
-                        let content   = key;
+                        let content = key;
 
                         return (
 
@@ -62,16 +62,16 @@ class RowContainer extends React.Component {
                                         return (
 
                                             <Col
-                                                first                  = { key == 0 }
-                                                last                   = { key == row.cols.length - 1 }
-                                                display                = { this.props.display }
-                                                key                    = { key }
-                                                model                  = { element }
-                                                dynamic                = { row.dynamic }
-                                                width                  = { element.width }
-                                                content                = { content }
-                                                uploads                = { this.props.uploads }
-                                                handleDialogModel     = { this.props.handleDialogModel }
+                                                first = { key == 0 }
+                                                last = { key == row.cols.length - 1 }
+                                                display = { this.props.display }
+                                                key = { key }
+                                                model = { element }
+                                                dynamic = { row.dynamic }
+                                                width = { element.width }
+                                                content = { content }
+                                                uploads = { this.props.uploads }
+                                                handleDialogModel = { this.props.handleDialogModel }
                                                 openDialog = { this.props.openDialog }
                                             />
 

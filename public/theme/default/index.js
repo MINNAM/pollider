@@ -1,200 +1,164 @@
-import React             from 'react';
+import React, {Component} from 'react';
 
-import HomePage          from './home-page';
-import Post              from './post.js';
-import PostContainer     from './post-container.js';
-import Header           from './header.js';
-import Wrapper           from './wrapper';
-import Contact           from './contact.js';
-import Profile            from './profile.js';
-
-import Button            from './components/ui/button.js';
-import CloseButton       from './components/ui/buttons/close-button.js';
-import Fold              from './components/ui/fold';
+import Home from './home';
+import Post from './post.js';
+import Posts from './posts.js';
+import FourOhFour from './four-oh-four.js';
+import Wrapper from './wrapper';
+import Contact from './contact.js';
+import Profile from './profile.js';
+import Button from './components/ui/button.js';
+import CloseButton from './components/ui/buttons/close-button.js';
 import FontAwesomeButton from './components/ui/buttons/font-awesome-button.js';
-import Heading           from './components/heading.js';
-import Input             from './components/input.js';
+import Heading from './components/heading.js';
+import Input from './components/input.js';
+
+const PRIMARY_COLOR = 'rgb(76, 211, 173)';
 
 
+class Index extends Component {
 
-const displayRobot = ( model ) => {
+    constructor (props) {
+        super(props);
 
-    const parentStatus = model.parentStatus;
-    const status       = model.status;
-
-    if ( parentStatus == 'hidden' || parentStatus == 'private' ) {
-
-        return <meta name="ROBOTS" content="NOINDEX, FOLLOW" />;
-
-    } else if ( status == 'private' || status == 'hidden' ) {
-
-        return <meta name="ROBOTS" content="NOINDEX, FOLLOW" />
-
-    }
-
-    return '';
-
-}
-
-
-class Index extends React.Component {
-
-    constructor ( props ) {
-
-        super( props );
+        const {
+            model
+        } = this.props;
 
         this.state = {
+            loaded: false,
+            loading: true,
+            toggle: null,
+            allowTransition: false
+        };
 
-            displayContact : false,
-            displayHeader : this.props.displayHeader,
-            displayPrivateWarning : this.props.model.status == 'private',
-            loaded         : false,
-            loading        : 50
-        }
-
-        this.toggleContact = this.toggleContact.bind( this );
-        this.toggleHeader = this.toggleHeader.bind( this );
-        this.toggleProfile = this.toggleProfile.bind( this );
-
+        this.toggle = this.toggle.bind(this);
     }
 
     componentDidMount () {
+        const {
+            model,
+            type
+        } = this.props;
 
-        if ( typeof window  != 'undefined' ) {
-
+        if (typeof window  != 'undefined') {
             window.onload = () => {
+                setTimeout(() => {
+                    this.setState({
+                        loaded: true,
+                        loading: false
+                    });
+                }, 1000);
+                setTimeout(() => {
+                    this.setState({
+                        allowTransition: true
+                    });
+                }, 2000);
+            };
+            const anchors = document.getElementsByTagName('a');
+            const self = this;
 
-                this.setState({ loaded : true });
+            for (let key in anchors) {
+                if (anchors[key].addEventListener) {
+                    anchors[key].addEventListener('click', function(event) {
+                        event.preventDefault();
 
+                        const href = this.getAttribute("href");
+
+                        self.setState({loaded: false});
+
+                        setTimeout(function(){
+                             window.location = href;
+                        },400);
+
+                    });
+                }
             }
 
         }
 
-        if ( this.props.model.status != 'public' ) {
+        this.onKeyDown = this.onKeyDown.bind(this);
+        document.body.addEventListener('keydown', this.onKeyDown);
+    }
 
-            setTimeout( () => {
-
-                this.setState({ displayPrivateWarning : false })
-
-            }, 5000 )
-
+    onKeyDown (event) {
+        switch (event.keyCode) {
+            case 27:
+                this.toggle(null);
+                break;
         }
-
-
     }
 
-    toggleHeader () {
+    toggle (_toggle) {
+        const {
+            toggle
+        } = this.state;
 
-
-        const { displayHeader } = this.state;
-
-        this.setState({ displayHeader : !displayHeader });
-
-    }
-
-    toggleContact () {
-
-        const { displayContact } = this.state;
-
-        this.setState({ displayContact : !displayContact });
-
-    }
-
-    toggleProfile () {
-
-        const { displayProfile } = this.state;
-
-        this.setState({ displayProfile : !displayProfile });
-
+        switch (_toggle) {
+            case 'profile':
+                if (toggle == _toggle) {
+                    this.setState({toggle: null});
+                } else {
+                    this.setState({toggle: _toggle});
+                }
+            break;
+            case 'contact':
+                if (toggle == _toggle) {
+                    this.setState({toggle: null});
+                } else {
+                    this.setState({toggle: _toggle});
+                }
+            break;
+            default:
+                this.setState({toggle: _toggle});
+        }
     }
 
     getContent () {
+        const {
+            model,
+            type,
+            children
+        } = this.props;
 
-        const { model, type, children } = this.props;
+        switch (type) {
+            case 'home':
+                return (<Home
+                    model = {model}
+                    children = {children}
+                />);
+            case 'post':
+                return (<Post
+                    model = {model}
+                />);
 
-        const { displayHeader } = this.state;
+            case 'posts':
+                return (<Posts
+                    model = {model}
+                    children = {children}
+                />);
+            case 'four-oh-four':
+                return (<FourOhFour model = {model}/>);
 
-        switch ( type ) {
-
-            case 'home' : {
-
-                return <HomePage
-                    displayHeader = { true }
-                    model = { model }
-                    children = { children }
-                    foldMouseOver = { this.state.foldMouseOver }
-                    hintFold      = { () => {
-                        this.setState({ foldMouseOver : true });
-
-                        setTimeout( () => {
-
-                            this.setState({ foldMouseOver : true });
-
-                        }, 1000 )
-                    }}
-                />
-
-            }
-
-            case 'post' : {
-
-                return <Post
-                    model = { model }
-                    foldMouseOver = { this.state.foldMouseOver }
-                    displayHeader  = { displayHeader }
-                    hintFold      = { () => {
-
-                        setTimeout( () => {
-
-                            this.setState({ foldMouseOver : true });
-
-                        }, 250 )
-
-                        setTimeout( () => {
-
-                            this.setState({ foldMouseOver : false });
-
-                        }, 500 )
-
-                    }}
-                />
-
-            }
-
-            case 'post-container' : {
-
-                return <PostContainer
-                    model = { model }
-                    displayHeader       = { displayHeader }
-                    children = { children }
-                    foldMouseOver = { this.state.foldMouseOver }
-                    hintFold      = { () => {
-                        this.setState({ foldMouseOver : true });
-
-                        setTimeout( () => {
-
-                            this.setState({ foldMouseOver : false });
-
-                        }, 1000 )
-                    }}
-                />
-
-            }
-
-            default : {
-
+            default:
                 return null;
-
-            }
-
         }
-
     }
 
     render () {
-
-        const { model, type, children }          = this.props;
-        const { displayHeader, displayContact, displayProfile } = this.state;
+        const {
+            model,
+            type,
+            children
+        } = this.props;
+        const {
+            displayHeader,
+            displayPrivateWarning,
+            loaded,
+            loading,
+            toggle,
+            allowTransition
+        } = this.state;
 
         const content = this.getContent();
 
@@ -202,130 +166,116 @@ class Index extends React.Component {
 
             <div
                 style = {{
-                    marginTop  : this.state.loaded ? 0 : -50,
-                    transition : '.4s ease all'
+                    marginTop: loaded ? 0 : -50,
+                    transition: '.4s ease margin-top',
+                    height: '100%'
                 }}
             >
+
+                {
+                    loading ? <svg
+                        width  = {60}
+                        height  = {35}
+                        className = {'loading-element'}
+                        style = {{
+                            position: 'fixed',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%,-50%)'
+                        }}
+                    >
+                        <circle
+                            cx = {7.5}
+                            r  = {3}
+                            fill = {'rgb(76, 211, 173)'}
+                        />
+                        <circle
+                            cx = {22.5}
+                            r  = {3}
+                            fill = {'rgb(76, 211, 173)'}
+                        />
+                        <circle
+                            cx = {37.5}
+                            r  = {3}
+                            fill = {'rgb(76, 211, 173)'}
+                        />
+                        <circle
+                            cx = {52.5}
+                            r  = {3}
+                            fill = {'rgb(76, 211, 173)'}
+                        />
+                    </svg> : ''
+                }
+
                 <div
-                    id    = 'loading'
                     style = {{
-                        background : `-webkit-linear-gradient(left, rgba(76, 211, 173,1) 0%, rgba(76, 211, 173,0) 100%)`,
-                        top        : this.state.loaded ? -2 : 0,
-                        width      : `${this.state.loading % 100}%`,
-                    }}
-                />
-                <div
-                    style = {{
-                        opacity    : this.state.loaded ? 1 : 0,
-                        transition : '.4s ease all',
-                        position : 'relative'
+                        opacity: loaded ? 1 : 0,
+                        transition: '.4s ease all',
+                        position: 'relative',
+                        height: '100%'
                     }}
                 >
-                    <Wrapper
-                        style = {{
-                            background : 'rgb(0, 14, 29)',
-                            height     : this.state.displayPrivateWarning ? 40 : 0,
-                            transition : '.25s all',
-                            overflow : 'hidden'
-                        }}
-                        innerStyle  = {{
-                            position : 'relative'
-                        }}
-                    >
-                        <div
-                            style = {{
-                                height : 40,
-                                lineHeight : '40px',
-                                color : 'rgb(220,220,220)',
-                                font : 'hind',
-                                letterSpacing : 1,
-
-                            }}
-                        >
-                            <i
-                                className="fa fa-exclamation"
-                                style = {{
-                                    marginRight : 10
-                                }}
-
-                            />
-                            This is a private post and will not be cached from search engines.
-                        </div>
-                    </Wrapper>
-                    {
-
-                        // <div ref = { 'header' }>
-                        //     <Header
-                        //         model         = { model }
-                        //         display       = { displayHeader }
-                        //         toggleContact = { this.toggleContact.bind( this ) }
-                        //         toggleHeader = { this.toggleHeader.bind( this ) }
-                        //         type          = { type == 'home' ? 0 : 1 }
-                        //     />
-                        // </div>
-
-                    }
-
-                    <header
-                        id    = 'main-header'
-                    >
-                        {
-                            // <Fold
-                            //     size        = { 58 }
-                            //     direction   = { 'right' }
-                            //     parentStyle = {{
-                            //         cursor  : 'pointer',
-                            //         display : displayHeader ? 'none' : '',
-                            //         left    : 0,
-                            //         top     : 0,
-                            //     }}
-                            //     topStyle = {{
-                            //         background : 'rgb(0, 14, 29)'
-                            //     }}
-                            //     onClick  = { () => {
-                            //         this.setState({ displayHeader : true })
-                            //     }}
-                            //     onMouseOver = { () => {
-                            //         this.setState({ foldMouseOver : true });
-                            //     }}
-                            //     onMouseLeave = { () => {
-                            //         this.setState({ foldMouseOver : false });
-                            //     }}
-                            //     foldMouseOver = { this.state.foldMouseOver }
-                            // />
-
-                        }
+                    <header id = 'main-header'>
                     </header>
+                    <div
+                        id = {type != 'home' && type != 'four-oh-four' ? `content-parent-container${toggle ? '-toggled' : ''}` : 'content-parent-container'}
+                        style = {{
+                            height: '100%',
+                        }}
+                    >
                         {
                             content ? (
-                                React.cloneElement( content, {
-                                    header       : this.refs.header,
-                                    toggleContact : this.toggleContact,
-                                    toggleProfile : this.toggleProfile,
-                                    toggleContact : this.toggleContact
+                                React.cloneElement(content, {
+                                    header: this.refs.header,
+                                    toggle: this.toggle,
+                                    toggled: this.state.toggle,
+                                    allowTransition: this.state.allowTransition
                                 })
-                            ) : ''
-
-                        }                    
+                           ) : ''
+                        }
+                    </div>
                 </div>
-                <Contact
-                    display  = { displayContact }
-                    toggle = { this.toggleContact.bind( this ) }
-                />
 
-                <Profile
-                    display  = { displayProfile }
-                    toggle = { this.toggleProfile.bind( this ) }
-                    toggleContact = { this.toggleContact }
-                    model = { model }
-                />
+                {
+                    this.props.type != 'home' ? <div
+                        id = {`contact-container${toggle == 'profile' ? '-toggled' : ''}`}
+                        style = {{
+                            background : 'white',
+                            height: '100%',
+                            position: 'fixed',
+                            top: 0,
+                            transition: allowTransition ? '0.5s all' : '',
+                            zIndex: 35,
+                            opacity: loaded ? 1 : 0,
+                        }}
+                    >
+                        <Profile
+                            toggle = {this.toggle}
+                        />
+                    </div> : ''
+                }
+                {
+                    type != 'home' && type != 'four-oh-four' ? <div
+                        id = {`contact-container${toggle == 'contact' ? '-toggled' : ''}`}
+                        style = {{
+                            background : 'white',
+                            height: '100%',
+                            position: 'fixed',
+                            top: 0,
+                            transition: allowTransition ? '0.5s all' : '',
+                            zIndex: 35,
+                            opacity: loaded ? 1 : 0,
+                            display: type != 'home' && type != 'four-oh-four' ? 'initial' : 'none'
+                        }}
+                    >
+                        <Contact
+                            toggle = {this.toggle}
+                        />
+                    </div> : ''
+                }
             </div>
-
-        )
+       );
     }
-
-
-
 }
 
 export default Index;

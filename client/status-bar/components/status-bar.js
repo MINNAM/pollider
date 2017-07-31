@@ -1,4 +1,15 @@
 import React from 'react';
+const STYLES = {
+    success: {
+        background: 'rgba(60,60,60,1)'
+    },
+    warning: {
+        background: 'rgba(255,167,38,1)'
+    },
+    error: {
+        background: 'rgba(244,67,54,1)'
+    }
+};
 
 class StatusBar extends React.Component {
 
@@ -34,17 +45,30 @@ class StatusBar extends React.Component {
         let status =  this.state.status;
 
         this.setState({
-
             status : ( ++status % 4 )
-
         });
 
     }
 
     render () {
         const {
+            text,
+            type
+        } = this.props;
+        const {
             transform
         } = this.state;
+
+        let style = STYLES.success;
+        switch (type) {
+            case -1:
+                style = STYLES.error;
+            break;
+
+            case 0:
+                style = STYLES.warning;
+            break;
+        }
 
         return (
             <div
@@ -61,12 +85,22 @@ class StatusBar extends React.Component {
                             width: '100%',
                             height: 60,
                             display : 'inline-block',
-                            background: 'rgba(20, 20, 20, 0.7)',
                             color : 'white',
-                            transition: '0.5s all'
+                            transition: '0.5s all',
+                            ...style
                         }}
                     >
-                        <span style = {{ height: 60, lineHeight : '60px', display: 'inline-block', padding: '0 5% 0 5%'}}>{ this.props.text }</span>
+                        <span
+                            style = {{
+                                height: 60,
+                                lineHeight: '60px',
+                                display: 'inline-block',
+                                padding: '0 5% 0 5%',
+                                fontSize: 15
+                            }}
+                        >
+                            {text}
+                        </span>
                     </div>
             </div>
         );

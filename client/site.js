@@ -1,11 +1,11 @@
 
 const address = 'http://localhost';
-const port = 4000;
+const port = 3000;
 
 const SITE = {
     address,
     port,
-    url: 'http://localhost:4000'
+    url: 'http://localhost:3000'
 };
 
 export default SITE;

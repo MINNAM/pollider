@@ -21,12 +21,6 @@ const INPUT_FIELDS = [
         required : 1
     },
     {
-        label    : 'Company',
-        id       : 'company',
-        type     : 'input',
-        required : 0
-    },
-    {
         label    : 'Email',
         id       : 'email',
         type     : 'input',
@@ -44,9 +38,8 @@ const INPUT_FIELDS = [
 class Contact extends React.Component {
 
 
-    constructor ( props ) {
-
-        super( props );
+    constructor (props) {
+        super(props);
 
         const state = { sending: false, sent : false, data : [] };
 
@@ -60,93 +53,188 @@ class Contact extends React.Component {
 
     }
 
-    send ( done ) {
+    componentDidMount () {
 
-        this.setState({
-            sending : true
-        });
+        document.body.addEventListener('keydown', (event) => {
 
-        $.ajax({
+            if (event.keyCode == 13 && this.props.toggled ) {
 
-            url         : SITE.url + '/contact',
-            type        : "POST",
-            data        : JSON.stringify( this.state.data ),
-            contentType : "application/json; charset=utf-8",
-            dataType    : "json",
-            success     : ( response ) => {
-
-                this.setState({
-                    sending : false,
-                    sent : true
-                });
+                this.submit();
 
             }
 
         });
 
-        // console.log ( this.state.data );
+    }
 
-        // setTimeout( () => {
-        //
-        //     this.setState({
-        //         sending : false,
-        //         sent : true
-        //     });
-        //
-        // }, 5000 );
+    submit () {
+        const _data =  [...this.state.data];
+
+        _data.map(( element ) => {
+
+            if ( element.required ) {
+
+                if ( element.value == null ) {
+
+                    element.error = true;
+
+                } else {
+
+                    element.error = false;
+
+                }
+
+            }
+
+            if ( element.check ) {
+
+                for ( let i = 0; i < element.check.length; i++ ) {
+
+                    if ( element.error ) {
+
+                        break;
+
+                    } else {
+
+                        const check = element.check[ i ];
+
+                        switch ( check ) {
+
+                            case EMAIL : {
+
+                                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test( element.value )) {
+
+                                    element.error = false;
+
+                                } else {
+
+                                    element.error = true;
+                                }
 
 
+                                break;
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        })
+
+        this.setState({
+
+            data : _data
+        });
+
+        let errors = 0;
+
+        this.state.data.map(( element ) => {
+
+            if ( element.error ) {
+
+                errors++;
+
+            }
+
+        })
+
+        if ( errors == 0 ) {
+
+            this.setState({
+                sending : true
+            });
+
+            $.ajax({
+
+                url         : SITE.url + '/contact',
+                type        : "POST",
+                data        : JSON.stringify( this.state.data ),
+                contentType : "application/json; charset=utf-8",
+                dataType    : "json",
+                success     : ( response ) => {
+
+                    this.setState({
+                        sending : false,
+                        sent : true
+                    });
+
+                }
+
+            });
+
+        }
     }
 
     render () {
-        const { display, toggle } = this.props;
-        const { data } = this.state;
+        const {
+            display,
+            toggle,
+            toggled,
+            style
+        } = this.props;
+        const {
+            data
+        } = this.state;
 
         return (
 
             <div
                 style = {{
-                    background : 'rgba(0,0,0,0.2)',
-                    display    : display ? 'inline-block' : 'none',
-                    height     : '100%',
-                    left       : 0,
-                    position   : 'fixed',
-                    top        : 0,
-                    width      : '100%',
-                    zIndex     : 31,
-                }}
-
-                onClick = {(  event )=>{
-                    toggle();
+                    width: 350,
+                    height: '100%',
+                    background: 'white',
+                    ...style
                 }}
             >
+
                 <div
-                    style = {{
-                        boxShadow     : '1px 1px 1px 1px rgba(0,0,0,0.1)',
-                        left          : '50%',
-                        position      : 'absolute',
-                        top           : '50%',
-                        transform     : 'translate(-50%,-50%)',
-                        width         : 500 ,
-                    }}
-                    onClick = {(  event )=>{
-
-                        event.stopPropagation();
-
-                    }}
+                    className = 'toggle-close-button'
                 >
                     <CloseButton
                         color   = 'rgb(220,220,220)'
-                        hoverStyle  = {{ stroke : 'rgb(160,160,160)' }}
-                        size    = { 17 }
-                        onClick = { toggle }
-                    />
-                    <div
                         style = {{
-                            background : 'white',
-                            padding    : '50px 15px 50px 15px',
+                            position: 'relative',
+                            left: 0,
+                            top: 0,
+                        }}
+                        hoverStyle  = {{stroke : 'rgb(160,160,160)'}}
+                        size    = { 17 }
+                        onClick = {() => {
+                            toggle(null);
+
+                            const _data =  [...this.state.data];
+
+                            _data.map((element) => {
+                                element.error = false;
+                            })
+
+                            this.setState({data: _data});
+                        }}
+                    />
+                </div>
+                <div
+                    className = 'toggle-content'
+                >
+                    <h1
+                        ref = 'title'
+                        style = {{
+                            fontFamily: 'hind',
+                            letterSpacing: '1.2px',
+                            fontSize: 44,
+                            color: 'rgb(40,40,40)',
+                            marginBottom: 50,
+                            marginTop: 5,
+                            display: 'inline-block'
                         }}
                     >
+                        Say Hello!
+                    </h1>
+                    <div>
                         {
                             this.state.data.map( ( element, key ) => {
 
@@ -221,9 +309,7 @@ class Contact extends React.Component {
                                 lineHeight : '40px',
                                 outline : 'none',
                                 width : '100%',
-                                position : 'absolute',
-                                bottom : 0,
-                                left : 0,
+                                marginTop: 20,
                                 transition : '.25s all'
                             }}
 
@@ -240,94 +326,7 @@ class Contact extends React.Component {
                             }}
 
 
-                            onClick = {() => {
-
-                                const _data =  [...this.state.data];
-
-                                _data.map(( element ) => {
-
-                                    if ( element.required ) {
-
-                                        if ( element.value == null ) {
-
-                                            element.error = true;
-
-                                        } else {
-
-                                            element.error = false;
-
-                                        }
-
-                                    }
-
-                                    if ( element.check ) {
-
-                                        for ( let i = 0; i < element.check.length; i++ ) {
-
-                                            if ( element.error ) {
-
-                                                break;
-
-                                            } else {
-
-                                                const check = element.check[ i ];
-
-                                                switch ( check ) {
-
-                                                    case EMAIL : {
-
-                                                        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test( element.value )) {
-
-                                                            element.error = false;
-
-                                                        } else {
-
-                                                            element.error = true;
-                                                        }
-
-
-                                                        break;
-
-                                                    }
-
-                                                }
-
-                                            }
-
-                                        }
-
-                                    }
-
-                                })
-
-                                this.setState({
-
-                                    data : _data
-                                });
-
-                                let errors = 0;
-
-                                this.state.data.map(( element ) => {
-
-                                    if ( element.error ) {
-
-                                        error++;
-
-                                    }
-
-                                })
-
-                                if ( errors == 0 ) {
-
-                                    this.send( () => {
-
-                                        // toggle();
-
-                                    });
-
-                                }
-
-                            }}
+                            onClick = {this.submit.bind(this)}
                         >
                             { this.state.sending ?
 
@@ -336,7 +335,6 @@ class Contact extends React.Component {
                                     height  = {35}
                                     className = {'loading-element'}
                                 >
-
                                     <circle
                                         cx = {7.5}
                                         r  = {3}
@@ -358,7 +356,6 @@ class Contact extends React.Component {
                                         r  = {3}
                                         fill = {'white'}
                                     />
-
                                 </svg> :
                                 this.state.sent ? 'Message Sent!' : 'Send'
 

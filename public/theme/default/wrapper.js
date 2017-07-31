@@ -8,9 +8,9 @@ class Wrapper extends React.Component {
         } = this.props;
 
         if (onResize) {
-            onResize(window.getComputedStyle(this.refs[ 'inner-content' ] ).marginRight);
+            onResize(window.getComputedStyle(this.refs['inner-content']).marginRight);
             window.addEventListener('resize', () => {
-                this.props.onResize( window.getComputedStyle( this.refs[ 'inner-content' ] ).marginRight );
+                onResize(window.getComputedStyle(this.refs['inner-content']).marginRight);
             });
         }
     }
@@ -24,7 +24,7 @@ class Wrapper extends React.Component {
         return (
             <div
                 className = 'content'
-                style = { style }
+                style = {style}
             >
                 <div
                     className = 'inner-content'

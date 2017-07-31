@@ -60,6 +60,8 @@ class Project extends ProjectBase {
 
         this.rows.map( row => {
 
+            row.parent = on ? this : null;
+
             if ( row.cols ) {
 
                 row.cols.map( col => {
@@ -92,6 +94,36 @@ class Project extends ProjectBase {
 
                                     }
 
+                                    if (col2.rows) {
+
+                                        col2.rows.map( row3 => {
+
+                                            row3.parent = on ? col2 : null;
+
+                                            if (row3.cols) {
+
+                                                row3.cols.map ( col3 => {
+
+                                                    col3.parent = on ? row3 : null;
+
+                                                    if ( col3.element && col3.element.content ) {
+
+                                                        if ( col3.element.content.parentNode )
+                                                            delete col3.element.content.parentNode;
+
+                                                    }
+
+                                                    return col3;
+
+                                                });
+
+                                            }
+
+                                            return row3;
+                                        });
+
+                                    }
+
                                     return col2;
 
                                 });
@@ -112,7 +144,9 @@ class Project extends ProjectBase {
 
         });
 
-        console.log( this.rows );
+        console.log(this.rows);
+
+        return this.rows;
 
     }
 
@@ -122,14 +156,11 @@ class Project extends ProjectBase {
 
         data[ this.dataKey ].content = this.html();
 
-
-        this.circularStructure( false );
+        this.circularStructure(false)
 
         data[ this.dataKey ].content_raw = JSON.stringify({
-
-            index : this.index,
-            rows  : this.rows
-
+            index: this.index,
+            rows: this.rows
         });
 
         this.model.data = data;
@@ -145,8 +176,7 @@ class Project extends ProjectBase {
 
     }
 
-    load ( json ) {
-
+    load (json) {
 
         json.rows.map(( row, key ) => {
 
@@ -154,11 +184,10 @@ class Project extends ProjectBase {
 
             newRow.copy( row, true );
 
-            this.rows[ key ]       = newRow;
+            this.rows[ key ] = newRow;
             this.rows[ key ].index = this.index;
 
             this.index++;
-
 
         });
 

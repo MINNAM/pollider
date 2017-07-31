@@ -33,8 +33,6 @@ class LoginDialog extends DialogHelper {
             displayPostInfo: true
         }
 
-        this.onRequestClose = null;
-
         this.components = {
             'text': (data, key) => {
                 return (
@@ -46,6 +44,7 @@ class LoginDialog extends DialogHelper {
                             onChange = {(event, target, value) => {
                                 this.onTextChange(event, target, value, data);
                             }}
+                            autoFocus = {data.autoFocus}
                             errorText = {(this.state.error[data.field] ? this.state.error[data.field] : '')}
                             style = {{
                                 width: '100%'
@@ -66,6 +65,7 @@ class LoginDialog extends DialogHelper {
                             onChange = {(event, target, value) => {
                                 this.onTextChange(event, target, value, data);
                             }}
+                            autoFocus = {false}
                             errorText = {(this.state.error[data.field] ? this.state.error[data.field] : '')}
                             style = {{
                                 width: '100%'
@@ -76,18 +76,17 @@ class LoginDialog extends DialogHelper {
             },
             'logo': (data, key) => {
                 return (
-                    <div key = {key}>
-                        <img
-                            id = 'logo'
-                            src = {'/images/logo.svg'}
-                            style = {{
-                                display: 'inline-block',
-                                float: 'left',
-                                height: 45,
-                                marginBottom: 20
-                            }}
-                        />
-                    </div>
+                    <img
+                        key = {key}
+                        id = 'logo'
+                        src = {'/images/logo.svg'}
+                        style = {{
+                            display: 'inline-block',
+                            float: 'left',
+                            height: 45,
+                            marginBottom: 20
+                        }}
+                    />
                );
             },
             'login': (data, key) => {
@@ -96,6 +95,7 @@ class LoginDialog extends DialogHelper {
                         key = {key}
                         style = {{
                             marginTop: 20,
+                            width: '100%',
                             fontSize: 12,
                             lineHeight: '12px',
                             color: 'rgb(244, 67, 54)'

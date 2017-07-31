@@ -50,16 +50,16 @@ class PostContainer {
     /**
     * Requests posts on start up.
     */
-    getPosts (type, done) {
+    getPosts (data) {
         axios.get(PostQuery.getPosts,{
             params: {
-                post_type_id: type.id
+                post_type_id: data.postType.id
             }
         }).then((response) => {
             for (let key in response.data) {
-                this.structurize(response.data, key, type, 0);
+                this.structurize(response.data, key, data.postType, 0, data.selected);
             }
-            done();
+            data.done();
         }).catch((error) => {
             console.log(error);
         });
@@ -87,44 +87,50 @@ class PostContainer {
     updatePost (post, done) {
         const date = new Date();
 
-        this.onUpdate(date, 'Updating ' + post.name  , 0);
+        setTimeout(() => {
 
-        // Fixing circular error when stringifying Post object
-        const tempParent = {...post.parentNode};
-        const tempChilden = {...post.children};
+            this.onUpdate(1, date, 'Updating ' + post.name, 0);
 
-        post.children = null;
-        post.parentNode = null;
+            // Fixing circular error when stringifying Post object
+            const tempParent = {...post.parentNode};
+            const tempChilden = {...post.children};
 
-        axios({
-            method: 'POST',
-            url: PostQuery.updatePost,
-            data: post,
-            headers: {'Content-Type': 'application/json'},
-            withCredentials: true
-        }).then((response) => {
-            post.parentNode = tempParent;
-            post.children   = tempChilden;
+            post.children = null;
+            post.parentNode = null;
 
-            if (Object.keys(post.children).length != 0) {
-                for (let key in post.children) {
-                    post.children[key].parentNode = post;
+            axios({
+                method: 'POST',
+                url: PostQuery.updatePost,
+                data: post,
+                headers: {'Content-Type': 'application/json'},
+                withCredentials: true
+            }).then((response) => {
+                post.parentNode = tempParent;
+                post.children   = tempChilden;
+
+                if (Object.keys(post.children).length != 0) {
+                    for (let key in post.children) {
+                        post.children[key].parentNode = post;
+                    }
                 }
-            }
 
-            post.update();
+                post.update();
 
-            if (done) {
-                done();
-            }
+                if (done) {
+                    console.log(done)
+                    done();
+                }
 
-            this.onUpdate(date, 'Updated ' + post.name , 1);
-        }).catch((error) => {
-            done(false);
-        });
+                this.onUpdate(1, date, 'Updated ' + post.name , 1);
+            }).catch((error) => {
+                done(false);
+            });
+        },250)
+
+
     }
 
-    structurize (elements, key, type, depth) {
+    structurize (elements, key, type, depth, selected) {
       /* If is a root container, create a post on the top level of this.posts */
       if (elements[key].parent_id == null) {
           /* Create a root container if not exists or return the existing one */
@@ -135,6 +141,10 @@ class PostContainer {
             post.postContainerHyperlink = this.model.hyperlink;
 
             this.posts[post.id] = post;
+
+            if (selected == post.id ) {
+                this.selected = post;
+            }
           }
 
           return this.posts[key];
@@ -156,13 +166,17 @@ class PostContainer {
 
                     parent.children[post.id] = post;
 
+                    if (selected == post.id ) {
+                        this.selected = post;
+                    }
+
                     post.update();
                 }
 
                 return parent.children[key];
             } else {
                 const parentPost = this.structurize(elements, elements[key].parent_id, type, ++depth);
-                const post       = this.new(type.meta);
+                const post = this.new(type.meta);
 
                 post.assign(elements[key]);
 
@@ -170,9 +184,31 @@ class PostContainer {
                 post.parentNode = parentPost;
                 post.postContainerHyperlink = this.model.hyperlink;
 
+                if (selected == post.id ) {
+                    this.selected = post;
+                }
+
                 return post;
             }
         }
+    }
+
+    findPost (posts, id) {
+        for (let key in posts) {
+
+            if (key == id) {
+                console.log( 'found', id);
+                return posts[key];
+            }
+
+            if (posts[key].children != null) {
+                let temp = this.findPost(posts[key].children, id);
+                if ( temp ) {
+                    return temp;
+                }
+            }
+        }
+
     }
 
     navigateParent (element, id, exclude) {
@@ -217,6 +253,7 @@ class PostContainer {
 
                     newPost = this.new();
                     newPost.assign(response.data);
+                    console.log( 'new', newPost );
                     done(newPost);
                 }).catch((error) => {
                     done(false);
@@ -273,6 +310,7 @@ class PostContainer {
     }
 
     new (meta, param) {
+        console.log( 'new post', meta, param );
         return new Post(meta, param);
     }
 

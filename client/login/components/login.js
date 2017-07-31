@@ -12,8 +12,6 @@ import {
 import User from '../models/user.js';
 import LoginDialog from './login-dialog.js';
 
-console.log( 'login', THEME );
-
 let navigator;
 
 if (!navigator) {
@@ -62,6 +60,7 @@ class Login extends Component {
                 dataType: 'text',
                 label: 'Username',
                 field: 'username',
+                autoFocus: true,
                 validate: (value) => {
                     if (!value || value == '') {
                         return 'Username cannot be empty.';
@@ -90,7 +89,9 @@ class Login extends Component {
                 cancel: {
                     label: 'Cancel',
                     hidden: true
-                }
+                },
+                executeOnEnter: true,
+                onRequestClose: false
             },
             fields: [
                 ...fields,
@@ -100,22 +101,87 @@ class Login extends Component {
             ],
             actions: {
                 execute: (data) => {
-                    this.state.model.login(data, (approved) => {
-                        if (approved) {
-                            this.processLogin();
-                        } else {
-                            this.openDialog({
-                                ...this.dialogType,
-                                fields: [
-                                    ...fields,
-                                    {
-                                        dataType: 'login',
-                                        default: 'Username or Password does not match.'
-                                    },
-                                ]
-                            });
-                        }
-                    });
+
+                    if (!data.username.value) {
+                        this.openDialog({
+                            ...this.dialogType,
+                            fields: [
+                                ...fields,
+                                {
+                                    dataType: 'login',
+                                    default: 'Username cannot be empty.'
+                                },
+                            ]
+                        });
+
+                    } else if (!data.password.value) {
+                        this.openDialog({
+                            ...this.dialogType,
+                            fields: [
+                                ...fields,
+                                {
+                                    dataType: 'login',
+                                    default: 'Password cannot be empty.'
+                                },
+                            ]
+                        });
+                    } else {
+                        this.state.model.login(data, (response) => {
+
+                            if (response.valid) {
+                                this.setState({isDialogOpen: false});
+                                setTimeout(() => {
+                                    this.processLogin();
+                                },500);
+
+                            } else {
+                                if (response.login_attempt != 'blocked') {
+                                    this.openDialog({
+                                        ...this.dialogType,
+                                        fields: [
+                                            ...fields,
+                                            {
+                                                dataType: 'login',
+                                                default: `Username or Password does not match. ${response.login_attempt > 2 ? `(${6 - response.login_attempt} attempts left)` : ''}`
+                                            },
+                                        ]
+                                    });
+                                } else {
+                                    this.openDialog({
+                                        options: {
+                                            submit: {
+                                                label: '',
+                                                hidden: true
+                                            },
+                                            cancel: {
+                                                label: '',
+                                                hidden: true
+                                            },
+                                            executeOnEnter: false,
+                                            onRequestClose: false
+                                        },
+                                        fields: [
+                                            {
+                                                dataType: 'logo',
+                                            },
+                                            {
+                                                dataType: 'login',
+                                                default: `Blocked`
+                                            },
+                                        ],
+                                        style: {
+                                            content: {
+                                                width: 500,
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+
+
                 }
             },
             style: {
@@ -153,7 +219,7 @@ class Login extends Component {
                 <input name = "email" className = "hide"/>
                 <input name = "password" className = "hide"/>
                 <LoginDialog
-                    model = {this.state.dialogModel}
+                    model = {this.state.dialogModel ? this.state.dialogModel : null }
                     isOpen = {this.state.isDialogOpen ? true : false}
                 />
                 </div>

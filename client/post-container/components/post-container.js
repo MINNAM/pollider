@@ -11,7 +11,8 @@ import AutoComplete from 'material-ui/AutoComplete';
 import {
     SITE,
     THEME,
-    formatHyperlink
+    formatHyperlink,
+    scroll
 } from '../../global.js';
 import * as Model from '../models/post-container.js';
 import Post from './post.js';
@@ -24,6 +25,31 @@ import {
     MaterialButton,
     Seperator
 } from '../../ui-components/';
+
+const POST_INFO_ICON = [];
+
+for (let i = 0; i < 6; i++ ) {
+
+    let x2 = 200 - 20;
+
+    if (i == 4) {
+        x2 = 200 * 0.9 - 20;
+    } else if ( i == 5) {
+        x2 = 200 * 0.75 - 20;
+    }
+
+    POST_INFO_ICON.push(<line
+        key = {i}
+        x1 = '0'
+        y1 = {20 * i + 10}
+        x2 = {x2}
+        y2 = {20 * i + 10}
+        style = {{
+            stroke: 'rgb(230,230,230)',
+            strokeWidth: 8,
+        }}
+    />);
+}
 
 
 class PostContainer extends Component {
@@ -57,18 +83,55 @@ class PostContainer extends Component {
     componentDidMount () {
         const {
             model,
-            postType
+            postType,
+            selected
         } = this.props;
 
-        model.getPosts(postType, () => {
-            for (let key in model.posts) {
-                model.posts[key].update();
+        model.getPosts({
+            postType,
+            selected,
+            done: () => { // after getPost function, PostContainer.posts get set.
+
+                for (let key in model.posts) {
+                    model.posts[key].update();
+                }
+                this.setState({model, selected: model.findPost(model.posts, selected)});
             }
-            this.setState({model});
         });
+
+    }
+
+    componentWillReceiveProps (nextProps) {
+        // this.setState({ updatePreview: false });
+        if (this.props.currentView == 'project-editor' && nextProps.currentView == 'post-container') {
+            setTimeout(() => {
+                this.setState({ updatePreview: true });
+            },500)
+        }
+
+    }
+
+    locatePost (post) {
+
+        scroll( this.refs['post-container'], this.refs['post-container'].scrollTop, post.offsetTop, () => {
+
+            this.setState({
+                updatePreview: true
+            })
+        });
+
+    }
+
+    onPreviewLoad (status) {
+        // this.setState({
+        //     previewLoaded: status
+        // })
     }
 
     setSelected (post) {
+
+        console.log( post );
+
         const {
             onExternalActionChange,
             onExternalActionUpdate,
@@ -99,8 +162,8 @@ class PostContainer extends Component {
             }
 
             selected.push(post);
-
             this.setState({selected});
+
         } else {
             /* onAction* in ProjectEditor  */
             if (onExternalActionChange) {
@@ -111,13 +174,17 @@ class PostContainer extends Component {
                 onExternalActionUpdate({ ...post, post_type_id : postType.id });
             }
 
-            this.setState({ selected : post });
+            this.setState({
+                selected: post,
+                previewLoaded: false
+            });
         }
     }
 
     resetSelection () {
         this.setState({
-            selected : null
+            selected : null,
+            previewLoaded: false
         });
     }
 
@@ -143,7 +210,7 @@ class PostContainer extends Component {
         }
     }
 
-    reallocateModel (parentId, id, name, hyperlink) {
+    reallocateModel (parentId, id, name, hyperlink, done) {
         const {
             destination,
             model,
@@ -161,26 +228,38 @@ class PostContainer extends Component {
             if (destination == null) {
                 model.checkPostExist(null, name, hyperlink, (exists) => {
                     if (!exists) {
-                        this.reallocatePost(parentId, id, null);
+                        this.reallocatePost(parentId, id, null, done);
+                    } else {
+                        setTimeout(() => {
+                            this.setState({ updatePreview: true });
+                        },300);
                     }
                 });
 
             } else {
                 model.checkPostExist(destination, name, hyperlink, (exists) => {
                     if (!exists) {
-                        this.reallocatePost(parentId, id, destination);
+                        this.reallocatePost(parentId, id, destination, done);
+                    } else {
+                        setTimeout(() => {
+                            this.setState({ updatePreview: true });
+                        },300);
                     }
                 });
             }
         }
     }
 
-    reallocatePost (parentId, id, destination) {
+    reallocatePost (parentId, id, destination, done) {
+
         const {
             model
         } = this.state;
 
         if (parentId == destination || id == destination) {
+            setTimeout(() => {
+                this.setState({ updatePreview: true });
+            },300);
             return false;
         }
 
@@ -201,7 +280,11 @@ class PostContainer extends Component {
                 selected: destinationPost.children[id]
             });
 
-            model.updatePost(destinationPost.children[id]); // at backend also
+            model.updatePost(destinationPost.children[id], () => {
+                setTimeout(() => {
+                    this.setState({ updatePreview: true });
+                },1500);
+            }); // at backend also
 
             return destinationPost.children[id];
         }
@@ -221,7 +304,11 @@ class PostContainer extends Component {
                 Posts: model,
                 selected: model.posts[id]
             });
-            model.updatePost(model.posts[id]); // at backend also
+            model.updatePost(model.posts[id], () => {
+                setTimeout(() => {
+                    this.setState({ updatePreview: true });
+                },1000);
+            }); // at backend also
 
             return model.posts[id];
         }
@@ -244,7 +331,11 @@ class PostContainer extends Component {
                 Posts : model,
                 selected : destinationPost.children[id]
             });
-            model.updatePost(destinationPost.children[id]); // at backend also
+            model.updatePost(destinationPost.children[id], () => {
+                setTimeout(() => {
+                    this.setState({ updatePreview: true });
+                },1000);
+            }); // at backend also
 
             return destinationPost.children[id];
         }
@@ -288,6 +379,10 @@ class PostContainer extends Component {
                 postType = {postType}
                 postDataTypes = {postDataTypes}
                 selected = {selected}
+                getPreviewLoaded = {() => {
+                    return this.state.previewLoaded;
+                }}
+                locatePost = {this.locatePost.bind(this)}
                 setSelected = {this.setSelected.bind(this)}
                 setDestination = {this.setDestination.bind(this)}
                 reallocateModel = {this.reallocateModel.bind(this)}
@@ -720,7 +815,8 @@ class PostContainer extends Component {
             postType,
             postTypes,
             setView,
-            hyperlink
+            hyperlink,
+            postDataTypes
         } = this.props;
         const {
             actionMenuOpen,
@@ -812,6 +908,7 @@ class PostContainer extends Component {
                                     float: 'right',
                                     margin: '9.5px 0 0 0',
                                     float: 'right',
+                                    borderRadius: 100,
                                 }}
                                 iconStyle = {{
                                     color : 'rgb(60,60,60)'
@@ -823,32 +920,37 @@ class PostContainer extends Component {
                                 onClick = {this.handleActionMenuOpen.bind(this)}
                                 icon = {'more_horiz'}
                             />
-                            <Seperator
-                                style = {{
-                                    marginTop : 18
-                                }}
-                            />
-                            <MaterialButton
-                                style = {{
-                                    boxShadow: '1px 1px 3px 1px rgba(0,0,0,0.1)',
-                                    float: 'right',
-                                    margin: '9.5px 9.5px 0 0',
-                                }}
-                                hoverStyle = {{
-                                    color: 'white'
-                                }}
+                            {
+                                this.state.model ? this.state.model.model.uploadable != '1' ? <Seperator
+                                    style = {{
+                                        marginTop : 15
+                                    }}
+                                /> : '' : ''
+                            }
+                            {
+                                this.state.model ? this.state.model.model.uploadable != '1' ? <MaterialButton
+                                    style = {{
+                                        boxShadow: '1px 1px 3px 1px rgba(0,0,0,0.1)',
+                                        float: 'right',
+                                        margin: '9.5px 9.5px 0 0',
+                                    }}
+                                    hoverStyle = {{
+                                        color: 'white'
+                                    }}
 
-                                onClick = {() => {
-                                    this.handleDialogModel('new-post');
-                                }}
-                                label = {`New ${postType.name_singular}`}
-                            />
+                                    onClick = {() => {
+                                        this.handleDialogModel('new-post');
+                                    }}
+                                    label = {`New ${postType.name_singular}`}
+                                /> : '' : ''
+
+                            }
                             <Popover
                               open = {actionMenuOpen}
                               anchorEl = {actionMenuAnchorEl}
                               anchorOrigin = {{
-                                  horizontal: 'left',
-                                  vertical: 'bottom'
+                                  horizontal: 'right',
+                                  vertical: 'top'
                               }}
                               targetOrigin = {{
                                   horizontal: 'right',
@@ -872,14 +974,19 @@ class PostContainer extends Component {
                                         disabled = {selectMultiple}
                                         primaryText="New Folder"
                                     />
-                                    <MenuItem
-                                        value = {'new-post'}
-                                        disabled = {selectMultiple}
-                                        primaryText = {`New ${postType.name_singular}`}
-                                    />
+                                    {
+                                        this.state.model ? this.state.model.model.uploadable != '1' ? <MenuItem
+                                            value = {'new-post'}
+                                            disabled = {selectMultiple}
+                                            primaryText = {`New ${postType.name_singular}`}
+                                        /> : '' : ''
+                                    }
                                     <Divider/>
                                     <MenuItem
                                         value = {'duplicate-post'}
+                                        style = {{
+                                            fontSize: 14
+                                        }}
                                         disabled = {selectMultiple || selected !== null}
                                         primaryText = "Duplicate"
                                     />
@@ -955,7 +1062,6 @@ class PostContainer extends Component {
                                     event.preventDefault();
                                 }}
                                 onDrop = {(event) => {
-                                    console.log( 'destination', null);
                                     this.setDestination(null);
                                 }}
                                 draggable = {true}
@@ -963,10 +1069,11 @@ class PostContainer extends Component {
                                 Drop here to place at the top level
                             </div>
                             <div
+                                ref = 'post-container'
                                 style = {{
                                     backgroundAttachment: 'local',
                                     backgroundImage: `url('${SITE.url}/../images/post-list-background.png')`,
-                                    height: 'calc(100% - 100px)',
+                                    height: displayTopLevelPlacer ? 'calc(100% - 240px)' : 'calc(100% - 100px)',
                                     overflow: 'auto',
                                 }}
                                 onMouseUp = {(event) => {
@@ -998,25 +1105,10 @@ class PostContainer extends Component {
                                 height: 56,
                                 padding: '0 5px 10px 10px',
                                 width: '100%',
+                                display: selected ? '' : 'none'
                             }}
                         >
-                            <span
-                                style = {{
-                                    display: 'inline-block',
-                                    float: 'left',
-                                    marginTop: 9,
-                                }}
-                            >
-                                {
-                                    selected ? <PostIcon
-                                        model = {selected}
-                                        style = {{
-                                            width: 35,
-                                            height: 35
-                                        }}
-                                    /> : ''
-                                }
-                            </span>
+
                             <span
                                 style = {{
                                     display: 'inline-block',
@@ -1040,6 +1132,7 @@ class PostContainer extends Component {
                                         fontWeight: 'semi-bold',
                                         margin: '10px 5px 0 0px',
                                         display: selected ? '' : 'none',
+                                        borderRadius: 100,
                                     }}
                                     onClick = {() => {
                                         mainEdit();
@@ -1068,42 +1161,129 @@ class PostContainer extends Component {
                                     }}
                                 >
                                     <PostInfoContainer
+                                        onPreviewLoad = {this.onPreviewLoad.bind(this)}
                                         updatePreview = {updatePreview}
                                         parentModel = {this.state.model}
                                         model = {selected}
                                         openDialog = {this.openDialog.bind(this)}
                                         handleProjectEditor = { () => {
+                                            this.setState({ updatePreview: false });
                                             setView('project-editor', selected);
                                         }}
                                         postMeta = {postType.meta}
+                                        postDataTypes = {postDataTypes}
                                         postTypes = {postTypes}
                                         filterList = {filterList}
                                         hyperlink = {hyperlink}
                                         setMainEdit = {(mainEdit) => {
-                                            this.setState({mainEdit});
+                                            this.setState({
+                                                mainEdit
+                                            });
                                         }}
                                     />
                                 </div> : <div
                                     style = {{
                                         width: '100%',
                                         height: '100%',
-                                        background: 'rgb(250,250,250)',
+                                        background: 'white',
                                         position: 'relative'
                                     }}
                                 >
                                     <div
                                         style = {{
-                                            padding: '5% 5% 5% 5%',
                                             display: 'inline-block',
-                                            background: 'white',
-                                            top: '20%',
+                                            top: 'calc(50% - 50px)',
                                             left: '50%',
                                             transform: 'translate(-50%,-50%)',
                                             position: 'absolute',
                                             borderRadius: 7.5
                                         }}
                                     >
-                                        Select a post to view its detail
+                                        <div
+                                            style = {{
+                                                height: 120,
+                                                position: 'relative',
+                                                zoom: 0.8
+                                            }}
+                                        >
+                                            <svg
+                                                style = {{
+                                                    width: 180,
+                                                    height: 120,
+                                                    margin: '0 auto',
+                                                    display: 'inherit'
+                                                }}
+                                            >
+                                                {POST_INFO_ICON}
+                                                <rect
+                                                    width = {100}
+                                                    height = {75}
+                                                    style = {{
+                                                        fill: 'white'
+                                                    }}
+                                                />
+                                                <polygon
+                                                    points="30,70 60,20 90,70"
+                                                    style= {{
+                                                        fill: 'rgba(200,200,200,1)'
+                                                    }}
+                                                />
+                                                <polygon
+                                                    points="2.5,70 27.5,35 52.5,70"
+                                                    style= {{
+                                                        fill: 'white'
+                                                    }}
+                                                />
+                                                <polygon
+                                                    points="0,70 25,35 50,70"
+                                                    style= {{
+                                                        fill: 'rgba(180,180,180,1)'
+                                                    }}
+                                                />
+                                            </svg>
+                                            <i
+                                                className="material-icons"
+                                                style = {{
+                                                    position: 'absolute',
+                                                    bottom: 0,
+                                                    right: 23,
+                                                    fontSize: 40,
+                                                    color: 'rgb(180,180,180)'
+                                                }}
+                                            >
+                                                mode_edit
+                                            </i>
+                                        </div>
+                                        <span
+                                            style = {{
+                                                display: 'inline-block',
+                                                marginTop: 50
+                                            }}
+                                        >
+                                            <span>
+                                                {`Select a `}
+                                            </span>
+                                            <span
+                                                style = {{
+                                                    fontWeight: 500,
+                                                    borderBottom: `2px solid ${THEME.primaryColor}`,
+                                                    paddingBottom: 5
+                                                }}
+                                            >
+                                                {`${postType.name_singular}`}
+                                            </span>
+                                            {` or `}
+                                            <span
+                                                style = {{
+                                                    fontWeight: 500,
+                                                    borderBottom: `2px solid ${THEME.primaryColor}`,
+                                                    paddingBottom: 5
+                                                }}
+                                            >
+                                                 {`Folder`}
+                                            </span>
+                                            {` to Edit`}
+                                        </span>
                                     </div>
                                 </div>
                             }
@@ -1111,11 +1291,13 @@ class PostContainer extends Component {
                     </div>
 
                 </div>
-                <PostDialog
-                    model = {dialogModel}
-                    isOpen = {isDialogOpen}
-                    onRequestClose = { this.closeDialog.bind(this) }
-                />
+                {
+                    isDialogOpen ? <PostDialog
+                        model = {dialogModel}
+                        isOpen = {isDialogOpen}
+                        onRequestClose = { this.closeDialog.bind(this) }
+                    /> : ''
+                }
             </div>
        );
     }

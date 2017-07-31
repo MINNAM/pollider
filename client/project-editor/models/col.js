@@ -57,6 +57,8 @@ class Col extends ProjectBase {
 
             newRow.parent = this;
 
+            console.log( 'rew', newRow);
+
             this.rows[ i ] = newRow;
 
         }

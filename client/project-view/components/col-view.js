@@ -4,6 +4,10 @@ import RowView from './row-view.js';
 import ElementView from './element-view.js';
 
 import {
+    scroll
+} from '../../global.js'
+
+import {
     MaterialButton
 } from '../../ui-components/';
 
@@ -13,11 +17,72 @@ class ColView extends Component {
         verticalAlign: 'top'
     }
 
+    displayByType ( type ) {
+
+        switch ( type ) {
+            case 'text' :
+
+                console.log(this.props.model);
+
+                this.props.handleDialogModel(
+                    {
+                        type : 'text-editor',
+                        model : this.props.model.element
+                    },
+                    this.props.model.element
+
+                );
+                break;
+
+            case 'image' :
+
+                this.props.handleDialogModel(
+                    {
+                        type : 'post-container',
+                        model : this.props.model.element
+                    },
+                    this.props.model.element
+
+                );
+                break;
+            case 'code' :
+                this.props.handleDialogModel(
+                    {
+                        type : 'code-editor',
+                        model : this.props.model.element
+                    },
+                    this.props.model.element
+                );
+
+                // alert('code');
+            break;
+
+            case 'embed' :
+                this.props.handleDialogModel(
+                    {
+                        type : 'embed',
+                        model : this.props.model.element
+                    },
+                    this.props.model.element
+                );
+
+                // alert('code');
+            break;
+
+
+            default :
+                // this.props.display( 'upload-container' );
+                break;
+        }
+
+    }
+
     render () {
         const {
             model,
             queueElement,
-            editor
+            editor,
+            handler
         } = this.props;
         const {
             verticalAlign
@@ -54,7 +119,18 @@ class ColView extends Component {
                                     style = {{
                                         background: 'rgba(255,255,255,0.5)'
                                     }}
-                                    onClick = { () => {}}
+                                    onClick = {() => {
+
+                                        const editor = document.getElementById( 'project-editor-content' ).childNodes[0];
+                                        const view = document.getElementById( 'editor-' + model.element.uniqueId );
+
+                                        if (model.element) {
+                                            this.displayByType( model.element.type);
+                                        }
+
+                                        scroll(editor, editor.scrollTop, view.getBoundingClientRect().top + editor.scrollTop - 200);
+
+                                    }}
                                     icon = {'mode_edit'}
                                     iconStyle = {{
                                         color: 'rgb(60,60,60)'
@@ -69,6 +145,7 @@ class ColView extends Component {
                                 setVerticalAlign = {(verticalAlign) => {
                                     this.setState({ verticalAlign })
                                 }}
+                                handler = {handler}
                             />
                         </div>
                     </div>
@@ -94,6 +171,7 @@ class ColView extends Component {
                             setVerticalAlign = {(verticalAlign) => {
                                 this.setState({verticalAlign});
                             }}
+                            handler = {handler}
                         />
                     </div>
                 );
@@ -112,7 +190,13 @@ class ColView extends Component {
             {
                 model.rows.map((row, key) => {
                     return (
-                        <RowView editor = { editor } key = { key } model = { row }/>
+                        <RowView
+                            editor = { editor }
+                            key = { key }
+                            model = { row }
+                            handler = {handler}
+                            handleDialogModel = {this.props.handleDialogModel}
+                        />
                     );
                 })
             }

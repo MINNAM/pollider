@@ -18,6 +18,7 @@ const StatusBarContainer = (props) => {
         >
             {
                 queue[0] ? <StatusBar
+                    type = {queue[0].type}
                     text = {queue[0].message}
                     status = {queue[0].status}
                 /> : ''

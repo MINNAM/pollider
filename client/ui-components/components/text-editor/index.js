@@ -21,7 +21,7 @@ import {BLOCK_TYPES, BlockStyleControls} from './components/block-style-controls
 import {TEXTS, TEXT_STYLE_MAP, TextTypeControls} from './components/text-type-controls.js';
 import ControlButton from './components/control-button.js';
 
-import TEXT_STYLE from '../../../../public/theme/default/text-style.js';
+import TEXT_STYLE from '../../../../public/theme/default/styles/text-style.js';
 
 const STYLES = {
     controls: {
@@ -68,8 +68,7 @@ const STYLES = {
 class TextEditor extends Component {
 
     static propTypes = {
-        contentStyle :PropTypes.object,
-        defaultValue: PropTypes.object,
+        contentStyle :PropTypes.object,        
         disableHTML: PropTypes.bool,
         disableStyling: PropTypes.bool,
         onChange: PropTypes.func.isRequired,
@@ -82,6 +81,8 @@ class TextEditor extends Component {
         const {
             defaultValue
         } = this.props;
+
+        console.log(defaultValue);
 
         if (defaultValue) {
             this.state = {
@@ -119,7 +120,8 @@ class TextEditor extends Component {
     onChange (editorState, done) {
         const {
             onUpdate,
-            onChange
+            onChange,
+            disableStyling
         } = this.props;
 
         this.setState({
@@ -127,7 +129,9 @@ class TextEditor extends Component {
             editorState
 
         }, () => {
+
             const content = this.state.editorState.getCurrentContent();
+
             const inlineStyles = {};
 
             for (let key in TEXT_STYLE_MAP) {
@@ -135,6 +139,8 @@ class TextEditor extends Component {
                     style: TEXT_STYLE_MAP[key]
                 };
             }
+
+            console.log( convertToRaw(content) );
 
             const options = {inlineStyles};
 
@@ -151,6 +157,8 @@ class TextEditor extends Component {
                     });
                 });
             }
+
+
 
             if (done) {
                 setTimeout(() => {

@@ -511,7 +511,7 @@ class ProjectDialog extends DialogHelper {
                     >
                         { this.setTitle( data ) }
                         <div className = 'row'>
-                            <div style = {style} className = 'col-sm-4' onTouchTap = { function () { this.onExecute({ type : 'text' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'text' }); }.bind( this ) }>
                                 <MaterialButton
                                     style = {{
 
@@ -520,7 +520,7 @@ class ProjectDialog extends DialogHelper {
                                     label = { 'TEXT' }
                                 />
                             </div>
-                            <div style = {style} className = 'col-sm-4' onTouchTap = { function () { this.onExecute({ type : 'image' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'image' }); }.bind( this ) }>
                                 <MaterialButton
                                     style = {{
 
@@ -529,7 +529,7 @@ class ProjectDialog extends DialogHelper {
                                     label = { 'IMAGE' }
                                 />
                             </div>
-                            <div style = {style} className = 'col-sm-4' onTouchTap = { function () { this.onExecute({ type : 'embed' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'embed' }); }.bind( this ) }>
                                 <MaterialButton
                                     style = {{
 
@@ -538,7 +538,7 @@ class ProjectDialog extends DialogHelper {
                                     label = { 'embed' }
                                 />
                             </div>
-                            <div style = {style} className = 'col-sm-4' onTouchTap = { function () { this.onExecute({ type : 'audio' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'audio' }); }.bind( this ) }>
                                 <MaterialButton
                                     style = {{
 
@@ -547,7 +547,7 @@ class ProjectDialog extends DialogHelper {
                                     label = { 'AUDIO' }
                                 />
                             </div>
-                            <div style = {style} className = 'col-sm-4' onTouchTap = { function () { this.onExecute({ type : 'video' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'video' }); }.bind( this ) }>
                                 <MaterialButton
                                     style = {{
 
@@ -556,7 +556,7 @@ class ProjectDialog extends DialogHelper {
                                     label = { 'VIDEO' }
                                 />
                             </div>
-                            <div style = {style} className = 'col-sm-4' onTouchTap = { function () { this.onExecute({ type : 'code' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'code' }); }.bind( this ) }>
                                 <MaterialButton
                                     style = {{
 
@@ -601,122 +601,115 @@ class ProjectDialog extends DialogHelper {
 
             'post-container' : ( data, key ) => {
 
+                const {
+                    model
+                } = this.props;
+                const {
+                    displayPostInfo
+                } = this.state;
                 const postContainers = [];
-                const postSelector   = [];
+                const postSelector = [];
 
                 let postIndex = 0;
                 let selectedPostType;
 
-                for( let key in data.postTypes ) {
-
+                for (let key in data.postTypes) {
                     const element = data.postTypes[ key ];
 
-                    if ( postIndex++ == 0 ) {
-
-                        selectedPostType = data.post_type_id ? data.post_type_id : element.id;
-
+                    if (postIndex++ == 0) {
+                        selectedPostType = data.post_type_id ? data.post_type_id: element.id;
                     }
-
-
                     postContainers[ element.id ] = <PostContainer
-                            key                    = { key }
-                            hyperlink              = { element.hyperlink }
-                            name                   = { element.name }
-                            model                  = { element.post_container }
-                            allowMultiple          = { false }
-                            width                  = {{ container : 7, info : 5 }}
-                            selected               = { data.selected }
-                            postDataTypes          = {{}}
-                            postTypes              = { data.postTypes }
-                            postType               = { element }
-                            onExternalActionUpdate = { this.props.model.actions.update }
-                            onExternalActionChange = {
+                        key = {key}
+                        hyperlink = {element.hyperlink}
+                        name = {element.name}
+                        model = {element.post_container}
+                        allowMultiple = {false}
+                        width = {{
+                            container: 7,
+                            info: 5
+                        }}
+                        postDataTypes = {data.postDataTypes}
+                        selected = {data.selected}
+                        postTypes = {data.postTypes}
+                        postType = {element}
+                        onExternalActionUpdate = {model.actions.update}
+                        onExternalActionChange = {(values) => {
+                            this.setState({
+                                error: false,
+                                values: [{
+                                    value : values
+                                }]
+                            });
+                        }}
+                        displayPostInfo = {this.state.displayPostInfo}
+                        onUpdate        = {(date, message, status) => {
+                            this.triggerStatusBar(date, message, status);
 
-                                ( values ) => {
+                        }}
+                    />
 
-                                    this.setState({
-
-                                        error : false,
-                                        values : values
-
-                                    });
-
-                                }
-                            }
-                            displayPostInfo = { this.state.displayPostInfo }
-                            onUpdate        = {
-
-                                ( date, message, status ) => {
-
-                                    this.triggerStatusBar( date, message, status );
-
-                                }
-
-                            }
-                        />
-
-
-
-                    postSelector.push( <MenuItem key = { key } value = { element.id } primaryText = { element.name } /> );
-
+                    postSelector.push(<MenuItem
+                        key = {key}
+                        value = {element.id}
+                        primaryText = {element.name}
+                    />);
                 }
 
                 return (
-
                     <div
-                        key = { key }
+                        key = {key}
                         style = {{
-                            height : 500,
+                            height: 500,
                             overflow: 'hidden'
                         }}
                     >
                         <div
                             style = {{
-                                height : 47,
-                                padding : '0 10px',
-                                borderBottom : '1px solid rgb(240, 240, 240)'
-                            }}
+                                borderBottom: '1px solid rgb(240, 240, 240)',
+                                height: 47,
+                                padding: 0,
+                           }}
                         >
                             <SelectField
-                                style          = {{  width: 200 }}
-                                labelStyle     = {{ fontSize : '1.8vh' }}
-                                underlineStyle = {{ borderBottom: 'none' }}
-                                value          = { this.state.selectedPostType ? this.state.selectedPostType : selectedPostType }
-                                onChange       = {( event, target, value ) => {
-
-                                    this.setState({ selectedPostType : value });
-
+                                style = {{
+                                    width: 200
                                 }}
-
+                                labelStyle = {{
+                                    color: THEME.primaryColor,
+                                    fontSize: '1.8vh',
+                                }}
+                                underlineStyle = {{
+                                    borderBottom: 'none'
+                                }}
+                                value = { this.state.selectedPostType ? this.state.selectedPostType: selectedPostType }
+                                onChange = {(event, target, value) => {
+                                    this.setState({selectedPostType: value});
+                                }}
                             >
-                                { postSelector }
+                                {postSelector}
                             </SelectField>
                             <ToggleIcon
-                                value = { this.state.displayPostInfo }
+                                value = {displayPostInfo}
                                 style = {{
+                                    float : 'right',
+                                    fontWeight: 'semi-bold',
+                                    marginRight: 5,
+                                    marginTop: 6,
+                               }}
+                                onChange = {() => {
 
-                                    float       : 'right',
-                                    fontWeight  : 'semi-bold',
-                                    marginTop   : 6,
-                                    marginRight : 5
-
+                                    this.setState({
+                                        displayPostInfo: !displayPostInfo
+                                    });
                                 }}
-                                onChange = {
-                                    () => {
-
-                                        this.setState({
-                                            displayPostInfo : !this.state.displayPostInfo
-                                        });
-                                    }
-                                }
-                                label = { 'Info' }
-                                on  = { 'info' }
-                                off = { 'info_outline' }
+                                label = {'Info'}
+                                on  = {'info'}
+                                off = {'info_outline'}
                             />
                         </div>
-                        {postContainers[ this.state.selectedPostType ? this.state.selectedPostType : selectedPostType  ]}
+                        {postContainers[this.state.selectedPostType ? this.state.selectedPostType : selectedPostType]}
                     </div>
-
                 );
 
             }

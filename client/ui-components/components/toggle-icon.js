@@ -1,13 +1,13 @@
 import React from 'react';
 
 import TouchRipple from '../../../node_modules/material-ui/internal/TouchRipple';
+import {THEME} from '../../global.js';
 
 const ICON_STYLE = {
-    fontSize: 22,
-    paddingRight: 8,
-    paddingLeft: 8,
-    lineHeight : '36px',
-    color : 'rgb(100, 100, 100)'
+    fontSize: 23,
+    paddingRight: 6,
+    paddingLeft: 6,
+    lineHeight: '36px',
 };
 
 
@@ -50,10 +50,11 @@ class ToggleIcon extends React.Component{
             <span
                 style = {{
                     ...this.props.style,
+                    borderRadius: '100%',
                     position : 'relative',
+                    overflow: 'hidden',
                     height : 36,
-                    background : this.state.hover ? 'rgba(153,153,153,0.2)' : '',
-                    borderRadius: 2,
+                    background : this.state.hover ? 'rgba(153,153,153,0.2)' : (value ? 'rgba(153,153,153,0.2)' : '' ),
                     transition : 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
                     cursor : 'pointer'
                 }}
@@ -71,12 +72,18 @@ class ToggleIcon extends React.Component{
 
                 onClick = { this.props.onChange }
             >
-                <TouchRipple>
-
+                <TouchRipple
+                    style = {{
+                        overflow: ''
+                    }}
+                >
                     <i
                         className="material-icons"
-                        style = { ICON_STYLE }
-                    >{ value ? this.props.on : this.props.off }</i>
+                        style = {{
+                            ...ICON_STYLE,
+                            color: 'rgb(123,123,123)'
+                        }}
+                    >{this.props.on}</i>
                 </TouchRipple>
             </span>
 

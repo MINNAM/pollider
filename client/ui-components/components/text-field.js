@@ -29,13 +29,14 @@ class _TextField extends React.Component {
             onChange,
             type = 'text',
             label,
-            errorText
+            errorText,
+            autoFocus
         } = this.props;
 
         return (
             <TextField
                 autoComplete = 'new-password'
-                autoFocus = {true}
+                autoFocus = {autoFocus}
                 type = {type}
                 style = {{
                     width: '100%',

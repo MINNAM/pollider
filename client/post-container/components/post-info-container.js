@@ -131,12 +131,41 @@ class PostInfoContainer extends Component {
                                 post: "'s New Public Date "
                             },
                             field: 'public_date',
-                            dataType: 'date'
+                            dataType: 'date',
+                            default: model.public_date
                         }
                    ],
                     actions: {
                         execute: (data) => {
-                            model.public_date = data.public_date.value;
+
+                            const defaultDate = new Date(model.public_date);
+                            const defaultTime = `${defaultDate.getHours()}:${defaultDate.getMinutes()}:${defaultDate.getSeconds() < 10 ? 0 : ''}${defaultDate.getSeconds()}`;
+
+                            const _data = {};
+
+                            if (!data.public_date) {
+                                _data.public_date = defaultDate
+                            } else {
+                                _data.public_date = data.public_date;
+                            }
+
+                            if (!data.time) {
+                                _data.time = defaultTime
+                            } else {
+                                _data.time = data.time.value;
+                            }
+
+
+
+                            let newDate = new Date(_data.public_date);
+                            const newTime = _data.time.split(':');
+
+
+                            newDate = new Date(newDate.setHours(newTime[0], newTime[1], newTime[2]));
+
+                            console.log(newDate);
+
+                            model.public_date = newDate.toISOString();
                             parentModel.updatePost(model);
                         }
                     }
@@ -182,6 +211,7 @@ class PostInfoContainer extends Component {
                         {
                             dataType: 'post-container',
                             postTypes: postTypes.postTypes,
+                            postDataTypes: this.props.postDataTypes,
                             selected: data ? data.id : null,
                             post_type_id: data ? data.post_type_id : null
                         }
@@ -286,7 +316,7 @@ class PostInfoContainer extends Component {
                                     >
                                         <a
                                             target = {'_blank'}
-                                            href = { `${SITE.url}/${model.postContainerHyperlink}/${model._hyperlink}`}
+                                            href = { `${SITE.url}/${model.postContainerHyperlink ? model.postContainerHyperlink + '/' : ''}${model._hyperlink}`}
                                             style = {{
                                                 color: THEME.primaryColor,
                                                 cursor: 'pointer',
@@ -506,11 +536,16 @@ class PostInfoContainer extends Component {
                                                 <SelectField
                                                     style = {{
                                                         display: 'inline',
-                                                        fontSize: 12,
                                                         fontWeight: 'bold',
                                                         height: 47,
                                                     }}
-                                                    labelStyle = {{color: THEME.primaryColor}}
+                                                    labelStyle = {{
+                                                        color: THEME.primaryColor,
+                                                        fontSize: 12,
+                                                    }}
+                                                    menuItemStyle = {{
+                                                        fontSize: 12
+                                                    }}
                                                     value = {parseInt(model.data[key].content) ? parseInt(model.data[key].content): items[0].value}
                                                     onChange = {(event, index, value) => {
                                                         model.data[key].content = value;
@@ -635,6 +670,7 @@ class PostInfoContainer extends Component {
             return (
                 <div>
                     <PostPreview
+                        onPreviewLoad = {this.props.onPreviewLoad}
                         update = {updatePreview}
                         model = { model }
                         hyperlink = { this.props.hyperlink }

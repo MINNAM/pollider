@@ -31,6 +31,13 @@ class DebounceField extends Component {
         errorStyle: 0
     };
 
+    componentDidMount () {
+        setTimeout(() => {
+            this.refs.text.input.focus()
+        }, 10)
+
+    }
+
     debounce (callback) {
         if (this.timeout) {
             clearTimeout(this.timeout);
@@ -97,16 +104,15 @@ class DebounceField extends Component {
             errorText
         } = this.state;
 
-        console.log( 'selected', model, selected );
 
         return (
             <TextField
-                autoFocus = {true}
-                defaultValue   = { model ? model.name : null }
-                errorText      = { error }
-                hintText       = { hintText }
-                onChange       = { this.onChange.bind(this) }
-                style          = {{width: '100%'}}
+                ref = 'text'
+                defaultValue = { model ? model.name : null }
+                errorText = { error }
+                hintText = { hintText }
+                onChange = { this.onChange.bind(this) }
+                style = {{width: '100%'}}
                 underlineStyle = { STYLES.errors[ errorStyle ] }
             />
         );

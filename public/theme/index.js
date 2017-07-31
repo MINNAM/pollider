@@ -1,10 +1,10 @@
 import React from 'react';
 
 import {PostModel} from '../../client/post-container';
-import Project from '../../client//project-editor/models/project.js';
-import {ProjectView} from '../../client//project-view/';
+import Project from '../../client/project-editor/models/project.js';
+import {ProjectView} from '../../client/project-view/';
 
-const createProjectView = (model) => {
+const createProjectView = (model, handler) => {
     const post =  {
         ...new PostModel(),
         ...model
@@ -15,7 +15,7 @@ const createProjectView = (model) => {
          projectField : 'Content'
     });
 
-    return <ProjectView model = {project}/>;
+    return <ProjectView model = {project} handler = {handler}/>;
 };
 
 export {createProjectView};

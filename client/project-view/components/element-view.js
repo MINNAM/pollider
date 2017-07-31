@@ -3,36 +3,117 @@ import React, {Component} from 'react';
 import {SITE} from '../../global.js';
 import FontAwesomeButton from '../../../public/theme/default/components/ui/buttons/font-awesome-button.js';
 
+const RESERVES = [
+    'abstract ',
+    'else ',
+    'instanceof ',
+    'super ',
+    'boolean ',
+    'enum ',
+    'int ',
+    'switch ',
+    'break ',
+    'export ',
+    'interface ',
+    'synchronized ',
+    'byte ',
+    'extends ',
+    'let ',
+    'this ',
+    'case ',
+    'false ',
+    'long ',
+    'throw ',
+    'catch ',
+    'final ',
+    'native ',
+    'throws ',
+    'char ',
+    'finally ',
+    'new ',
+    'transient ',
+    'class ',
+    'float ',
+    'null ',
+    'true ',
+    'const ',
+    'for ',
+    'package ',
+    'try ',
+    'continue ',
+    'function ',
+    'private ',
+    'typeof ',
+    'debugger ',
+    'goto ',
+    'protected ',
+    'var ',
+    'default ',
+    'if ',
+    'public ',
+    'void ',
+    'delete ',
+    'implements ',
+    'return ',
+    'volatile ',
+    'do ',
+    'import ',
+    'short ',
+    'while ',
+    'double ',
+    'in ',
+    'static ',
+    'with '
+];
+
+const colorString = (str, color) => {
+    return `<span style = 'color: ${color}'>${str}</span>`;
+};
+
+function highlightSyntax (code, colors = {
+    string: '#FF9800', // orange
+    object: '#E57373', // red
+    function: '#00BCD4', // cyan
+    reserve: '#64B5F6', // blue
+    comment: '#9E9E9E' // grey
+}) {
+    // string
+    code = code.replace(/['"].*['"]/g, (str) => {
+        return colorString(str, colors.string );
+    });
+    // object
+    code = code.replace(/[a-zA-Z][a-zA-Z0-9]*[.][a-zA-Z][a-zA-Z0-9]*/g, (str) => {
+        return colorString(str.split('.')[0], colors.object) + '.' + str.split('.')[1]
+    });
+    // function
+    code = code.replace(/[a-zA-Z][a-zA-Z0-9]*[ ]*[(]/g, (str) => {
+        return colorString(str.replace( '(','' ), colors.function) + '(';
+    });
+
+    RESERVES.map((str) => {
+        code = code.replace(new RegExp(str, 'g'), colorString(str, colors.reserve));
+    })
+
+    // Comments
+    code = code.replace(/[\/][\/\*][^<]*[\*\/]+/g, (str) => {
+        return colorString(str, colors.comment);
+    });
+
+    return code;
+}
+
+
 class ElementView extends Component {
 
     state = {
         contentModel: null
     }
 
-    constructor (props) {
-
-        console.log( 'elements') ;
-        super(props);
-
-        const {
-            model,
-            setVerticalAlign
-        } = this.props;
-
-        model.getPostById((contentModel) => {
-            this.setState({ contentModel });
-
-            if (model.type == 'image') {
-                setVerticalAlign('center');
-            } else {
-                setVerticalAlign('top');
-            }
-        });
-    }
-
     componentDidMount () {
         const {
-            queueElement
+            queueElement,
+            model,
+            setVerticalAlign
         } = this.props;
         const {
             element
@@ -41,6 +122,18 @@ class ElementView extends Component {
         if (element) {
             queueElement(element);
         }
+
+        setTimeout(()=>{
+            model.getPostById((contentModel) => {
+                this.setState({ contentModel });
+
+                if (model.type == 'image') {
+                    setVerticalAlign('center');
+                } else {
+                    setVerticalAlign('top');
+                }
+            });
+        },500);
     }
 
     componentWillReceiveProps (props, state) {
@@ -58,7 +151,8 @@ class ElementView extends Component {
         const {
             model,
             col,
-            queueElement
+            queueElement,
+            handler = {}
         } = this.props;
         const {
             contentModel,
@@ -69,11 +163,31 @@ class ElementView extends Component {
             code
         } = this.refs;
 
+        const _handler = handler.element ? handler.element : {};
+
         switch (model.type) {
             case 'image':
+                let imageHandler = _handler.image ? _handler.image : {};
                 let path;
 
                 if (contentModel) {
+
+                    let enlargeClassName = '';
+                    let enlargeTimeout = null;
+                    if ( imageHandler.enlarge ) {
+                        if (imageHandler.enlarge.classNames) {
+                            if (this.state.enlarge) {
+                                enlargeClassName = imageHandler.enlarge.classNames.after;
+                            } else {
+                                enlargeClassName = imageHandler.enlarge.classNames.before;
+                            }
+                        }
+
+                        if (imageHandler.enlarge.timeout) {
+                            enlargeTimeout = imageHandler.enlarge.timeout;
+                        }
+                    }
+
                     return (
                         <div>
                             <div
@@ -83,26 +197,69 @@ class ElementView extends Component {
                                     height: '100%',
                                     width: '100%',
                                     // why regular col 100% and this has to be 50% while they are all table-cell
-                                    alignItems: 'center'
+                                    alignItems: 'center',
+                                    cursor: 'zoom-in'
                                 }}
                             >
-                            {
+                            <img
+                                ref = 'element'
+                                onLoad = {() => {
+                                    queueElement(element);
+                                }}
+                                onClick = {() => {
+                                    if ( imageHandler.enlarge ) {
+                                        this.setState({enlargeDisplay: true });
+
+                                        if (this.enlargeTimeout) {
+                                            clearTimeout(this.enlargeTimeout);
+                                        }
+
+                                        this.enlargeTimeout = setTimeout(() => {
+                                            this.setState({enlarge: true });
+                                        }, 100)
+
+                                    }
+                                }}
+                                src = { `/${ contentModel._hyperlink }` }
+                                alt = { contentModel.data ? (contentModel.data[ 'Alt Text' ] ? contentModel.data[ 'Alt Text' ].content: ''): '' }
+                                style = {{
+                                    width: (col.padding * 100) + '%', // 70
+                                }}
+                            />
+                            </div>
+                            <div
+                                className = {enlargeClassName}
+                                style = {{
+                                    display: this.state.enlargeDisplay ? 'inline-block' : 'none',
+                                    cursor: 'zoom-out',
+                                    zIndex: 100
+                                }}
+                                onClick = {() => {
+                                    this.setState({enlarge: false});
+
+                                    if (enlargeTimeout) {
+                                        if (this.enlargeTimeout) {
+                                            clearTimeout(this.enlargeTimeout);
+                                        }
+
+                                        this.enlargeTimeout = setTimeout(() => {
+                                            this.setState({enlargeDisplay: false });
+                                        }, enlargeTimeout)
+
+                                    } else {
+                                        this.setState({enlargeDisplay: false });
+                                    }
+                                }}
+                            >
                                 <img
+                                    className = 'element'
                                     ref = 'element'
                                     onLoad = {() => {
                                         queueElement(element);
                                     }}
-                                    src = { `${SITE.url}/${ contentModel._hyperlink }` }
+                                    src = { `/${ contentModel._hyperlink }` }
                                     alt = { contentModel.data ? (contentModel.data[ 'Alt Text' ] ? contentModel.data[ 'Alt Text' ].content: ''): '' }
-                                    style = {{
-                                        // margin: '0 auto',
-                                        // // top: '50%',
-                                        // // left: '50%',
-                                        // // transform: 'translate(-50%,-50%)'
-                                        width: (col.padding * 100) + '%', // 70
-                                    }}
                                 />
-                            }
                             </div>
                         </div>
                     );
@@ -127,43 +284,30 @@ class ElementView extends Component {
                 }
 
                 const code = <div
-                    className = { 'code' }
+                    className = {'code'}
                     ref = 'code'
                     style = {{
                         display: 'inline-block',
-                        color: 'rgb(220,220,220)',
-                        padding: '5px 20px 5px 5px',
+                        padding: 0,
                         fontFamily: 'monaco',
                         letterSpacing: '0px',
                         lineHeight: '21px',
                         fontSize: 14,
-                        width: 500,
-                        position: 'absolute'
+                        background: 'rgb(245,245,245)',
+                        width: '100%',
+                        padding: 15
                     }}
                 >
                     <div
                         style = {{
-                            width: 25,
+                            width: '100%',
                             float: 'left',
-                            textAlign: 'right',
-                            fontFamily: 'monaco',
-                            lineHeight: '21px',
-                            color: 'rgb(160,160,160)',
-                        }}
-                    >
-                    {
-                        lineNumbers
-                    }
-                    </div>
-                    <div
-                        style = {{
-                            width: 'calc(100% - 25px)',
-                            float: 'left',
-                            paddingLeft: 20,
                             fontFamily: 'monaco',
                             lineHeight: '21px !important',
                         }}
-                        dangerouslySetInnerHTML = {{ __html: model.content }}
+                        dangerouslySetInnerHTML = {{
+                            __html: highlightSyntax(model.content)
+                        }}
                     >
                     </div>
                 </div>
@@ -176,44 +320,10 @@ class ElementView extends Component {
                             style = {{
                                 display: 'inline-block',
                                 width: '100%',
-                                height: toggleCode ? 'initial' : 310,
-                                overflow: 'hidden',
-                                transition: '0.5s all'
+                                transition: '0.5s all',
                             }}
                         >
-                            <div
-                                style = {{
-                                    // width: '100%',
-                                    display: 'block',
-                                    overflow: 'auto',
-                                    height: code ? code.offsetHeight : 200,
-                                    whiteSpace: 'nowrap',
-                                    position: 'relative',
-                                    width: '100%',
-                                    background: 'rgb(0, 14, 29)',
-                                }}
-                            >
-                                { code }
-                            </div>
-                            <FontAwesomeButton
-                                className   = { toggleCode ? 'fa-angle-up': 'fa-angle-down' }
-                                size        = { 28 }
-                                iconStyle   = {{
-                                    color: 'rgb(76, 211, 173)'
-                                }}
-                                hoverStyle  = {{ color: 'rgb(60,60,60)' }}
-                                parentStyle = {{
-                                    left: '50%',
-                                    bottom: 10,
-                                    transform: 'translate(-50%, 0)',
-                                    position: 'absolute',
-                                }}
-                                onClick = {() => {
-                                    this.setState({
-                                        toggleCode: !toggleCode
-                                    })
-                                }}
-                            />
+                            { code }
                         </div>
                     </div>
                 );

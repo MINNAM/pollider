@@ -91,8 +91,6 @@ class Col extends React.Component {
 
         }
 
-        console.log( 'cols parent', this.state.model.parent );
-
         if (this.state.model.parent) {
             if ( this.state.model.parent.cols.length == 1 ) {
                 allowAddRow = false;
@@ -262,7 +260,6 @@ class Col extends React.Component {
 
         />: '';
 
-
         return (
 
             <div
@@ -314,12 +311,8 @@ class Col extends React.Component {
                                     display            = { this.props.display }
                                     toggle             = { this.state.model.displayElement }
                                 />
-
-                          : ''
-
+                            : ''
                         }
-
-
                         <RowContainer
                             display = { this.props.display }
                             model = { this.state.model }
@@ -366,10 +359,7 @@ class Col extends React.Component {
                                             top  : 50
 
                                         },
-
-
                                     }
-
                                 });
 
                             }: null }

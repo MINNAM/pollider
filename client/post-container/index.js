@@ -14,7 +14,7 @@ import {PostQuery} from './models/post-query.js';
 import PostTypes from './models/post-types.js';
 import {Post as PostModel} from './models/post.js';
 
-const structurePostTypes = (postTypes, displayPostInfo, setView) => {
+const structurePostTypes = (postTypes, displayPostInfo, setView, currentView) => {
 
     const postContainers = [];
     const postSelector = [];
@@ -41,6 +41,7 @@ const structurePostTypes = (postTypes, displayPostInfo, setView) => {
                 onUpdate = {(date, message, status) => {
                     this.triggerStatusBar(date, message, status);
                 }}
+                currentView = {currentView}
             />;
 
             postSelector.push(<MenuItem key = {key} value = {postType.id} primaryText = {postType.name} />);

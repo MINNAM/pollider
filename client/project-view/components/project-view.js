@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import TEXT_STYLE from '../../../public/theme/default/text-style.js';
+import TEXT_STYLE from '../../../public/theme/default/styles/text-style.js';
 import RowView from './row-view.js';
 
 class ProjectView extends Component {
@@ -9,7 +9,9 @@ class ProjectView extends Component {
         const {
             model,
             style,
-            editor
+            editor,
+            handler,
+            handleDialogModel
         } = this.props;
 
         return (
@@ -29,6 +31,8 @@ class ProjectView extends Component {
                                 key = {rowKey}
                                 model = {row}
                                 editor = {editor}
+                                handler = {handler}
+                                handleDialogModel = {handleDialogModel}
                             />
                         );
                     })

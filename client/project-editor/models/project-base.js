@@ -192,7 +192,7 @@ class ProjectBase {
 
         if ( !data.selected ) {
 
-            this.rows.push( new Row( this.index++, data.colIndex, data.dynamic, true ) );
+            this.rows.push( new Row( this.index++, data.colIndex, data.dynamic, true, this ) );
 
         } else {
 
@@ -202,7 +202,7 @@ class ProjectBase {
 
                 if ( this.rows[ i ].index == data.selected.index ) {
 
-                    this.rows.splice( i + data.position , 0, new Row( this.index++, data.colIndex, data.dynamic, true ) );
+                    this.rows.splice( i + data.position , 0, new Row( this.index++, data.colIndex, data.dynamic, true, this ) );
 
                     break;
 

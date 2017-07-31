@@ -18,12 +18,13 @@ const COL_WIDTH = [
 
 class Row {
 
-    constructor ( index, colIndex, dynamic, updated  ) {
+    constructor ( index, colIndex, dynamic, updated, parent  ) {
 
         this.index   = index;
         this.cols    = [];
         this.dynamic = dynamic;
         this.updated = updated;
+        this.parent = parent;
 
         if ( colIndex != undefined ) {
 

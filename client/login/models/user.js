@@ -34,11 +34,10 @@ class User {
             headers: {'Content-Type': 'application/json'},
             withCredentials: true
         }).then((response) => {
-            if(response.data) {
-                done(true);
-            } else {
-                done(false);
-            }
+            console.log(response.data);
+
+            done(response.data);
+
         }).catch((error) => {
             done(false);
         });

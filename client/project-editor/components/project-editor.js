@@ -37,7 +37,6 @@ class ProjectEditor extends React.Component {
     }
 
     componentWillReceiveProps (nextProps) {
-        console.log( 'save?', nextProps );
         this.setState({model: nextProps.model});
     }
 
@@ -51,14 +50,11 @@ class ProjectEditor extends React.Component {
 
             model.rows[0].cols[0].setElement({
                 type: 'text',
-                open: 'true'
+                open: true
             });
 
-            // model.rows[0].cols[0].displayElement(true);
+            this.setState({ model });                        
 
-            this.setState({ model });
-
-            // this.state.model.rows[0].cols[0].element.displayByType('text');
         }
     }
 
@@ -77,6 +73,7 @@ class ProjectEditor extends React.Component {
     }
 
     openDialog (data) {
+
         const dialogModel = {
             actions: data.actions,
             fields: data.fields,
@@ -98,7 +95,7 @@ class ProjectEditor extends React.Component {
     }
 
     handleDialogModel (data, model = {}) {
-        const prevModel = {...prevModel};
+        const prevModel = {...model};
 
         switch (data.type) {
             /* New Row */
@@ -234,8 +231,6 @@ class ProjectEditor extends React.Component {
 
             /* Add Row Above */
             case 'add-row-above':
-
-                alert();
 
                 this.openDialog({
 
@@ -390,14 +385,15 @@ class ProjectEditor extends React.Component {
             case 'text-editor':
 
                 this.openDialog({
-
+                    options: {
+                        executeOnEnter: false
+                    },
                     fields: [
                         {
                             dataType: 'text-editor',
                             default: model.contentRaw,
                             content: model.content
                         }
-
                    ],
                     actions: {
 
@@ -423,7 +419,7 @@ class ProjectEditor extends React.Component {
 
                         cancel: () => {
 
-                            model.content    = prevModel.content;
+                            model.content = prevModel.content;
                             model.contentRaw = prevModel.contentRaw;
 
                             this.setState({
@@ -437,9 +433,7 @@ class ProjectEditor extends React.Component {
                     },
 
                     style: {
-
                         dialog: {
-
                             width: '50%',
                             height: 'calc(100% - 50px)',
                             top: 50
@@ -449,7 +443,6 @@ class ProjectEditor extends React.Component {
                             width: '80%',
                             height: '80%'
                         },
-
                     }
 
                 });
@@ -459,7 +452,9 @@ class ProjectEditor extends React.Component {
             case 'embed':
 
                 this.openDialog({
-
+                    options: {
+                        executeOnEnter: false
+                    },
                     fields: [
                         {
                             dataType: 'embed',
@@ -531,7 +526,9 @@ class ProjectEditor extends React.Component {
             case 'code-editor':
 
                 this.openDialog({
-
+                    options: {
+                        executeOnEnter: false
+                    },
                     fields: [
                         {
                             dataType: 'code-editor',
@@ -599,35 +596,33 @@ class ProjectEditor extends React.Component {
 
             case 'post-container':
 
+                console.log(model.contentRaw );
+
                 this.openDialog({
-
                     fields: [
-
                         {
                             dataType: 'post-container',
                             postTypes: this.props.postTypes.postTypes,
                             selected: model.contentRaw ? model.contentRaw.id: null,
-                            post_type_id: model.contentRaw ? model.contentRaw.post_type_id: null
-
+                            post_type_id: model.contentRaw ? model.contentRaw.post_type_id: null,
+                            postDataTypes: this.props.postTypes.postDataTypes,
                         }
-
                    ],
                     actions: {
 
                         execute: (_data) => {
-
-                            model.content    = _data;
-                            model.contentRaw = {
-                                post_type_id: _data.post_type_id,
-                                id    : _data.id,
-                                type  : _data.hide.dataType
-                            };
-
-
+                            if(_data) {
+                                model.content    = _data[0].value;
+                                model.contentRaw = {
+                                    post_type_id: _data[0].value.post_type_id,
+                                    id    : _data[0].value.id,
+                                    type  : _data[0].value.hide.dataType
+                                };
+                            }
                         },
 
                         update:  (_data) => {
-
+                            console.log(_data);
                             model.content    = _data;
                             model.contentRaw = {
                                 post_type_id: _data.post_type_id,
@@ -775,6 +770,8 @@ class ProjectEditor extends React.Component {
 
     render () {
 
+        console.log( 'rowContainer', this.state.model );
+
 
         return (
 
@@ -827,7 +824,7 @@ class ProjectEditor extends React.Component {
 
                         <Seperator
                             style = {{
-                                marginTop: 18
+                                marginTop: 15
                             }}
                         />
 
@@ -886,14 +883,14 @@ class ProjectEditor extends React.Component {
                         }
                     </div>
 
-                    <div style = {{ height: 'calc(100% - 56px)', paddingBottom: 56 }}>
+                    <div id = 'project-editor-content' style = {{ height: 'calc(100% - 56px)', paddingBottom: 56 }}>
 
                         <RowContainer
-                            top          = { true }
-                            model        = { this.state.model }
-                            display      = { this.props.display }
+                            top = { true }
+                            model = { this.state.model }
+                            display = { this.props.display }
                             rowClassName = { 'parent-row' }
-                            uploads      = { this.props.uploads }
+                            uploads = { this.props.uploads }
                             handleDialogModel =  { this.handleDialogModel.bind(this) }
                             openDialog = { this.openDialog.bind(this) }
                         />
@@ -921,8 +918,9 @@ class ProjectEditor extends React.Component {
                         }}
                     >
                         <ProjectView
-                            editor = { true }
-                            model = { this.state.model }
+                            editor = {true}
+                            model = {this.state.model}
+                            handleDialogModel =  {this.handleDialogModel.bind(this)}
                             style = {{
                                 minHeight: 750
                             }}
@@ -930,11 +928,14 @@ class ProjectEditor extends React.Component {
                     </div>
 
                 </div>
-                <ProjectDialog
-                    model = {this.state.dialogModel}
-                    isOpen = {this.state.isDialogOpen ? true: false}
-                    onRequestClose = {this.closeDialog.bind(this)}
-                />
+                {
+                    this.state.isDialogOpen ? <ProjectDialog
+                        model = {this.state.dialogModel}
+                        isOpen = {this.state.isDialogOpen ? true: false}
+                        onRequestClose = {this.closeDialog.bind(this)}
+                    /> : ''
+                }
+
 
             </div>
 

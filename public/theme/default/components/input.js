@@ -40,7 +40,7 @@ class Input extends React.Component {
                         position : 'absolute',
                         top : this.state.focus ? 0 : 19.5,
                         left : 2.5,
-                        color : this.state.focus ? 'rgb(180, 180, 180)' : 'rgb(80,80,80)',
+
                         transition : '0.25s all'
                     }}
                 >
@@ -55,7 +55,7 @@ class Input extends React.Component {
                                 width : '100%',
                                 height : 150,
                                 border : 'none',
-                                borderBottom : `2px solid ${ this.state.focus ? 'rgb(76, 211, 173)' : this.props.error ? 'rgb(220,0,0)' : 'rgb(220,220,220)' }`,
+                                borderBottom : `2px solid ${ this.props.error ? 'rgb(244, 67, 54)' : this.state.focus ? 'rgb(76, 211, 173)' : 'rgb(220,220,220)' }`,
                                 outline : 'none',
                                 padding : 2.5,
                                 fontSize : 15,
@@ -109,7 +109,7 @@ class Input extends React.Component {
                         style = {{
                             width : '100%',
                             border : 'none',
-                            borderBottom : `2px solid ${ this.props.error ? 'rgb(220,0,0)' : this.state.focus ? 'rgb(76, 211, 173)' : 'rgb(220,220,220)' }`,
+                            borderBottom : `2px solid ${ this.props.error ? 'rgb(244, 67, 54)' : this.state.focus ? 'rgb(76, 211, 173)' : 'rgb(220,220,220)' }`,
                             outline : 'none',
                             padding : 2.5,
                             fontSize : 15,

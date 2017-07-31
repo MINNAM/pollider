@@ -6,6 +6,9 @@ import getMuiTheme      from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import SelectField from 'material-ui/SelectField';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import Divider from 'material-ui/Divider';
 import MenuItem from 'material-ui/MenuItem';
 import CircularProgress from 'material-ui/CircularProgress';
 
@@ -73,6 +76,7 @@ class Admin extends React.Component {
             actionDialogOpen: false,
             actionCallback: null,
             actionModel: [],
+            updatePreview: false,
         };
 
         this.state.user.getDetail();
@@ -101,8 +105,8 @@ class Admin extends React.Component {
                 }
             });
 
-        }, (date, message, status) => {
-            this.triggerStatusBar(date, message, status);
+        }, (type, date, message, status) => {
+            this.triggerStatusBar(type, date, message, status);
         });
     }
 
@@ -146,14 +150,14 @@ class Admin extends React.Component {
 
     }
 
-    triggerStatusBar (date, message, status) {
+    triggerStatusBar (type, date, message, status) {
         const {
             statusBarQueue
         } = this.state;
 
         this.popStatusBarQueue();
 
-        statusBarQueue.push({date, message, status});
+        statusBarQueue.push({type, date, message, status});
 
         this.setState({statusBarQueue});
 
@@ -180,6 +184,24 @@ class Admin extends React.Component {
         this.setState({statusBarQueue: []});
     }
 
+    handleActionMenuOpen (event) {
+        event.preventDefault();
+
+        this.setState({
+            actionMenuOpen     : true,
+            actionMenuAnchorEl : event.currentTarget
+        });
+
+    }
+
+    handleActionMenuClose () {
+        this.setState({
+            actionMenuOpen : false
+        });
+    }
+
+
+
     render () {
 
         const {
@@ -192,10 +214,12 @@ class Admin extends React.Component {
             currentProject,
             currentPost,
             previousProject,
-            statusBarQueue
+            statusBarQueue,
+            actionMenuOpen,
+            actionMenuAnchorEl
         } = this.state;
 
-        const posts = structurePostTypes(postTypes, displayPostInfo, this.setView.bind(this));
+        const posts = structurePostTypes(postTypes,displayPostInfo,this.setView.bind(this), this.state.view);
 
         return (
             <MuiThemeProvider muiTheme = {getMuiTheme(muiTheme)}>
@@ -210,7 +234,6 @@ class Admin extends React.Component {
                         style = {{
                             height: view != 'post-container' ? 50 : 100,
                             marginTop: view != 'post-container' ? -50 : '',
-                            background: 'rgb(245,245,245)'
                         }}
                     >
                         <div
@@ -230,27 +253,60 @@ class Admin extends React.Component {
                             />
                             <MaterialButton
                                 style = {{
-                                   float : 'right',
-                                   fontWeight: 'semi-bold',
-                                   marginTop: 0
-                                }}
-                                onClick = {() => {
-                                    user.logout(() => {
-                                        window.location.href = SITE.url + '/login';
-                                    });
-                                }}
-                                icon = {'exit_to_app'}
-                            />
-                            <MaterialButton
-                                style = {{
                                     float : 'right',
                                     fontWeight: 'semi-bold',
-                                    marginTop: 0
+                                    borderRadius: 100,
+                                    boxShadow: 'rgba(0, 0, 0, 0.1) 1px 1px 3px 1px'
+
                                 }}
-                                onClick = {() => {}}
-                                icon = {'settings'}
+                                iconStyle = {{
+                                    color: 'rgb(123, 123, 123)'
+                                }}
+                                onClick = {this.handleActionMenuOpen.bind(this)}
+                                icon = {'person'}
                             />
                         </div>
+                        <Popover
+                            open = {actionMenuOpen}
+                            anchorEl = {actionMenuAnchorEl}
+                            anchorOrigin = {{
+                                horizontal: 'right',
+                                vertical: 'top'
+                            }}
+                            targetOrigin = {{
+                                horizontal: 'right',
+                                vertical: 'top'
+                            }}
+                            onRequestClose = {this.handleActionMenuClose.bind(this)}
+                        >
+                            <Menu
+                                onChange = {(event, value) => {
+                                    switch (value) {
+                                        case 'logout':
+                                            user.logout(() => {
+                                                window.location.href = SITE.url + '/login';
+                                            });
+                                            break;
+                                    }
+                                }}
+                                style = {{
+                                    float: 'right'
+                                }}
+                                menuItemStyle = {{
+                                    fontSize: 14
+                                }}
+                            >
+                                <MenuItem
+                                    value = {'preference'}
+                                    primaryText = "Preference"
+                                />
+                                <Divider />
+                                <MenuItem
+                                    value = {'logout'}
+                                    primaryText = "Logout"
+                                />
+                            </Menu>
+                        </Popover>
                         <div
                             className = 'row secondary-menu'
                         >
@@ -298,13 +354,15 @@ class Admin extends React.Component {
                                     }
 
                                 </div>
-
                                 <ToggleIcon
                                     value = {displayPostInfo}
                                     style = {{
                                         float: 'right',
                                         fontWeight: 'semi-bold',
                                         marginTop: 6,
+                                    }}
+                                    iconStyle = {{
+                                        color: 'rgb(123, 123, 123)'
                                     }}
                                     onChange = {() => {
                                         this.setState({
@@ -314,6 +372,20 @@ class Admin extends React.Component {
                                     label = {'Info'}
                                     on = {'info'}
                                     off = {'info_outline'}
+                                />
+                                <MaterialButton
+                                    style = {{
+                                        float : 'right',
+                                        fontWeight: 'semi-bold',
+                                        marginTop: 6,
+                                        marginRight: 18,
+                                        borderRadius: 100,
+                                    }}
+                                    iconStyle = {{
+                                        color: 'rgb(123, 123, 123)'
+                                    }}
+                                    onClick = {() => {}}
+                                    icon = {'assessment'}
                                 />
                             </div>
                             <div

@@ -1,4 +1,6 @@
-import fetch from 'node-fetch';
+import axios from 'axios';
+axios.defaults.withCredentials = true;
+
 import { PostQuery } from '../../post-container/';
 
 let idIndex = 1;
@@ -36,16 +38,20 @@ class Element {
                 if ( typeof this.contentRaw.children !== 'undefined' && this.contentRaw.children.length > 0 ) {
 
                     id = JSON.stringify( this.contentRaw.children );
+
+                    console.log( id );
                 }
 
-                fetch( `${ PostQuery.getPostById + id }&post_type_id=${this.contentRaw.post_type_id}` ).then( ( res ) => {
-
-                    return res.json()
-
-                }).then( ( json ) => {
-
-                    done( json );
-
+                axios.get(PostQuery.getPostById,{
+                    params: {
+                        id: id,
+                        post_type_id: this.contentRaw.post_type_id
+                    }
+                }).then((response) => {
+                    if (done)
+                        done(response.data);
+                }).catch((error) => {
+                    console.log(error);
                 });
 
             }

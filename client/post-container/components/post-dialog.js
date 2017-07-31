@@ -23,11 +23,7 @@ class PostDialog extends DialogHelper {
 
     constructor (props) {
 
-
-
         super(props);
-
-        console.log(props);
 
         this.state = {
             ...this.state,
@@ -47,6 +43,7 @@ class PostDialog extends DialogHelper {
                     <div key = {key}>
                         {this.setTitle(data)}
                         <DebounceField
+                            autofocus = {true}
                             parentModel = { data.parentModel }
                             model    = {data.model}
                             selected = {data.selected ? data.selected : null}
@@ -81,8 +78,6 @@ class PostDialog extends DialogHelper {
                                     }
                                 }
 
-                                console.log( 'error', values, error );
-
                                 this.setState({
                                     values,
                                     error
@@ -111,17 +106,44 @@ class PostDialog extends DialogHelper {
                );
             },
             'date': (data, key) => {
+
+                const defaultDate = new Date(data.default);
+                const defaultTime = `${defaultDate.getHours()}:${defaultDate.getMinutes()}:${defaultDate.getSeconds() < 10 ? 0 : ''}${defaultDate.getSeconds()}`;
+
+
                 return (
                     <div key = {key}>
                         {this.setTitle(data)}
                         <DatePicker
+                            defaultDate = {defaultDate}
                             autoOk = {true}
                             hintText = {`Type ${data.field}`}
                             field = {data.field}
                             values = {this.state.values}
                             setError = {this.setError.bind(this)}
-                            setValues = { (values) => {
-                                this.setState({values});
+                            setValues = {(values) => {
+
+                                this.setState({
+                                    values: {
+                                        ...this.state.values,
+                                        ...values
+                                    }
+                                });
+
+                                console.log( this.state.values );
+                            }}
+                        />
+                        <TextField
+                            defaultValue = {defaultTime}
+                            label = {'Time (hh:mm:ss)'}
+                            onChange = {(event, target, value) => {
+                                this.onTextChange(event, target, value, {
+                                    field: 'time'
+                                });
+                            }}
+                            errorText = {(this.state.error[data.field] ? this.state.error[data.field] : '')}
+                            style = {{
+                                width: '100%'
                             }}
                         />
                     </div>
@@ -144,7 +166,7 @@ class PostDialog extends DialogHelper {
                     const element = data.postTypes[ key ];
 
                     if (postIndex++ == 0) {
-                        selectedPostType = data.post_type_id ? data.post_type_id: element.id;
+                        selectedPostType = data.post_type_id ? data.post_type_id : element.id;
                     }
                     postContainers[ element.id ] = <PostContainer
                         key = {key}
@@ -152,6 +174,7 @@ class PostDialog extends DialogHelper {
                         name = {element.name}
                         model = {element.post_container}
                         allowMultiple = {false}
+                        postDataTypes = {data.postDataTypes}
                         width = {{
                             container: 7,
                             info: 5
@@ -199,7 +222,7 @@ class PostDialog extends DialogHelper {
                         >
                             <SelectField
                                 style = {{
-                                    width: '200'
+                                    width: 200
                                 }}
                                 labelStyle = {{
                                     color: THEME.primaryColor,

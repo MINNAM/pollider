@@ -3,7 +3,7 @@ import React, {PropTypes} from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem    from 'material-ui/MenuItem';
 /* Pollider */
-import TEXT_STYLE from '../../../../../public/theme/default/text-style.js';
+import TEXT_STYLE from '../../../../../public/theme/default/styles/text-style.js';
 import {THEME} from '../../../../';
 
 // The actual style object is derived from theme, text-style.js

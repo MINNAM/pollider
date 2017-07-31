@@ -9,6 +9,7 @@ const STYLES = {
         display: 'table',
         height: 50,
         marginTop: 5,
+        paddingTop: 6.5,
         position: 'fixed',
         width : 'calc( 100% - 30px )',
         borderTop : '1px solid rgb(240,240,240)'
@@ -75,12 +76,34 @@ class Dialog extends React.Component {
         this.onKeyDown = this.onKeyDown.bind( this );
     }
 
+    componentWillReceiveProps (newProps) {
+        const {
+            onRequestClose
+        } = this.props;
+
+        if (newProps.isOpen == false) {
+
+            this.setState({
+                marginTop: 100,
+                opacity: 0
+            });
+
+            setTimeout(() => {
+                this.setState({
+                    display: 'none'
+                });
+            },500);
+        }
+
+    }
+
     componentDidMount () {
         document.body.addEventListener('keydown', this.onKeyDown);
 
         this.setState({
             marginTop: 0,
-            opacity: 1
+            opacity: 1,
+            display: 'inline'
         })
     }
 
@@ -93,14 +116,14 @@ class Dialog extends React.Component {
             onRequestClose,
             onExecute,
             options = {
-                executeOnEnter : true
+                executeOnEnter : true,
             }
         } = this.props;
 
         switch (event.keyCode) {
 
             case 27:
-                if (onRequestClose) {
+                if (options.onRequestClose !== false) {
                     this.setState({
                         marginTop: 100,
                         opacity: 0
@@ -114,13 +137,19 @@ class Dialog extends React.Component {
 
             case 13:
                 if (options.executeOnEnter) {
-                    this.setState({
-                        marginTop: 100,
-                        opacity: 0
-                    })
-                    setTimeout(() => {
+                    if (options.onRequestClose != false) {
+                        this.setState({
+                            marginTop: 0,
+                            opacity: 1
+                        })
+                        setTimeout(() => {
+                            onExecute();
+                        },300);
+
+                    } else {
                         onExecute();
-                    },300);
+                    }
+
                 }
                 break;
         }
@@ -131,16 +160,7 @@ class Dialog extends React.Component {
         const {
             children,
             style = {},
-            options = {
-                submit : {
-                    label : 'OK'
-                },
-                cancel : {
-                    label : 'Cancel'
-                },
-                executeOnEnter : true,
-                ...this.props.options
-            },
+            options = {},
             onExecute,
             onRequestClose,
             isOpen,
@@ -153,11 +173,11 @@ class Dialog extends React.Component {
 
         const actions = [
             <FlatButton
-                label = {options.cancel.label}
+                label = {options.cancel ? options.cancel.label : 'Cancel'}
                 primary = {true}
                 style = {{
                     float: 'left',
-                    display: options.cancel.hidden ? 'none' : ''
+                    display: options.cancel ? (options.cancel.hidden ? 'none' : '') : ''
                 }}
                 onTouchTap = {() => {
                     this.setState({
@@ -171,20 +191,24 @@ class Dialog extends React.Component {
             />,
             <FlatButton
                 disabled = {error}
-                label = {options.submit.label}
+                label = {options.submit ? options.submit.label : 'OK'}
                 style = {{
                     float: 'right',
-                    display: options.submit.hidden ? 'none' : ''
+                    display: options.submit ? (options.submit.hidden ? 'none' : '') : ''
                 }}
                 primary = {true}
                 onTouchTap = {() => {
-                    this.setState({
-                        marginTop: 100,
-                        opacity: 0
-                    })
-                    setTimeout(() => {
+                    if (options.onRequestClose !== false) {
+                        this.setState({
+                            marginTop: 100,
+                            opacity: 0
+                        })
+                        setTimeout(() => {
+                            onExecute();
+                        },300);
+                    } else {
                         onExecute();
-                    },300);
+                    }
                 }}
             />
         ];
@@ -194,14 +218,14 @@ class Dialog extends React.Component {
                 style = {{
                     ...STYLES.dialog,
                     ...style.dialog,
-                    display: isOpen ? 'initial' : 'none',
+                    display: this.state.display,
                     opacity,
                     transition: '.3s all'
                 }}
                 onTouchTap = {(event) => {
                     event.stopPropagation();
 
-                    if (onRequestClose) {
+                    if (options.onRequestClose !== false) {
                         this.setState({
                             marginTop: 100,
                             opacity: 0
@@ -226,7 +250,15 @@ class Dialog extends React.Component {
                             event.stopPropagation();
                         }}
                     >
-                        {children}
+                        <div
+                            style = {{
+                                position: 'relative',
+                                height: '100%',
+                                overflow: 'auto'
+                            }}
+                        >
+                            {children}
+                        </div>
                         <div
                             style = {STYLES.actions}
                         >

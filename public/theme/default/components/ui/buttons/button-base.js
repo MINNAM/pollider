@@ -17,7 +17,7 @@ class ButtonBase extends React.Component {
 
         const {
             mouseOver,
-            className,
+            _className,
         } = this.state;
 
         const {
@@ -26,7 +26,8 @@ class ButtonBase extends React.Component {
             onClick,
             onMouseOver,
             onMouseLeave,
-            size
+            size,
+            className
         } = this.props;
 
         const parentStyle = { width : '100%', textAlign : 'center', display : 'inline-block', ...this.props.parentStyle, cursor : 'pointer' };
@@ -34,6 +35,7 @@ class ButtonBase extends React.Component {
         return (
 
             <span
+                className = {className}
                 style = { parentStyle }
                 onClick = { () => {
 
@@ -72,21 +74,6 @@ class ButtonBase extends React.Component {
                         display : 'inline-block',
                         top : 0,
                         left : 0,
-                        overflow: 'hidden',
-                        cursor : 'pointer'
-                    }}
-                >
-                    { secondary }
-                </div>
-                <div
-                    style = {{
-                        width : size,
-                        height : size,
-                        position: 'absolute',
-                        display : 'inline-block',
-                        top : 0,
-                        left : 0,
-                        overflow: 'hidden'
                     }}
                 >
                     { primary }

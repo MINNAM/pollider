@@ -7,6 +7,9 @@ import IconButton from 'material-ui/IconButton/IconButton';
 import MoreHorizIcon from 'material-ui/svg-icons/navigation/more-horiz';
 
 import {
+    scroll
+} from '../../global.js'
+import {
     MaterialButton
 } from '../../ui-components/';
 
@@ -33,11 +36,7 @@ class Element extends React.Component {
 
             model.open = false;
 
-            this.setState({
-
-                model
-
-            })
+            this.setState({model})
 
         }
 
@@ -51,13 +50,16 @@ class Element extends React.Component {
 
     displayByType ( type ) {
 
+        const {
+            model
+        } = this.state;
+
         switch ( type ) {
             case 'text' :
-
                 this.props.handleDialogModel(
                     {
-                        type : 'text-editor',
-                        model : this.state.model
+                        type: 'text-editor',
+                        model
                     },
                     this.props.model
 
@@ -68,8 +70,8 @@ class Element extends React.Component {
 
                 this.props.handleDialogModel(
                     {
-                        type : 'post-container',
-                        model : this.state.model
+                        type: 'post-container',
+                        model
                     },
                     this.props.model
 
@@ -78,8 +80,8 @@ class Element extends React.Component {
             case 'code' :
                 this.props.handleDialogModel(
                     {
-                        type : 'code-editor',
-                        model : this.state.model
+                        type: 'code-editor',
+                        model
                     },
                     this.props.model
                 );
@@ -185,7 +187,10 @@ class Element extends React.Component {
 
                             this.displayByType( model.type );
 
-                            document.getElementById( 'pollider-public' ).scrollTop = parentNode.parentNode.offsetTop - document.getElementById( 'pollider-public' ).getBoundingClientRect().height * 0.25 ;
+                            const polliderPublic = document.getElementById( 'pollider-public' );
+                            const view = document.getElementById( 'view-' + model.uniqueId );
+
+                            scroll(polliderPublic, polliderPublic.scrollTop, view.getBoundingClientRect().top + polliderPublic.scrollTop - 200);
 
 
                         }}

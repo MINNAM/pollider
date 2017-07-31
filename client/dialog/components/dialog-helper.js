@@ -17,8 +17,6 @@ import {
 
 class DialogHelper extends Component {
 
-    static test = 0;
-
     static propTypes = {
         actions: PropTypes.object,
         actionModel: PropTypes.array,
@@ -34,9 +32,7 @@ class DialogHelper extends Component {
 
     constructor (props) {
         super(props);
-        DialogHelper.test++;
     }
-
 
     onExecute (values = this.state.values) {
         const {
@@ -48,8 +44,13 @@ class DialogHelper extends Component {
         } = this.state;
 
         if (Object.keys(error).length == 0) {
+
             model.actions.execute(values);
-            onRequestClose();
+
+            if (onRequestClose != null) {
+                onRequestClose();
+            }
+
         } else {
             this.setState({ error });
         }
@@ -164,7 +165,7 @@ class DialogHelper extends Component {
                         <div
                             key = {key}
                             style = {{
-                                height: '100%'
+                                width: '100%'
                             }}
                         >
                             {this.components[field.dataType](field, key)}
@@ -191,13 +192,9 @@ class DialogHelper extends Component {
             error
         } = this.state;
 
-        if (!isOpen) {
+        if (!model) {
             return ( <div/> );
-        } else {
-            console.log( 'dialog opened', model );
         }
-
-        console.log(model.options);
 
         return (
             <div>
@@ -208,6 +205,7 @@ class DialogHelper extends Component {
                     onExecute = {() => {
                         this.onExecute();
                     }}
+                    values = {this.state.values}
                     error = { error ? Object.keys(error).length != 0 : false }
                     onRequestClose = {this.onRequestClose ? this.onRequestClose.bind(this) : null}
                     style = {model.style}

@@ -17,13 +17,20 @@ class CloseButton extends React.Component {
 
     render () {
 
-        const { style, hoverStyle, onClick, color, size } = this.props;
+        const {
+            className,
+            style,
+            hoverStyle,
+            onClick,
+            color,
+            size
+        } = this.props;
 
         let _size = 20 - ( size ? size : 18 );
 
         let iconStyle = {
             fill : 'none',
-            strokeWidth : 4,
+            strokeWidth : 2,
             stroke : color ? color : 'white',
             transition: 'all 0.25s'
         };
@@ -36,8 +43,8 @@ class CloseButton extends React.Component {
 
 
         const secondary = <svg>
-            <polyline points={`${_size},${_size} ${20-_size},${20-_size}`} style={{ fill : 'none', strokeWidth : 4, stroke : 'rgb(76, 211, 173)'}} />
-            <polyline points={`${20-_size},${_size} ${_size},${20-_size}`} style={{ fill : 'none', strokeWidth : 4, stroke : 'rgb(76, 211, 173)'}} />
+            <polyline points={`${_size},${_size} ${20-_size},${20-_size}`} style={{ fill : 'none', strokeWidth : 0, stroke : 'rgb(76, 211, 173)'}} />
+            <polyline points={`${20-_size},${_size} ${_size},${20-_size}`} style={{ fill : 'none', strokeWidth : 0, stroke : 'rgb(76, 211, 173)'}} />
         </svg>;
 
         const primary = <svg>
@@ -55,12 +62,13 @@ class CloseButton extends React.Component {
             top : 15,
             left : 15,
             zIndex : 5,
+            overflow: 'hidden',
             ...style
         }
 
-
         return (
             <ButtonBase
+                className = {className}
                 onMouseOver = { () => {
 
                     this.setState({

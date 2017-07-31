@@ -54,36 +54,24 @@ router.get('/admin', (req, res) => {
     if ( !sess.username ) {
         res.redirect( '/login' );
     } else {
-
         const {headers} = req;
 
         global.navigator = global.navigator || {};
         global.navigator.userAgent = req.headers['user-agent'] || 'all';
 
-        match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
+        match({routes, location: req.url}, (error, redirectLocation, renderProps) => {
 
-            if ( error ) {
-
+            if (error) {
               res.status(500).send(error.message);
-
             } else if (redirectLocation) {
-
               res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-
             } else if (renderProps) {
-
                 const content = renderToString(<RouterContext {...renderProps} />);
-
                 res.render('index', {title: 'Admin | Pollider', data : false, content});
-
             } else {
-
               res.status(404).send('Not Found');
-
             }
-
         });
-
     }
 });
 
@@ -93,6 +81,7 @@ router.get('/login', (req, res) => {
         headers
     } = req;
 
+
     match({routes, location: req.url }, (error, redirectLocation, renderProps) => {
 
         if (error) {
@@ -101,6 +90,8 @@ router.get('/login', (req, res) => {
             res.redirect(302, redirectLocation.pathname + redirectLocation.search);
         } else if (renderProps) {
             const content = renderToString(<RouterContext {...renderProps} />);
+
+            console.log( 'index' );
 
             res.render( 'index', {title: 'Login | Pollider', data : false, content });
         } else {
@@ -137,40 +128,33 @@ customRoutes(router);
 const handleContainer = function ( row, res ) {
 
     post.getBlog({
+        parentId: row.alias_id ? row.alias_id : row.id,
+        parentStatus: row.status,
+        postDataCount: row.post_data_count,
+        postTypeId: 1,
+        container: false,
+        parentHyperlink: '',
+        hyperlink: row.hyperlink,
+        postDataCount: row.post_data_count
+    }, (posts) => {
+         user._get((_user) => {
+             const initialState = {
+                 model : {
+                     ...row,
+                     ..._user
+                 },
+                 children : posts,
+                 type : 'posts',
+             };
 
-        parentId : row.alias_id ? row.alias_id : row.id,
-        parentStatus : row.status,
-        postDataCount : row.post_data_count,
-        postTypeId : 1,
-        container : false,
-        parentHyperlink : '',
-        hyperlink : row.hyperlink,
-        postDataCount : row.post_data_count
+            const content = renderToString(<Index {...initialState }></Index>);
 
-    }, ( posts ) => {
-
-        const initialState = {
-            model : {
-                ...row,
-                first_name : 'Min',
-                last_name : 'Nam',
-            },
-            children : posts,
-            displayProfile : true,
-            type : 'post-container',
-
-        };
-        const content = renderToString(
-                <Index {...initialState }></Index>
-         );
-
-
-        res.send( Template({
-            body         : content,
-            title        : `Sung Min Nam | ${ post.name }`,
-            initialState : JSON.stringify( initialState )
-        }));
-
+            res.send( Template({
+                body: content,
+                title: `${_user.first_name} ${_user.last_name} | ${ row.name }`,
+                initialState: JSON.stringify( initialState )
+            }));
+         });
     });
 
 }
@@ -196,11 +180,10 @@ router.get('/', (req, res) => {
                         ..._user,
                         hyperlinks: [{
                             name: home.name,
-                            hyperlink : ''
+                            hyperlink: ''
                         }]
                     },
                     children: posts,
-                    displayHeader: true,
                     type: 'home'
                 };
 
@@ -208,7 +191,7 @@ router.get('/', (req, res) => {
 
                 res.send( Template({
                     body : content,
-                    title : `Sung Min Nam | Web Developer`,
+                    title : `${_user.first_name} ${_user.last_name} | Web Developer`,
                     initialState : JSON.stringify(initialState)
                 }));
             });
@@ -219,7 +202,7 @@ router.get('/', (req, res) => {
 
 router.get('/*', ( req, res ) => {
 
-    const links = req.originalUrl.replace( '//', '/').split('/');
+    const links = req.originalUrl.replace( '//', '/').split('/').filter((e) => { return e !== '' });
 
     post._getPostType((postTypes) => {
         let home = {};
@@ -231,7 +214,7 @@ router.get('/*', ( req, res ) => {
         });
 
         post.getPostByHyperlink({
-            links: links.slice(1),
+            links: links,
             index: 0,
             postTypeId: home.id,
             parentId: null,
@@ -244,174 +227,203 @@ router.get('/*', ( req, res ) => {
 
             const _post = Object.assign({ ...postByHyperlink, post_data_count : home.post_data_count, hyperlink : req.originalUrl });
 
-            if ( !postByHyperlink ) {
+            console.log( 'ppooooost', postByHyperlink);
 
-                post.getPostTypeByHyperlink({
+            user._get((_user) => {
+                if (!postByHyperlink) {
 
-                    hyperlink : links[ 1 ]
+                    post.getPostTypeByHyperlink({
+                        hyperlink : links[0]
+                    }, (postType) => {
 
-                }, ( postType ) => {
+                        if ( links.length > 1 ) {
 
-                    if ( links.length > 2 ) {
+                            if (postType) { // Search for post if post type with given hyperlink exists
+                                post.getPostByHyperlink({
 
-                        if ( postType ) {
+                                    links : links.splice(1), // exclude hyperlink for post type
+                                    index : 0,
+                                    postTypeId : postType.id,
+                                    parentId : null,
+                                    hyperlinks : [{
+                                        name : postType.name,
+                                        hyperlink : links[ 0 ]
+                                    }]
 
-                            post.getPostByHyperlink({
+                                }, (post) => {
 
-                                links : links.slice(2),
-                                index : 0,
-                                postTypeId : postType.id,
-                                parentId : null,
-                                hyperlinks : [{
-                                    name : 'Projects',
-                                    hyperlink : links[ 1 ]
-                                }]
+                                    const _post = Object.assign({ ...post, post_data_count : postType.post_data_count, hyperlink : req.originalUrl });
 
-                            }, ( post ) => {
+                                    console.log( 'ppooooost', post);
 
-                                const _post = Object.assign({ ...post, post_data_count : postType.post_data_count, hyperlink : req.originalUrl });
+                                    if ( !post ) {
 
-                                if ( !post ) {
-
-                                    res.send( 'not found' );
-
-                                } else {
-
-                                    if ( post.extension && post.path ) {
-
-                                        const path = __dirname + '/../src' + post.path + post.filename + '.' + post.extension;
-
-                                        var file = fs.readFileSync( path );
-
-                                        res.writeHead(200, {'Content-Type': mime.lookup( path ) });
-                                        res.end(file, 'binary');
+                                        res.send( 'not found' );
 
                                     } else {
 
-                                        if ( post.container == 1 ) {
+                                        if ( post.extension && post.path ) {
 
-                                            handleContainer( _post, res );
+                                            const path = __dirname + '/../src' + post.path + post.filename + '.' + post.extension;
+
+                                            var file = fs.readFileSync( path );
+
+                                            res.writeHead(200, {'Content-Type': mime.lookup( path ) });
+                                            res.end(file, 'binary');
 
                                         } else {
 
-                                            const initialState = {
+                                            if ( post.container == 1 ) {
 
-                                                model : { ...post },
-                                                type  : 'post',
-                                                displayProfile : false
+                                                handleContainer( _post, res );
 
-                                            };
+                                            } else {
 
-                                            const content = renderToString( <Index {...initialState }/> );
+                                                const initialState = {
+                                                    model : { ...post },
+                                                    type  : 'post',
+                                                };
 
-                                            res.send( Template({
+                                                const content = renderToString( <Index {...initialState }/> );
 
-                                                body         : content,
-                                                title        : `Sung Min Nam | ${ post.name }`,
-                                                initialState : JSON.stringify(initialState)
+                                                res.send( Template({
 
-                                            }));
+                                                    body         : content,
+                                                    title        : `${_user.first_name} ${_user.last_name} | ${ post.name }`,
+                                                    initialState : JSON.stringify(initialState)
+
+                                                }));
+
+                                            }
 
                                         }
 
                                     }
 
-                                }
+                                })
 
-                            })
-
-                        }
-
-                    } else {
-
-                        if ( postType.home == 1  ) {
-
-                            res.redirect('/');
-
-                        } else {
-
-                            post.getBlog({
-
-                                postTypeId : postType.id,
-                                container : false,
-                                hyperlink : req.originalUrl
-
-                            }, ( posts ) => {
-
+                            } else {
                                 const initialState = {
-                                    model : {
-                                        first_name : 'Min',
-                                        last_name : 'Nam',
+                                    model: {
+                                        ..._user
                                     },
-                                    displayProfile : true,
-                                    model : posts,
-                                    type : 'home'
+                                    type: 'four-oh-four'
 
                                 };
                                 const content = renderToString(
-                                        <Index {...initialState }></Index>
+                                    <Index {...initialState }></Index>
                                  );
 
+                                res.send( Template({
+                                    body: content,
+                                    title: `${_user.first_name } ${_user.last_name } | Oooooooooops`,
+                                    initialState: JSON.stringify( initialState )
+                                }));
+                            }
+
+                        } else {
+
+                            if (!postType) {
+
+                                const initialState = {
+                                    model: {
+                                        ..._user
+                                    },
+                                    type: 'four-oh-four'
+
+                                };
+                                const content = renderToString(
+                                    <Index {...initialState }></Index>
+                                 );
 
                                 res.send( Template({
-                                    body : content,
-                                    title        : `Sung Min Nam | ${ post.name }`,
-                                    initialState : JSON.stringify( initialState )
+                                    body: content,
+                                    title: `${_user.first_name } ${_user.last_name } | Oooooooooops`,
+                                    initialState: JSON.stringify( initialState )
                                 }));
 
-                            });
+                            } else {
+
+                                if ( postType.home == 1  ) {
+
+                                    res.redirect('/');
+
+                                } else {
+
+                                    post.getBlog({
+                                        postTypeId: postType.id,
+                                        container: false,
+                                        hyperlink: req.originalUrl
+                                    }, ( posts ) => {
+
+                                        const initialState = {
+                                            model : {
+                                                ..._user
+                                            },
+                                            model : posts,
+                                            type : 'home'
+
+                                        };
+                                        const content = renderToString(
+                                                <Index {...initialState }></Index>
+                                         );
+
+                                        res.send( Template({
+                                            body: content,
+                                            title: `${_user.first_name } ${_user.last_name } | ${postType.name}`,
+                                            initialState : JSON.stringify( initialState )
+                                        }));
+
+                                    });
+                                }
+
+                            }
 
                         }
 
-                    }
-
-                });
-
-
-
-
-            } else {
-
-                if ( postByHyperlink.extension && postByHyperlink.path ) {
-
-                    const path = __dirname + '/../src' + postByHyperlink.path + postByHyperlink.filename + '.' + postByHyperlink.extension;
-
-                    var file = fs.readFileSync( path );
-
-                    res.writeHead(200, {'Content-Type': mime.lookup( path ) });
-                    res.end(file, 'binary');
+                    });
 
                 } else {
 
-                    if ( postByHyperlink.container == 1 ) {
+                    if ( postByHyperlink.extension && postByHyperlink.path ) {
 
-                        handleContainer( _post, res );
+                        const path = __dirname + '/../src' + postByHyperlink.path + postByHyperlink.filename + '.' + postByHyperlink.extension;
+
+                        var file = fs.readFileSync( path );
+
+                        res.writeHead(200, {'Content-Type': mime.lookup( path ) });
+                        res.end(file, 'binary');
 
                     } else {
 
-                        const initialState = {
+                        if ( postByHyperlink.container == 1 ) {
 
-                            model : { ...postByHyperlink },
-                            type  : 'post',
-                            displayProfile : false
+                            handleContainer( _post, res );
 
-                        };
+                        } else {
 
-                        const content = renderToString( <Index {...initialState }/> );
+                            const initialState = {
+                                model : { ...postByHyperlink },
+                                type  : 'post',
+                            };
 
-                        res.send(Template({
+                            const content = renderToString( <Index {...initialState }/> );
 
-                            body         : content,
-                            title        : `Sung Min Nam | ${postByHyperlink.name}`,
-                            initialState : JSON.stringify(initialState)
+                            res.send(Template({
 
-                        }));
+                                body         : content,
+                                title        : `Sung Min Nam | ${postByHyperlink.name}`,
+                                initialState : JSON.stringify(initialState)
+
+                            }));
+
+                        }
 
                     }
 
                 }
 
-            }
+            });
 
         })
 

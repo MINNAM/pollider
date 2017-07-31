@@ -79,6 +79,8 @@ class Post {
                 }
             }
 
+            console.log( 'hyperlink', node.parentNode.hyperlink );
+
             return this.buildLink (`${node.parentNode.hyperlink}/${hyperlink}`, node.parentNode);
         } else {
             if (this.container ==  1) {

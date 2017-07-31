@@ -39861,7 +39861,7 @@ var Login = function (_Component) {
     }, {
         key: 'processLogin',
         value: function processLogin() {
-            window.location.href = _global.SITE.url + '/admin';
+            window.location.href = '/admin';
         }
     }, {
         key: 'openDialog',
@@ -39921,9 +39921,9 @@ var _global = __webpack_require__(21);
 * Collection of urls that model.PostContainer requests
 */
 var UserQueryUrls = {
-    getDetail: _global.SITE.url + '/user-get-detail',
-    login: _global.SITE.url + '/user-login',
-    logout: _global.SITE.url + '/user-logout'
+    getDetail: '/user-get-detail',
+    login: '/user-login',
+    logout: '/user-logout'
 }; /* Pollider */
 exports.UserQueryUrls = UserQueryUrls;
 

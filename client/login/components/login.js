@@ -195,7 +195,7 @@ class Login extends Component {
     }
 
     processLogin () {
-        window.location.href = SITE.url + '/admin';
+        window.location.href = '/admin';
     }
 
     openDialog (data) {

@@ -151,7 +151,7 @@ class Contact extends React.Component {
 
             $.ajax({
 
-                url         : SITE.url + '/contact',
+                url         : '/contact',
                 type        : "POST",
                 data        : JSON.stringify( this.state.data ),
                 contentType : "application/json; charset=utf-8",

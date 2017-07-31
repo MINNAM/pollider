@@ -22126,7 +22126,7 @@ var Contact = function (_React$Component) {
 
                 _jquery2.default.ajax({
 
-                    url: _global.SITE.url + '/contact',
+                    url: '/contact',
                     type: "POST",
                     data: JSON.stringify(this.state.data),
                     contentType: "application/json; charset=utf-8",

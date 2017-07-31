@@ -38894,7 +38894,7 @@ var Admin = function (_React$Component) {
                             },
                             _react2.default.createElement('img', {
                                 id: 'logo',
-                                src: _global.SITE.url + '/images/logo.svg',
+                                src: '/images/logo.svg',
                                 style: {
                                     height: '80%',
                                     marginTop: view != 'post-container' ? 100 : ''

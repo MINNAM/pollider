@@ -564,9 +564,6 @@ class Post {
     }
 
     getPost ( req, res ) {
-
-        console.log(req.query.id);
-
         this.db.connection.query (
 
             `SELECT
@@ -605,11 +602,7 @@ class Post {
             if ( parentId == parent.id ) {
 
                 if ( parent.parent_id != 'null' ) {
-
-
                     _hyperlink = this.buildHyperlink( parent.parent_id, parentPosts, `/${ parent.hyperlink + hyperlink }` );
-                    console.log( 'hyperlink', parent.hyperlink, _hyperlink );
-
                 }
 
             }
@@ -905,8 +898,6 @@ class Post {
 
                                         }
 
-                                        console.log('hello', _posts[ key ].hyperlink );
-
                                     });
 
                                     done( _posts );
@@ -1103,10 +1094,7 @@ class Post {
                 [ hyperlink ],
 
                 ( err, postTypes ) => {
-
-                    console.log(err, hyperlink, postTypes);
                     done( postTypes[0] );
-
                 }
 
             );
@@ -1127,9 +1115,6 @@ class Post {
         } = query;
 
         if ( links != 'favicon.ico' ) {
-
-            // console.log( query.links[ query.index ], query.index );
-
             let sql = `SELECT
                 p.id AS id,
                 p.alias_id,
@@ -1155,9 +1140,6 @@ class Post {
                 post_type_id = ?
                 ${ parentId ? '' : 'AND p.parent_id IS NULL'};
             `;
-
-            console.log( sql, links[ index ], postTypeId );
-
             this.db.connection.query (
 
                 sql,
@@ -1168,10 +1150,7 @@ class Post {
                 ],
                 ( err, rows ) => {
 
-                    let _row;
-
-                    console.log( rows );
-
+                    let _row;                    
                     rows.map ((row) =>  {
                         if (row.parent_id == parentId) {
                             _row = row;

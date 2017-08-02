@@ -66,9 +66,6 @@ class ProjectBase {
         }
 
         this.reindexRows();
-
-        console.log( this.rows );
-
     }
 
     downRow ( row ) {
@@ -100,9 +97,6 @@ class ProjectBase {
         }
 
         this.reindexRows();
-
-        console.log( this.rows );
-
     }
 
     duplicate ( row ) {
@@ -112,12 +106,9 @@ class ProjectBase {
         for ( var i = 0; i < this.rows.length; i++ ) {
 
             if ( this.rows[ i ].index == row.index ) {
-
                     var duplicatedRow = new Row( this.index++ );
 
                     duplicatedRow.copy( row, false );
-
-                    console.log( row, duplicatedRow );
 
                     this.rows.splice( i + 1 , 0, duplicatedRow  );
 

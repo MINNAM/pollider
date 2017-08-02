@@ -79,7 +79,7 @@ class LoginDialog extends DialogHelper {
                     <img
                         key = {key}
                         id = 'logo'
-                        src = {'/images/logo.svg'}
+                        src = {'/assets/logo.svg'}
                         style = {{
                             display: 'inline-block',
                             float: 'left',

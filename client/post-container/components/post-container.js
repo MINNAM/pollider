@@ -129,9 +129,6 @@ class PostContainer extends Component {
     }
 
     setSelected (post) {
-
-        console.log( post );
-
         const {
             onExternalActionChange,
             onExternalActionUpdate,
@@ -174,9 +171,25 @@ class PostContainer extends Component {
                 onExternalActionUpdate({ ...post, post_type_id : postType.id });
             }
 
+            let mainEdit
+            if (this.props.allowEdit) {
+                for (let key in postType.meta) {
+                    if (postType.meta[key].main) {
+                        for (let key2 in post.data) {
+                            if (key == post.data[key2].field) {
+                                mainEdit = () => {
+                                    this.handleDialogModel(postType.meta[post.data[key2].field].data_type, key2)
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+
             this.setState({
                 selected: post,
-                previewLoaded: false
+                previewLoaded: false,
+                mainEdit
             });
         }
     }
@@ -681,6 +694,155 @@ class PostContainer extends Component {
                 });
             break;
 
+            case 'Name':
+                this.openDialog({
+                    fields: [
+                        {
+                            title: 'Rename',
+                            subtitle: {
+                                pre: 'Enter ',
+                                middle: selected.name,
+                                post: "'s new name"
+                            },
+                            field: 'name',
+                            dataType: 'debounce-text',
+                            model,
+                            parentModel: this.state.model
+                        }
+                   ],
+                    actions: {
+                        execute: (data) => {
+                            selected.name = data.name.value;
+                            selected.hyperlink = formatHyperlink(data.name.value);
+                            this.state.model.updatePost(selected);
+                        }
+                    }
+                });
+            break;
+
+            case 'Public Date':
+                this.openDialog({
+                    fields: [
+                        {
+                            title: 'Change Public Date' ,
+                            subtitle: {
+                                pre: 'Change ',
+                                middle: selected.name,
+                                post: "'s New Public Date "
+                            },
+                            field: 'public_date',
+                            dataType: 'date',
+                            default: selected.public_date
+                        }
+                   ],
+                    actions: {
+                        execute: (data) => {
+
+                            const defaultDate = new Date(selected.public_date);
+                            const defaultTime = `${defaultDate.getHours()}:${defaultDate.getMinutes()}:${defaultDate.getSeconds() < 10 ? 0 : ''}${defaultDate.getSeconds()}`;
+
+                            const _data = {};
+
+                            if (!data.public_date) {
+                                _data.public_date = defaultDate
+                            } else {
+                                _data.public_date = data.public_date;
+                            }
+
+                            if (!data.time) {
+                                _data.time = defaultTime
+                            } else {
+                                _data.time = data.time.value;
+                            }
+
+                            let newDate = new Date(_data.public_date);
+                            const newTime = _data.time.split(':');
+
+                            newDate = new Date(newDate.setHours(newTime[0], newTime[1], newTime[2]));
+
+                            selected.public_date = newDate.toISOString();
+                            this.state.model.updatePost(selected);
+                        }
+                    }
+                });
+            break;
+
+            case 'text':
+                this.openDialog({
+                    fields: [
+                        {
+                            title: `Edit ${selected.data[model].field}`,
+                            subtitle: {
+                                pre: 'Enter ',
+                                middle: selected.name,
+                                post: `'s New ${selected.data[model].field}`
+                            },
+                            field: 'content',
+                            dataType: 'text',
+                            default: selected.data[model].content
+                        }
+                   ],
+                    actions: {
+                        execute: (data) => {
+                            selected.data[model].content = data.content.value;
+                            this.state.model.updatePost(selected);
+                        }
+                    }
+                });
+            break;
+
+            case 'project':
+                this.setState({ updatePreview: false });
+                this.props.setView('project-editor', selected);
+            break;
+
+            case 'post-container':
+                let data = selected.data[model].content != '' ? selected.data[model].content : null;
+
+                if (data) {
+                    data = JSON.parse(data);
+                }
+                this.openDialog({
+                    fields: [
+                        {
+                            dataType: 'post-container',
+                            postTypes: this.props.postTypes.postTypes,
+                            postDataTypes: this.props.postDataTypes,
+                            selected: data ? data.id : null,
+                            post_type_id: data ? data.post_type_id : null
+                        }
+                   ],
+                    actions: {
+                        execute: (_data) => {
+                            const children = [];
+
+                            for (let key in _data[0].value.children ) {
+                                children.push(key);
+                            }
+
+                            selected.data[model].content = JSON.stringify({
+                                post_type_id: _data[0].value.post_type_id,
+                                id: _data[0].value.id,
+                                children
+                            });
+
+                            this.state.model.updatePost(selected);
+                        },
+                    },
+                    style: {
+                        dialog: {
+                            width: '50%',
+                            height: 'calc(100% - 50px)',
+                            top: 50
+                        },
+                        content: {
+                            width: '95%',
+                            height: '80%'
+                        },
+                    }
+                });
+            break;
+
         }
 
         this.handleActionMenuClose();
@@ -928,7 +1090,7 @@ class PostContainer extends Component {
                                 /> : '' : ''
                             }
                             {
-                                this.state.model ? this.state.model.model.uploadable != '1' ? <MaterialButton
+                                this.state.model ? this.state.model.model.uploadable != '1' ? this.props.allowEdit ? <MaterialButton
                                     style = {{
                                         boxShadow: '1px 1px 3px 1px rgba(0,0,0,0.1)',
                                         float: 'right',
@@ -942,7 +1104,7 @@ class PostContainer extends Component {
                                         this.handleDialogModel('new-post');
                                     }}
                                     label = {`New ${postType.name_singular}`}
-                                /> : '' : ''
+                                /> : '' : '' : ''
 
                             }
                             <Popover
@@ -969,19 +1131,23 @@ class PostContainer extends Component {
                                         fontSize: 14
                                     }}
                                 >
-                                    <MenuItem
-                                        value = {'new-folder'}
-                                        disabled = {selectMultiple}
-                                        primaryText="New Folder"
-                                    />
                                     {
-                                        this.state.model ? this.state.model.model.uploadable != '1' ? <MenuItem
+                                        this.props.allowEdit ? <MenuItem
+                                            value = {'new-folder'}
+                                            disabled = {selectMultiple}
+                                            primaryText="New Folder"
+                                        /> : ''
+                                    }
+                                    {
+                                        this.state.model ? this.state.model.model.uploadable != '1' ? this.props.allowEdit ? <MenuItem
                                             value = {'new-post'}
                                             disabled = {selectMultiple}
                                             primaryText = {`New ${postType.name_singular}`}
-                                        /> : '' : ''
+                                        /> : '' : '' : ''
                                     }
-                                    <Divider/>
+                                    {
+                                        this.props.allowEdit ? <Divider/> : ''
+                                    }
                                     <MenuItem
                                         value = {'duplicate-post'}
                                         style = {{
@@ -1072,7 +1238,7 @@ class PostContainer extends Component {
                                 ref = 'post-container'
                                 style = {{
                                     backgroundAttachment: 'local',
-                                    backgroundImage: `url('/images/post-list-background.png')`,
+                                    backgroundImage: `url('/assets/post-list-background.png')`,
                                     height: displayTopLevelPlacer ? 'calc(100% - 240px)' : 'calc(100% - 100px)',
                                     overflow: 'auto',
                                 }}
@@ -1126,7 +1292,7 @@ class PostContainer extends Component {
                                 { selected ? selected.name : name }
                             </span>
                             {
-                                selected ? <MaterialButton
+                                this.props.allowEdit ? selected ? mainEdit ? <MaterialButton
                                     style = {{
                                         float: 'right',
                                         fontWeight: 'semi-bold',
@@ -1142,7 +1308,7 @@ class PostContainer extends Component {
                                     iconStyle = {{
                                         color : 'rgb(60,60,60)'
                                     }}
-                                /> : ''
+                                /> : '' : '' : ''
                             }
                         </div>
                         <div
@@ -1161,11 +1327,13 @@ class PostContainer extends Component {
                                     }}
                                 >
                                     <PostInfoContainer
+                                        allowEdit = {this.props.allowEdit}
                                         onPreviewLoad = {this.onPreviewLoad.bind(this)}
                                         updatePreview = {updatePreview}
                                         parentModel = {this.state.model}
                                         model = {selected}
                                         openDialog = {this.openDialog.bind(this)}
+                                        handleDialogModel = {this.handleDialogModel.bind(this)}
                                         handleProjectEditor = { () => {
                                             this.setState({ updatePreview: false });
                                             setView('project-editor', selected);
@@ -1175,11 +1343,7 @@ class PostContainer extends Component {
                                         postTypes = {postTypes}
                                         filterList = {filterList}
                                         hyperlink = {hyperlink}
-                                        setMainEdit = {(mainEdit) => {
-                                            this.setState({
-                                                mainEdit
-                                            });
-                                        }}
+
                                     />
                                 </div> : <div
                                     style = {{

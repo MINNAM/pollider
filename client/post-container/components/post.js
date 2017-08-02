@@ -84,7 +84,7 @@ class Post extends Component {
         this.props.handleTopLevelPlacer( true );
 
         const img = document.createElement( 'img' );
-        img.src = "/images/blank.png";
+        img.src = "/assets/blank.png";
 
         event.dataTransfer.setData( "text/html", "" );
         event.dataTransfer.setDragImage( img, 0, 0);

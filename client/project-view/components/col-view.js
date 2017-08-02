@@ -21,9 +21,6 @@ class ColView extends Component {
 
         switch ( type ) {
             case 'text' :
-
-                console.log(this.props.model);
-
                 this.props.handleDialogModel(
                     {
                         type : 'text-editor',

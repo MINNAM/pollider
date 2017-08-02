@@ -39,8 +39,6 @@ class PostDialog extends DialogHelper {
                     values,
                 } = this.state;
 
-                console.log(data.selected);
-
                 return (
                     <div key = {key}>
                         {this.setTitle(data)}
@@ -122,15 +120,12 @@ class PostDialog extends DialogHelper {
                             values = {this.state.values}
                             setError = {this.setError.bind(this)}
                             setValues = {(values) => {
-
                                 this.setState({
                                     values: {
                                         ...this.state.values,
                                         ...values
                                     }
                                 });
-
-                                console.log( this.state.values );
                             }}
                         />
                         <TextField
@@ -174,6 +169,7 @@ class PostDialog extends DialogHelper {
                         name = {element.name}
                         model = {element.post_container}
                         allowMultiple = {false}
+                        allowEdit = {false}
                         postDataTypes = {data.postDataTypes}
                         width = {{
                             container: 7,

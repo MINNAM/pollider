@@ -324,9 +324,11 @@ class Contact extends React.Component {
                                     submitMouseEnter : false
                                 })
                             }}
-
-
-                            onClick = {this.submit.bind(this)}
+                            onClick = {() => {
+                                if (!this.state.sending) {
+                                    this.submit();
+                                }
+                            }}
                         >
                             { this.state.sending ?
 
@@ -334,6 +336,9 @@ class Contact extends React.Component {
                                     width  = {60}
                                     height  = {35}
                                     className = {'loading-element'}
+                                    style = {{
+                                        marginTop: 8
+                                    }}
                                 >
                                     <circle
                                         cx = {7.5}

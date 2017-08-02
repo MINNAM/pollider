@@ -1,8 +1,6 @@
 /* Pollider */
 import SITE from '../../site.js';
 
-console.log('from post query', SITE);
-
 /*
 * Collection of urls that model.PostContainer requests
 */

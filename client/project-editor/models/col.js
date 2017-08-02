@@ -50,17 +50,12 @@ class Col extends ProjectBase {
         }
 
         for ( let i = 0; i < col.rows.length; i++ ) {
-
             let newRow = new Row();
 
             newRow.copy( col.rows[ i ], true );
-
             newRow.parent = this;
 
-            console.log( 'rew', newRow);
-
             this.rows[ i ] = newRow;
-
         }
 
     }

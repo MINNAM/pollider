@@ -102,7 +102,6 @@ var schema = {
             description: 'Database Password:',
             required: true,
             hidden: 'true',
-            default: '1111',
         },
         database_table_prefix: {
             description: 'Database Table Prefix:',
@@ -111,32 +110,27 @@ var schema = {
         user_first_name: {
             description: 'First Name:',
             required: true,
-            default: 'Sung Min',
         },
         user_last_name: {
             description: 'Last Name:',
             required: true,
-            default: 'Nam',
         },
         user_email: {
             description: 'User Email:',
             pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             message: 'Provide valid email',
             required: true,
-            default: 'nsm12889@gmail.com',
         },
         user_password: {
             description: 'User Password:',
             required: true,
             hidden: 'true',
-            default: '1111',
         },
         user_repassword: {
             description: 'Re-password:',
             message: 'Password does not match',
             required: true,
-            hidden: 'true',
-            default: '1111',
+            hidden: 'true',            
             conform: function (value) {
                 return prompt.history('user_password').value == value;
             }

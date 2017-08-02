@@ -29,7 +29,7 @@ class StatusBar extends React.Component {
             this.setState({
                 transform: 'translate(0, 0%)'
             });
-            setTimeout(() => {
+            this.disappear = setTimeout(() => {
                 this.setState({
                     transform: 'translate(0, -100%)'
                 });
@@ -39,6 +39,10 @@ class StatusBar extends React.Component {
 
     componentWillUnmount () {
         clearTimeout(this.transform);
+
+        if (this.disappear) {
+            clearTimeout(this.disappear);
+        }
     }
 
     onClick () {

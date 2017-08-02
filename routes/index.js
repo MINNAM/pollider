@@ -90,9 +90,6 @@ router.get('/login', (req, res) => {
             res.redirect(302, redirectLocation.pathname + redirectLocation.search);
         } else if (renderProps) {
             const content = renderToString(<RouterContext {...renderProps} />);
-
-            console.log( 'index' );
-
             res.render( 'index', {title: 'Login | Pollider', data : false, content });
         } else {
             res.status(404).send('Not Found');
@@ -122,7 +119,7 @@ router.post( '/upload-file', ( req, res ) => {  post.uploadFile( req, res ); } )
 
 
 /* User defined routes */
-customRoutes(router);
+customRoutes(router, database, user);
 
 
 const handleContainer = function ( row, res ) {
@@ -227,8 +224,6 @@ router.get('/*', ( req, res ) => {
 
             const _post = Object.assign({ ...postByHyperlink, post_data_count : home.post_data_count, hyperlink : req.originalUrl });
 
-            console.log( 'ppooooost', postByHyperlink);
-
             user._get((_user) => {
                 if (!postByHyperlink) {
 
@@ -253,8 +248,6 @@ router.get('/*', ( req, res ) => {
                                 }, (post) => {
 
                                     const _post = Object.assign({ ...post, post_data_count : postType.post_data_count, hyperlink : req.originalUrl });
-
-                                    console.log( 'ppooooost', post);
 
                                     if ( !post ) {
 
@@ -409,13 +402,17 @@ router.get('/*', ( req, res ) => {
 
                             const content = renderToString( <Index {...initialState }/> );
 
-                            res.send(Template({
+                            user._get((_user) => {
 
-                                body         : content,
-                                title        : `Sung Min Nam | ${postByHyperlink.name}`,
-                                initialState : JSON.stringify(initialState)
+                                res.send(Template({
 
-                            }));
+                                    body         : content,
+                                    title        : `${_user.first_name} ${_user.last_name} | ${postByHyperlink.name}`,
+                                    initialState : JSON.stringify(initialState)
+
+                                }));
+
+                            });
 
                         }
 

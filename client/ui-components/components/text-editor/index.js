@@ -68,7 +68,7 @@ const STYLES = {
 class TextEditor extends Component {
 
     static propTypes = {
-        contentStyle :PropTypes.object,        
+        contentStyle :PropTypes.object,
         disableHTML: PropTypes.bool,
         disableStyling: PropTypes.bool,
         onChange: PropTypes.func.isRequired,
@@ -81,8 +81,6 @@ class TextEditor extends Component {
         const {
             defaultValue
         } = this.props;
-
-        console.log(defaultValue);
 
         if (defaultValue) {
             this.state = {
@@ -138,9 +136,7 @@ class TextEditor extends Component {
                 inlineStyles[key] = {
                     style: TEXT_STYLE_MAP[key]
                 };
-            }
-
-            console.log( convertToRaw(content) );
+            }            
 
             const options = {inlineStyles};
 

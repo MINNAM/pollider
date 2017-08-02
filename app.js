@@ -74,13 +74,11 @@ app.use((err, req, res, next) => {
     res.render('error');
 });
 
-
-console.log( site );
 const server = app.listen(site.default.port, '0.0.0.0', () => {
     const host = server.address().address;
     const port = server.address().port;
 
-    console.log("Listening at http://%s:%s", host, port);
+    console.log("Pollider running at http://%s:%s", host, port);
 });
 
 module.exports = app;

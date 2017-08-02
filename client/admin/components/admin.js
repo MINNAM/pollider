@@ -246,7 +246,7 @@ class Admin extends React.Component {
                         >
                             <img
                                id = 'logo'
-                               src = {'/images/logo.svg'}
+                               src = {'/assets/logo.svg'}
                                style = {{
                                    height: '80%',
                                    marginTop: view != 'post-container' ? 100: '',

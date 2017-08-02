@@ -266,42 +266,42 @@ class ProjectDialog extends DialogHelper {
                             <RowSelectorItem
                                 onClick = {() => {this.onExecute({ colIndex: 0 });}}
                                 style = {style}
-                                src = '/images/row-selector-1.svg'
+                                src = '/assets/row-selector-1.svg'
                             />
                             <RowSelectorItem
                                 onClick = {() => {this.onExecute({ colIndex: 1 });}}
                                 style = {style}
-                                src = '/images/row-selector-2.svg'
+                                src = '/assets/row-selector-2.svg'
                             />
                             <RowSelectorItem
                                 onClick = {() => {this.onExecute({ colIndex: 2 });}}
                                 style = {style}
-                                src = '/images/row-selector-3.svg'
+                                src = '/assets/row-selector-3.svg'
                             />
                             <RowSelectorItem
                                 onClick = {() => {this.onExecute({ colIndex: 3 });}}
                                 style = {style}
-                                src = '/images/row-selector-4.svg'
+                                src = '/assets/row-selector-4.svg'
                             />
                             <RowSelectorItem
                                 onClick = {() => {this.onExecute({ colIndex: 4});}}
                                 style = {style}
-                                src = '/images/row-selector-5.svg'
+                                src = '/assets/row-selector-5.svg'
                             />
                             <RowSelectorItem
                                 onClick = {() => {this.onExecute({ colIndex: 5 });}}
                                 style = {style}
-                                src = '/images/row-selector-6.svg'
+                                src = '/assets/row-selector-6.svg'
                             />
                             <RowSelectorItem
                                 onClick = {() => {this.onExecute({ colIndex: 6});}}
                                 style = {style}
-                                src = '/images/row-selector-7.svg'
+                                src = '/assets/row-selector-7.svg'
                             />
                             <RowSelectorItem
                                 onClick = {() => {this.onExecute({ colIndex: 7 });}}
                                 style = {style}
-                                src = '/images/row-selector-8.svg'
+                                src = '/assets/row-selector-8.svg'
                             />
 
                         </div>
@@ -424,6 +424,7 @@ class ProjectDialog extends DialogHelper {
                         name = {element.name}
                         model = {element.post_container}
                         allowMultiple = {false}
+                        allowEdit = {false}
                         width = {{
                             container: 7,
                             info: 5

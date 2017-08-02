@@ -59,7 +59,7 @@ class User {
                                 login_attempt: req.session.login_attempt
                             });
 
-                        } else {                            
+                        } else {
 
                             if (sess.login_attempt) {
 
@@ -124,7 +124,7 @@ class User {
     }
 
     _get (done) {
-        this.db.connection.query('SELECT first_name, last_name FROM user',  (error, rows, fields) => {
+        this.db.connection.query('SELECT first_name, last_name, username FROM user',  (error, rows, fields) => {
             if (!error) {
                 done(rows[0]);
             } else {

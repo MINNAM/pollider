@@ -116,8 +116,7 @@ class PostContainer {
 
                 post.update();
 
-                if (done) {
-                    console.log(done)
+                if (done) {                    
                     done();
                 }
 
@@ -198,7 +197,6 @@ class PostContainer {
         for (let key in posts) {
 
             if (key == id) {
-                console.log( 'found', id);
                 return posts[key];
             }
 
@@ -254,7 +252,7 @@ class PostContainer {
 
                     newPost = this.new();
                     newPost.assign(response.data);
-                    console.log( 'new', newPost );
+
                     done(newPost);
                 }).catch((error) => {
                     done(false);
@@ -311,7 +309,6 @@ class PostContainer {
     }
 
     new (meta, param) {
-        console.log( 'new post', meta, param );
         return new Post(meta, param);
     }
 

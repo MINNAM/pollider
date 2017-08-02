@@ -129,7 +129,6 @@ class ProjectEditor extends React.Component {
                    ],
                     actions: {
                         execute: (data) => {
-                            console.log(data);
                             post.name = data.name.value;
                             post.hyperlink = formatHyperlink(data.name.value);
                             currentPostContainer.updatePost(post);
@@ -647,7 +646,6 @@ class ProjectEditor extends React.Component {
             break;
 
             case 'post-container':
-
                 this.openDialog({
                     fields: [
                         {
@@ -672,7 +670,6 @@ class ProjectEditor extends React.Component {
                         },
 
                         update:  (_data) => {
-                            console.log(_data);
                             model.content    = _data;
                             model.contentRaw = {
                                 post_type_id: _data.post_type_id,

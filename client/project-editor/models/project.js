@@ -47,8 +47,6 @@ class Project extends ProjectBase {
             dataType    : "json",
             success     : ( response ) => {
 
-                console.log( 'addPostReferece', response );
-
             }
 
         });
@@ -144,10 +142,7 @@ class Project extends ProjectBase {
 
         });
 
-        console.log(this.rows);
-
         return this.rows;
-
     }
 
     save (done) {

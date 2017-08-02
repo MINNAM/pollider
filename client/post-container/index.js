@@ -35,6 +35,7 @@ const structurePostTypes = (postTypes, displayPostInfo, setView, currentView) =>
                     info: 3
                 }}
                 allowMultiple = {true}
+                allowEdit = {true}
                 postDataTypes = {postTypes.postDataTypes}
                 displayPostInfo = {displayPostInfo}
                 setView = {setView ? setView : null}

@@ -43,18 +43,10 @@ class PostInfoContainer extends Component {
 
         let mainEdit;
 
-        for (let key in postMeta) {
-            if (postMeta[key].main) {
-                mainEdit = postMeta[key].data_type;
-                for (let key2 in model.data) {
-                    if (key == model.data[key2].field) {
-                        setMainEdit(() => {
-                            this.handleDialogModel(postMeta[model.data[key2].field].data_type, key2);
-                        });
-                    }
-                }
-            }
-        }
+    }
+
+    componentWillReceiveProps () {
+
     }
 
     getDate (unformattedDate) {
@@ -85,170 +77,9 @@ class PostInfoContainer extends Component {
         parentModel.updatePost(model);
     }
 
-    handleDialogModel (key, key2) {
-        const {
-            openDialog,
-            model,
-            parentModel,
-            postTypes,
-        } = this.props;
 
-        switch (key) {
-            case 'Name':
-                openDialog({
-                    fields: [
-                        {
-                            title: 'Rename',
-                            subtitle: {
-                                pre: 'Enter ',
-                                middle: model.name,
-                                post: "'s new name"
-                            },
-                            field: 'name',
-                            dataType: 'debounce-text',
-                            model,
-                            parentModel
-                        }
-                   ],
-                    actions: {
-                        execute: (data) => {
-                            console.log(data);
-                            model.name = data.name.value;
-                            model.hyperlink = formatHyperlink(data.name.value);
-                            parentModel.updatePost(model);
-                        }
-                    }
-                });
-            break;
-
-            case 'Public Date':
-                openDialog({
-                    fields: [
-                        {
-                            title: 'Change Public Date' ,
-                            subtitle: {
-                                pre: 'Change ',
-                                middle: model.name,
-                                post: "'s New Public Date "
-                            },
-                            field: 'public_date',
-                            dataType: 'date',
-                            default: model.public_date
-                        }
-                   ],
-                    actions: {
-                        execute: (data) => {
-
-                            const defaultDate = new Date(model.public_date);
-                            const defaultTime = `${defaultDate.getHours()}:${defaultDate.getMinutes()}:${defaultDate.getSeconds() < 10 ? 0 : ''}${defaultDate.getSeconds()}`;
-
-                            const _data = {};
-
-                            if (!data.public_date) {
-                                _data.public_date = defaultDate
-                            } else {
-                                _data.public_date = data.public_date;
-                            }
-
-                            if (!data.time) {
-                                _data.time = defaultTime
-                            } else {
-                                _data.time = data.time.value;
-                            }
-
-                            let newDate = new Date(_data.public_date);
-                            const newTime = _data.time.split(':');
-
-                            newDate = new Date(newDate.setHours(newTime[0], newTime[1], newTime[2]));
-
-                            model.public_date = newDate.toISOString();
-                            parentModel.updatePost(model);
-                        }
-                    }
-                });
-            break;
-
-            case 'text':
-                this.props.openDialog({
-                    fields: [
-                        {
-                            title: `Edit ${model.data[key2].field}`,
-                            subtitle: {
-                                pre: 'Enter ',
-                                middle: model.name,
-                                post: `'s New ${model.data[key2].field}`
-                            },
-                            field: 'content',
-                            dataType: 'text',
-                            default: model.data[key2].content
-                        }
-                   ],
-                    actions: {
-                        execute: (data) => {
-                            model.data[key2].content = data.content.value;
-                            parentModel.updatePost(model);
-                        }
-                    }
-                });
-            break;
-
-            case 'project':
-                this.props.handleProjectEditor();
-            break;
-
-            case 'post-container':
-                let data = model.data[key2].content != '' ? model.data[key2].content : null;
-
-                if (data) {
-                    data = JSON.parse(data);
-                }
-                this.props.openDialog({
-                    fields: [
-                        {
-                            dataType: 'post-container',
-                            postTypes: postTypes.postTypes,
-                            postDataTypes: this.props.postDataTypes,
-                            selected: data ? data.id : null,
-                            post_type_id: data ? data.post_type_id : null
-                        }
-                   ],
-                    actions: {
-                        execute: (_data) => {
-                            const children = [];
-
-                            for (let key in _data[0].value.children ) {
-                                children.push(key);
-                            }
-
-                            model.data[key2].content = JSON.stringify({
-                                post_type_id: _data[0].value.post_type_id,
-                                id: _data[0].value.id,
-                                children
-                            });
-
-                            parentModel.updatePost(model);
-                        },
-                    },
-                    style: {
-                        dialog: {
-                            width: '50%',
-                            height: 'calc(100% - 50px)',
-                            top: 50
-                        },
-                        content: {
-                            width: '95%',
-                            height: '80%'
-                        },
-                    }
-                });
-
-            break;
-        }
-    }
 
     render () {
-
-
         const {
             model,
             filterList,
@@ -287,7 +118,7 @@ class PostInfoContainer extends Component {
                                             fontWeight: 'bold',
                                          }}
                                         onClick = {() => {
-                                            this.handleDialogModel(FIELD_NAMES[key]);
+                                            this.props.handleDialogModel(FIELD_NAMES[key]);
                                         }}
                                     >
                                         {model[key]}
@@ -347,7 +178,6 @@ class PostInfoContainer extends Component {
                                                 model.status = value;
                                                 // parentModel.updatePost(model);
                                                 this.props.parentModel.updatePost(model);
-                                                console.log( value );
                                             }}
                                         >
                                             <RadioButton
@@ -393,7 +223,7 @@ class PostInfoContainer extends Component {
                                             fontWeight: 'bold',
                                         }}
                                         onClick = {() => {
-                                            this.handleDialogModel('Public Date');
+                                            this.props.handleDialogModel('Public Date');
                                         }}
                                     >
                                         { this.getDateTime(model.public_date) }
@@ -484,31 +314,33 @@ class PostInfoContainer extends Component {
                         if (postMeta[model.data[key].field]) {
                             switch (postMeta[model.data[key].field].data_type) {
                                 case 'project':
-                                    fields.push (
-                                        <span
-                                            className = {'post-info-field-container'}
-                                            key = {key}
-                                        >
+                                    if (this.props.allowEdit == true) {
+                                        fields.push (
                                             <span
-                                                className = { 'field' }
+                                                className = {'post-info-field-container'}
+                                                key = {key}
                                             >
-                                                {model.data[key].field}
+                                                <span
+                                                    className = { 'field' }
+                                                >
+                                                    {model.data[key].field}
+                                                </span>
+                                                <span
+                                                    className = {'value'}
+                                                    onTouchTap = {() => {
+                                                        this.props.handleDialogModel(postMeta[model.data[key].field].data_type);
+                                                    }}
+                                                    style = {{
+                                                        color: THEME.primaryColor,
+                                                        cursor: 'pointer',
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
+                                                    { "Click here to edit" }
+                                                </span>
                                             </span>
-                                            <span
-                                                className = {'value'}
-                                                onTouchTap = {() => {
-                                                    this.handleDialogModel(postMeta[model.data[key].field].data_type);
-                                                }}
-                                                style = {{
-                                                    color: THEME.primaryColor,
-                                                    cursor: 'pointer',
-                                                    fontWeight: 'bold',
-                                                }}
-                                            >
-                                                { "Click here to edit" }
-                                            </span>
-                                        </span>
-                                    );
+                                        );
+                                    }
                                     break;
 
                                 case 'select':
@@ -584,7 +416,7 @@ class PostInfoContainer extends Component {
                                                     fontWeight: 'bold',
                                                 }}
                                                 onTouchTap = {() => {
-                                                    this.handleDialogModel(this.props.postMeta[model.data[key].field].data_type, key);
+                                                    this.props.handleDialogModel(this.props.postMeta[model.data[key].field].data_type, key);
                                                 }}
                                             >
                                                 {model.data[key].content == '' ? 'Click here to edit': model.data[key].content}
@@ -600,31 +432,34 @@ class PostInfoContainer extends Component {
                                         data = JSON.parse(data);
                                     }
 
-                                    fields.push(
-                                        <span
-                                            className = {'post-info-field-container'}
-                                            key = {key}
-                                        >
+                                    if (this.props.allowEdit == true) {
+                                        fields.push(
                                             <span
-                                                className = { 'field' }
+                                                className = {'post-info-field-container'}
+                                                key = {key}
                                             >
-                                                {model.data[key].field}
+                                                <span
+                                                    className = { 'field' }
+                                                >
+                                                    {model.data[key].field}
+                                                </span>
+                                                <span
+                                                    className = { 'value' }
+                                                    style = {{
+                                                        fontWeight: 'bold',
+                                                        cursor: 'pointer',
+                                                        color: THEME.primaryColor
+                                                    }}
+                                                    onTouchTap = {() => {
+                                                        this.props.handleDialogModel(this.props.postMeta[model.data[key].field].data_type, key)
+                                                    }}
+                                                >
+                                                    {data ? data.id: 'Click here to edit'}
+                                                </span>
                                             </span>
-                                            <span
-                                                className = { 'value' }
-                                                style = {{
-                                                    fontWeight: 'bold',
-                                                    cursor: 'pointer',
-                                                    color: THEME.primaryColor
-                                                }}
-                                                onTouchTap = {() => {
-                                                    this.handleDialogModel(this.props.postMeta[model.data[key].field].data_type, key)
-                                                }}
-                                            >
-                                                {data ? data.id: 'Click here to edit'}
-                                            </span>
-                                        </span>
-                                    );
+                                        );
+                                    }
+
                                     break;
 
                                 default:

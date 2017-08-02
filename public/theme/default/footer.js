@@ -13,6 +13,7 @@ const Footer = (props) => {
         <Wrapper
             innerStyle = {{
                 ...innerContentStyle,
+                maxWidth: 'none'
             }}
             style = {{
                 display: 'inline-block'
@@ -22,6 +23,7 @@ const Footer = (props) => {
                 innerStyle = {{
                     position: 'relative',
                     ...innerContentStyle,
+                    maxWidth: 'none',
                     marginTop: 35,
                 }}
             >
@@ -45,7 +47,8 @@ const Footer = (props) => {
                 <Wrapper
                     innerStyle = {{
                         position: 'relative',
-                        ...innerContentStyle
+                        ...innerContentStyle,
+                        maxWidth: 'none'
                     }}
                 >
                     <span

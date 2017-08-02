@@ -23,21 +23,11 @@ class MaterialButton extends React.Component{
     }
 
     handleChange () {
-
-        // var value = this.state.value;
-        //
-        // var test = value ? false : true
-        //
-        // console.log('value');
-        //
-        // this.setState({ value : test });
-
         const value = !this.state.value;
 
         this.setState({ value });
 
         return false;
-
     }
 
     render(){

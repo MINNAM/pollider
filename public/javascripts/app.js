@@ -14423,6 +14423,7 @@ var structurePostTypes = function structurePostTypes(postTypes, displayPostInfo,
                     info: 3
                 },
                 allowMultiple: true,
+                allowEdit: true,
                 postDataTypes: postTypes.postDataTypes,
                 displayPostInfo: displayPostInfo,
                 setView: setView ? setView : null,
@@ -14473,12 +14474,9 @@ var _site2 = _interopRequireDefault(_site);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-console.log('from post query', _site2.default);
-
 /*
 * Collection of urls that model.PostContainer requests
 */
-/* Pollider */
 var PostQuery = {
     getPosts: '/get-posts',
     getBlog: '/get-blog',
@@ -14494,8 +14492,7 @@ var PostQuery = {
     getPostById: '/get-post-by-id',
     createAlias: '/create-alias',
     getAccessToken: '/get-access-token'
-};
-
+}; /* Pollider */
 exports.PostQuery = PostQuery;
 
 /***/ }),
@@ -17603,7 +17600,6 @@ var PostContainer = function () {
                     post.update();
 
                     if (done) {
-                        console.log(done);
                         done();
                     }
 
@@ -17683,7 +17679,6 @@ var PostContainer = function () {
             for (var key in posts) {
 
                 if (key == id) {
-                    console.log('found', id);
                     return posts[key];
                 }
 
@@ -17742,7 +17737,7 @@ var PostContainer = function () {
 
                         newPost = _this5.new();
                         newPost.assign(response.data);
-                        console.log('new', newPost);
+
                         done(newPost);
                     }).catch(function (error) {
                         done(false);
@@ -17802,7 +17797,6 @@ var PostContainer = function () {
     }, {
         key: 'new',
         value: function _new(meta, param) {
-            console.log('new post', meta, param);
             return new _post3.Post(meta, param);
         }
     }, {
@@ -25188,8 +25182,7 @@ var PostContainer = function (_Component) {
     }, {
         key: 'setSelected',
         value: function setSelected(post) {
-
-            console.log(post);
+            var _this5 = this;
 
             var _props2 = this.props,
                 onExternalActionChange = _props2.onExternalActionChange,
@@ -25231,9 +25224,29 @@ var PostContainer = function (_Component) {
                     onExternalActionUpdate(_extends({}, post, { post_type_id: postType.id }));
                 }
 
+                var mainEdit = void 0;
+                if (this.props.allowEdit) {
+                    for (var key in postType.meta) {
+                        if (postType.meta[key].main) {
+                            var _loop = function _loop(key2) {
+                                if (key == post.data[key2].field) {
+                                    mainEdit = function mainEdit() {
+                                        _this5.handleDialogModel(postType.meta[post.data[key2].field].data_type, key2);
+                                    };
+                                }
+                            };
+
+                            for (var key2 in post.data) {
+                                _loop(key2);
+                            }
+                        }
+                    }
+                }
+
                 this.setState({
                     selected: post,
-                    previewLoaded: false
+                    previewLoaded: false,
+                    mainEdit: mainEdit
                 });
             }
         }
@@ -25274,7 +25287,7 @@ var PostContainer = function (_Component) {
     }, {
         key: 'reallocateModel',
         value: function reallocateModel(parentId, id, name, hyperlink, done) {
-            var _this5 = this;
+            var _this6 = this;
 
             var _state2 = this.state,
                 destination = _state2.destination,
@@ -25285,7 +25298,7 @@ var PostContainer = function (_Component) {
 
             if (selectMultiple) {
                 selected.map(function (element) {
-                    if (_this5.reallocatePost(element.parent_id, element.id, destination)) {
+                    if (_this6.reallocatePost(element.parent_id, element.id, destination)) {
                         element.parent_id = destination;
                     }
                 });
@@ -25293,20 +25306,20 @@ var PostContainer = function (_Component) {
                 if (destination == null) {
                     model.checkPostExist(null, name, hyperlink, function (exists) {
                         if (!exists) {
-                            _this5.reallocatePost(parentId, id, null, done);
+                            _this6.reallocatePost(parentId, id, null, done);
                         } else {
                             setTimeout(function () {
-                                _this5.setState({ updatePreview: true });
+                                _this6.setState({ updatePreview: true });
                             }, 300);
                         }
                     });
                 } else {
                     model.checkPostExist(destination, name, hyperlink, function (exists) {
                         if (!exists) {
-                            _this5.reallocatePost(parentId, id, destination, done);
+                            _this6.reallocatePost(parentId, id, destination, done);
                         } else {
                             setTimeout(function () {
-                                _this5.setState({ updatePreview: true });
+                                _this6.setState({ updatePreview: true });
                             }, 300);
                         }
                     });
@@ -25316,14 +25329,14 @@ var PostContainer = function (_Component) {
     }, {
         key: 'reallocatePost',
         value: function reallocatePost(parentId, id, destination, done) {
-            var _this6 = this;
+            var _this7 = this;
 
             var model = this.state.model;
 
 
             if (parentId == destination || id == destination) {
                 setTimeout(function () {
-                    _this6.setState({ updatePreview: true });
+                    _this7.setState({ updatePreview: true });
                 }, 300);
                 return false;
             }
@@ -25347,7 +25360,7 @@ var PostContainer = function (_Component) {
 
                 model.updatePost(_destinationPost.children[id], function () {
                     setTimeout(function () {
-                        _this6.setState({ updatePreview: true });
+                        _this7.setState({ updatePreview: true });
                     }, 1500);
                 }); // at backend also
 
@@ -25371,7 +25384,7 @@ var PostContainer = function (_Component) {
                 });
                 model.updatePost(model.posts[id], function () {
                     setTimeout(function () {
-                        _this6.setState({ updatePreview: true });
+                        _this7.setState({ updatePreview: true });
                     }, 1000);
                 }); // at backend also
 
@@ -25397,7 +25410,7 @@ var PostContainer = function (_Component) {
                 });
                 model.updatePost(destinationPost.children[id], function () {
                     setTimeout(function () {
-                        _this6.setState({ updatePreview: true });
+                        _this7.setState({ updatePreview: true });
                     }, 1000);
                 }); // at backend also
 
@@ -25422,7 +25435,7 @@ var PostContainer = function (_Component) {
     }, {
         key: 'createPost',
         value: function createPost(id, parentId, post, isParent) {
-            var _this7 = this;
+            var _this8 = this;
 
             var _props3 = this.props,
                 postType = _props3.postType,
@@ -25447,7 +25460,7 @@ var PostContainer = function (_Component) {
                     postDataTypes: postDataTypes,
                     selected: selected,
                     getPreviewLoaded: function getPreviewLoaded() {
-                        return _this7.state.previewLoaded;
+                        return _this8.state.previewLoaded;
                     },
                     locatePost: this.locatePost.bind(this),
                     setSelected: this.setSelected.bind(this),
@@ -25455,10 +25468,10 @@ var PostContainer = function (_Component) {
                     reallocateModel: this.reallocateModel.bind(this),
                     upload: this.upload.bind(this),
                     setUpdatePreview: function setUpdatePreview(updatePreview) {
-                        _this7.setState({ updatePreview: updatePreview });
+                        _this8.setState({ updatePreview: updatePreview });
                     },
                     handleTopLevelPlacer: function handleTopLevelPlacer(displayTopLevelPlacer) {
-                        _this7.setState({ displayTopLevelPlacer: displayTopLevelPlacer });
+                        _this8.setState({ displayTopLevelPlacer: displayTopLevelPlacer });
                     },
                     insertPost: function insertPost(target, file, dataType) {
                         var parentId = target.parent_id;
@@ -25467,7 +25480,7 @@ var PostContainer = function (_Component) {
                             parentId = target.id;
                         }
 
-                        _this7.insertPost({
+                        _this8.insertPost({
                             name: file.name,
                             size: file.size,
                             container: 0,
@@ -25479,7 +25492,7 @@ var PostContainer = function (_Component) {
                 isParent ? function () {
                     var children = [];
                     for (var key in post.children) {
-                        children.push(_this7.populatePost(key, id, post.children[key]));
+                        children.push(_this8.populatePost(key, id, post.children[key]));
                     }
                     return children;
                 }() : null
@@ -25488,7 +25501,7 @@ var PostContainer = function (_Component) {
     }, {
         key: 'insertPost',
         value: function insertPost(data, file) {
-            var _this8 = this;
+            var _this9 = this;
 
             var filename = data.name.split('.');
 
@@ -25501,7 +25514,7 @@ var PostContainer = function (_Component) {
             }, data);
 
             this.state.model.insertPost(temp, function (newPost) {
-                var model = _this8.state.model;
+                var model = _this9.state.model;
 
 
                 newPost.fileToUpload = file;
@@ -25519,7 +25532,7 @@ var PostContainer = function (_Component) {
 
                 newPost.update(); // update hyperlink
 
-                _this8.setState({
+                _this9.setState({
                     model: model,
                     selected: newPost,
                     updatePreview: true
@@ -25582,7 +25595,7 @@ var PostContainer = function (_Component) {
     }, {
         key: 'handleDialogModel',
         value: function handleDialogModel(value, model) {
-            var _this9 = this;
+            var _this10 = this;
 
             var postType = this.props.postType;
             var selected = this.state.selected;
@@ -25623,7 +25636,7 @@ var PostContainer = function (_Component) {
                                     size: -1
                                 };
 
-                                _this9.insertPost(folder);
+                                _this10.insertPost(folder);
                             }
                         }
                     });
@@ -25649,7 +25662,7 @@ var PostContainer = function (_Component) {
                                     size: -1
                                 };
 
-                                _this9.insertPost(post);
+                                _this10.insertPost(post);
                             }
                         }
                     });
@@ -25669,7 +25682,7 @@ var PostContainer = function (_Component) {
                                 var post = _extends({}, selected, {
                                     name: data.name.value
                                 });
-                                _this9.insertPost(post);
+                                _this10.insertPost(post);
                             }
                         }
                     });
@@ -25688,7 +25701,7 @@ var PostContainer = function (_Component) {
                         actions: {
                             execute: function execute() {
                                 selected.createAlias(function (_newPost) {
-                                    var model = _this9.state.model;
+                                    var model = _this10.state.model;
                                     var newPost = model.new();
                                     newPost.assign(_newPost);
 
@@ -25702,9 +25715,9 @@ var PostContainer = function (_Component) {
                                     }
 
                                     newPost.update();
-                                    _this9.setState({ updatePreview: true });
+                                    _this10.setState({ updatePreview: true });
 
-                                    _this9.setState({
+                                    _this10.setState({
                                         model: model,
                                         selected: newPost
                                     });
@@ -25727,7 +25740,148 @@ var PostContainer = function (_Component) {
                         }],
                         actions: {
                             execute: function execute() {
-                                _this9.deletePost();
+                                _this10.deletePost();
+                            }
+                        }
+                    });
+                    break;
+
+                case 'Name':
+                    this.openDialog({
+                        fields: [{
+                            title: 'Rename',
+                            subtitle: {
+                                pre: 'Enter ',
+                                middle: selected.name,
+                                post: "'s new name"
+                            },
+                            field: 'name',
+                            dataType: 'debounce-text',
+                            model: model,
+                            parentModel: this.state.model
+                        }],
+                        actions: {
+                            execute: function execute(data) {
+                                selected.name = data.name.value;
+                                selected.hyperlink = (0, _global.formatHyperlink)(data.name.value);
+                                _this10.state.model.updatePost(selected);
+                            }
+                        }
+                    });
+                    break;
+
+                case 'Public Date':
+                    this.openDialog({
+                        fields: [{
+                            title: 'Change Public Date',
+                            subtitle: {
+                                pre: 'Change ',
+                                middle: selected.name,
+                                post: "'s New Public Date "
+                            },
+                            field: 'public_date',
+                            dataType: 'date',
+                            default: selected.public_date
+                        }],
+                        actions: {
+                            execute: function execute(data) {
+
+                                var defaultDate = new Date(selected.public_date);
+                                var defaultTime = defaultDate.getHours() + ':' + defaultDate.getMinutes() + ':' + (defaultDate.getSeconds() < 10 ? 0 : '') + defaultDate.getSeconds();
+
+                                var _data = {};
+
+                                if (!data.public_date) {
+                                    _data.public_date = defaultDate;
+                                } else {
+                                    _data.public_date = data.public_date;
+                                }
+
+                                if (!data.time) {
+                                    _data.time = defaultTime;
+                                } else {
+                                    _data.time = data.time.value;
+                                }
+
+                                var newDate = new Date(_data.public_date);
+                                var newTime = _data.time.split(':');
+
+                                newDate = new Date(newDate.setHours(newTime[0], newTime[1], newTime[2]));
+
+                                selected.public_date = newDate.toISOString();
+                                _this10.state.model.updatePost(selected);
+                            }
+                        }
+                    });
+                    break;
+
+                case 'text':
+                    this.openDialog({
+                        fields: [{
+                            title: 'Edit ' + selected.data[model].field,
+                            subtitle: {
+                                pre: 'Enter ',
+                                middle: selected.name,
+                                post: '\'s New ' + selected.data[model].field
+                            },
+                            field: 'content',
+                            dataType: 'text',
+                            default: selected.data[model].content
+                        }],
+                        actions: {
+                            execute: function execute(data) {
+                                selected.data[model].content = data.content.value;
+                                _this10.state.model.updatePost(selected);
+                            }
+                        }
+                    });
+                    break;
+
+                case 'project':
+                    this.setState({ updatePreview: false });
+                    this.props.setView('project-editor', selected);
+                    break;
+
+                case 'post-container':
+                    var data = selected.data[model].content != '' ? selected.data[model].content : null;
+
+                    if (data) {
+                        data = JSON.parse(data);
+                    }
+                    this.openDialog({
+                        fields: [{
+                            dataType: 'post-container',
+                            postTypes: this.props.postTypes.postTypes,
+                            postDataTypes: this.props.postDataTypes,
+                            selected: data ? data.id : null,
+                            post_type_id: data ? data.post_type_id : null
+                        }],
+                        actions: {
+                            execute: function execute(_data) {
+                                var children = [];
+
+                                for (var key in _data[0].value.children) {
+                                    children.push(key);
+                                }
+
+                                selected.data[model].content = JSON.stringify({
+                                    post_type_id: _data[0].value.post_type_id,
+                                    id: _data[0].value.id,
+                                    children: children
+                                });
+
+                                _this10.state.model.updatePost(selected);
+                            }
+                        },
+                        style: {
+                            dialog: {
+                                width: '50%',
+                                height: 'calc(100% - 50px)',
+                                top: 50
+                            },
+                            content: {
+                                width: '95%',
+                                height: '80%'
                             }
                         }
                     });
@@ -25810,7 +25964,7 @@ var PostContainer = function (_Component) {
     }, {
         key: 'upload',
         value: function upload(parentId, id, updateStatus) {
-            var _this10 = this;
+            var _this11 = this;
 
             var model = this.state.model;
 
@@ -25818,7 +25972,7 @@ var PostContainer = function (_Component) {
             var postToUpload = model.navigateParent(model.posts, parentId).children[id];
 
             postToUpload.upload(updateStatus, function () {
-                _this10.setState({ model: model });
+                _this11.setState({ model: model });
             });
         }
     }, {
@@ -25870,7 +26024,7 @@ var PostContainer = function (_Component) {
         key: 'render',
         value: function render() {
             var _ref2,
-                _this11 = this;
+                _this12 = this;
 
             var _props4 = this.props,
                 displayPostInfo = _props4.displayPostInfo,
@@ -25997,7 +26151,7 @@ var PostContainer = function (_Component) {
                                     marginTop: 15
                                 }
                             }) : '' : '',
-                            this.state.model ? this.state.model.model.uploadable != '1' ? _react2.default.createElement(_uiComponents.MaterialButton, {
+                            this.state.model ? this.state.model.model.uploadable != '1' ? this.props.allowEdit ? _react2.default.createElement(_uiComponents.MaterialButton, {
                                 style: {
                                     boxShadow: '1px 1px 3px 1px rgba(0,0,0,0.1)',
                                     float: 'right',
@@ -26008,10 +26162,10 @@ var PostContainer = function (_Component) {
                                 },
 
                                 onClick: function onClick() {
-                                    _this11.handleDialogModel('new-post');
+                                    _this12.handleDialogModel('new-post');
                                 },
                                 label: 'New ' + postType.name_singular
-                            }) : '' : '',
+                            }) : '' : '' : '',
                             _react2.default.createElement(
                                 _Popover2.default,
                                 {
@@ -26031,7 +26185,7 @@ var PostContainer = function (_Component) {
                                     _Menu2.default,
                                     {
                                         onChange: function onChange(event, value) {
-                                            _this11.handleDialogModel(value);
+                                            _this12.handleDialogModel(value);
                                         },
                                         style: {
                                             float: 'right'
@@ -26040,17 +26194,17 @@ var PostContainer = function (_Component) {
                                             fontSize: 14
                                         }
                                     },
-                                    _react2.default.createElement(_MenuItem2.default, {
+                                    this.props.allowEdit ? _react2.default.createElement(_MenuItem2.default, {
                                         value: 'new-folder',
                                         disabled: selectMultiple,
                                         primaryText: 'New Folder'
-                                    }),
-                                    this.state.model ? this.state.model.model.uploadable != '1' ? _react2.default.createElement(_MenuItem2.default, {
+                                    }) : '',
+                                    this.state.model ? this.state.model.model.uploadable != '1' ? this.props.allowEdit ? _react2.default.createElement(_MenuItem2.default, {
                                         value: 'new-post',
                                         disabled: selectMultiple,
                                         primaryText: 'New ' + postType.name_singular
-                                    }) : '' : '',
-                                    _react2.default.createElement(_Divider2.default, null),
+                                    }) : '' : '' : '',
+                                    this.props.allowEdit ? _react2.default.createElement(_Divider2.default, null) : '',
                                     _react2.default.createElement(_MenuItem2.default, {
                                         value: 'duplicate-post',
                                         style: {
@@ -26114,7 +26268,7 @@ var PostContainer = function (_Component) {
                                         zIndex: 1
                                     }, topLevelPlacerStyle),
                                     onDragEnter: function onDragEnter() {
-                                        _this11.setState({
+                                        _this12.setState({
                                             topLevelPlacerStyle: {
                                                 background: 'rgb(60, 60, 60)',
                                                 color: 'white'
@@ -26122,7 +26276,7 @@ var PostContainer = function (_Component) {
                                         });
                                     },
                                     onDragLeave: function onDragLeave() {
-                                        _this11.setState({
+                                        _this12.setState({
                                             topLevelPlacerStyle: {
                                                 background: '',
                                                 color: ''
@@ -26133,7 +26287,7 @@ var PostContainer = function (_Component) {
                                         event.preventDefault();
                                     },
                                     onDrop: function onDrop(event) {
-                                        _this11.setDestination(null);
+                                        _this12.setDestination(null);
                                     },
                                     draggable: true
                                 },
@@ -26145,12 +26299,12 @@ var PostContainer = function (_Component) {
                                     ref: 'post-container',
                                     style: {
                                         backgroundAttachment: 'local',
-                                        backgroundImage: 'url(\'/images/post-list-background.png\')',
+                                        backgroundImage: 'url(\'/assets/post-list-background.png\')',
                                         height: displayTopLevelPlacer ? 'calc(100% - 240px)' : 'calc(100% - 100px)',
                                         overflow: 'auto'
                                     },
                                     onMouseUp: function onMouseUp(event) {
-                                        _this11.setState({ selected: null });
+                                        _this12.setState({ selected: null });
                                     }
                                 },
                                 posts
@@ -26205,7 +26359,7 @@ var PostContainer = function (_Component) {
                                 },
                                 selected ? selected.name : name
                             ),
-                            selected ? _react2.default.createElement(_uiComponents.MaterialButton, {
+                            this.props.allowEdit ? selected ? mainEdit ? _react2.default.createElement(_uiComponents.MaterialButton, {
                                 style: {
                                     float: 'right',
                                     fontWeight: 'semi-bold',
@@ -26221,7 +26375,7 @@ var PostContainer = function (_Component) {
                                 iconStyle: {
                                     color: 'rgb(60,60,60)'
                                 }
-                            }) : ''
+                            }) : '' : '' : ''
                         ),
                         _react2.default.createElement(
                             'div',
@@ -26242,25 +26396,23 @@ var PostContainer = function (_Component) {
                                     }
                                 },
                                 _react2.default.createElement(_postInfoContainer2.default, {
+                                    allowEdit: this.props.allowEdit,
                                     onPreviewLoad: this.onPreviewLoad.bind(this),
                                     updatePreview: updatePreview,
                                     parentModel: this.state.model,
                                     model: selected,
                                     openDialog: this.openDialog.bind(this),
+                                    handleDialogModel: this.handleDialogModel.bind(this),
                                     handleProjectEditor: function handleProjectEditor() {
-                                        _this11.setState({ updatePreview: false });
+                                        _this12.setState({ updatePreview: false });
                                         setView('project-editor', selected);
                                     },
                                     postMeta: postType.meta,
                                     postDataTypes: postDataTypes,
                                     postTypes: postTypes,
                                     filterList: filterList,
-                                    hyperlink: hyperlink,
-                                    setMainEdit: function setMainEdit(mainEdit) {
-                                        _this11.setState({
-                                            mainEdit: mainEdit
-                                        });
-                                    }
+                                    hyperlink: hyperlink
+
                                 })
                             ) : _react2.default.createElement(
                                 'div',
@@ -26485,8 +26637,6 @@ var PostDialog = function (_DialogHelper) {
                 var values = _this.state.values;
 
 
-                console.log(data.selected);
-
                 return _react2.default.createElement(
                     'div',
                     { key: key },
@@ -26568,12 +26718,9 @@ var PostDialog = function (_DialogHelper) {
                         values: _this.state.values,
                         setError: _this.setError.bind(_this),
                         setValues: function setValues(values) {
-
                             _this.setState({
                                 values: _extends({}, _this.state.values, values)
                             });
-
-                            console.log(_this.state.values);
                         }
                     }),
                     _react2.default.createElement(_uiComponents.TextField, {
@@ -26613,6 +26760,7 @@ var PostDialog = function (_DialogHelper) {
                         name: element.name,
                         model: element.post_container,
                         allowMultiple: false,
+                        allowEdit: false,
                         postDataTypes: data.postDataTypes,
                         width: {
                             container: 7,
@@ -26801,8 +26949,6 @@ var PostInfoContainer = function (_Component) {
     _createClass(PostInfoContainer, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this2 = this;
-
             var _props = this.props,
                 model = _props.model,
                 postMeta = _props.postMeta,
@@ -26810,25 +26956,10 @@ var PostInfoContainer = function (_Component) {
 
 
             var mainEdit = void 0;
-
-            for (var key in postMeta) {
-                if (postMeta[key].main) {
-                    mainEdit = postMeta[key].data_type;
-
-                    var _loop = function _loop(key2) {
-                        if (key == model.data[key2].field) {
-                            setMainEdit(function () {
-                                _this2.handleDialogModel(postMeta[model.data[key2].field].data_type, key2);
-                            });
-                        }
-                    };
-
-                    for (var key2 in model.data) {
-                        _loop(key2);
-                    }
-                }
-            }
         }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps() {}
     }, {
         key: 'getDate',
         value: function getDate(unformattedDate) {
@@ -26854,178 +26985,24 @@ var PostInfoContainer = function (_Component) {
             parentModel.updatePost(model);
         }
     }, {
-        key: 'handleDialogModel',
-        value: function handleDialogModel(key, key2) {
-            var _props3 = this.props,
-                openDialog = _props3.openDialog,
-                model = _props3.model,
-                parentModel = _props3.parentModel,
-                postTypes = _props3.postTypes;
-
-
-            switch (key) {
-                case 'Name':
-                    openDialog({
-                        fields: [{
-                            title: 'Rename',
-                            subtitle: {
-                                pre: 'Enter ',
-                                middle: model.name,
-                                post: "'s new name"
-                            },
-                            field: 'name',
-                            dataType: 'debounce-text',
-                            model: model,
-                            parentModel: parentModel
-                        }],
-                        actions: {
-                            execute: function execute(data) {
-                                console.log(data);
-                                model.name = data.name.value;
-                                model.hyperlink = (0, _global.formatHyperlink)(data.name.value);
-                                parentModel.updatePost(model);
-                            }
-                        }
-                    });
-                    break;
-
-                case 'Public Date':
-                    openDialog({
-                        fields: [{
-                            title: 'Change Public Date',
-                            subtitle: {
-                                pre: 'Change ',
-                                middle: model.name,
-                                post: "'s New Public Date "
-                            },
-                            field: 'public_date',
-                            dataType: 'date',
-                            default: model.public_date
-                        }],
-                        actions: {
-                            execute: function execute(data) {
-
-                                var defaultDate = new Date(model.public_date);
-                                var defaultTime = defaultDate.getHours() + ':' + defaultDate.getMinutes() + ':' + (defaultDate.getSeconds() < 10 ? 0 : '') + defaultDate.getSeconds();
-
-                                var _data = {};
-
-                                if (!data.public_date) {
-                                    _data.public_date = defaultDate;
-                                } else {
-                                    _data.public_date = data.public_date;
-                                }
-
-                                if (!data.time) {
-                                    _data.time = defaultTime;
-                                } else {
-                                    _data.time = data.time.value;
-                                }
-
-                                var newDate = new Date(_data.public_date);
-                                var newTime = _data.time.split(':');
-
-                                newDate = new Date(newDate.setHours(newTime[0], newTime[1], newTime[2]));
-
-                                model.public_date = newDate.toISOString();
-                                parentModel.updatePost(model);
-                            }
-                        }
-                    });
-                    break;
-
-                case 'text':
-                    this.props.openDialog({
-                        fields: [{
-                            title: 'Edit ' + model.data[key2].field,
-                            subtitle: {
-                                pre: 'Enter ',
-                                middle: model.name,
-                                post: '\'s New ' + model.data[key2].field
-                            },
-                            field: 'content',
-                            dataType: 'text',
-                            default: model.data[key2].content
-                        }],
-                        actions: {
-                            execute: function execute(data) {
-                                model.data[key2].content = data.content.value;
-                                parentModel.updatePost(model);
-                            }
-                        }
-                    });
-                    break;
-
-                case 'project':
-                    this.props.handleProjectEditor();
-                    break;
-
-                case 'post-container':
-                    var data = model.data[key2].content != '' ? model.data[key2].content : null;
-
-                    if (data) {
-                        data = JSON.parse(data);
-                    }
-                    this.props.openDialog({
-                        fields: [{
-                            dataType: 'post-container',
-                            postTypes: postTypes.postTypes,
-                            postDataTypes: this.props.postDataTypes,
-                            selected: data ? data.id : null,
-                            post_type_id: data ? data.post_type_id : null
-                        }],
-                        actions: {
-                            execute: function execute(_data) {
-                                var children = [];
-
-                                for (var _key3 in _data[0].value.children) {
-                                    children.push(_key3);
-                                }
-
-                                model.data[key2].content = JSON.stringify({
-                                    post_type_id: _data[0].value.post_type_id,
-                                    id: _data[0].value.id,
-                                    children: children
-                                });
-
-                                parentModel.updatePost(model);
-                            }
-                        },
-                        style: {
-                            dialog: {
-                                width: '50%',
-                                height: 'calc(100% - 50px)',
-                                top: 50
-                            },
-                            content: {
-                                width: '95%',
-                                height: '80%'
-                            }
-                        }
-                    });
-
-                    break;
-            }
-        }
-    }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
+            var _this2 = this;
 
-            var _props4 = this.props,
-                model = _props4.model,
-                filterList = _props4.filterList,
-                postMeta = _props4.postMeta,
-                updatePreview = _props4.updatePreview;
+            var _props3 = this.props,
+                model = _props3.model,
+                filterList = _props3.filterList,
+                postMeta = _props3.postMeta,
+                updatePreview = _props3.updatePreview;
 
 
             if (Object.prototype.toString.call(model) == '[object Array]') {
                 return _react2.default.createElement('div', { className: 'post-info' });
             } else {
-                var _ret3 = function () {
+                var _ret2 = function () {
                     var fields = [];
 
-                    var _loop2 = function _loop2(key) {
+                    var _loop = function _loop(key) {
                         if (filterList.indexOf(key) > -1) {
                             return 'continue';
                         }
@@ -27054,7 +27031,7 @@ var PostInfoContainer = function (_Component) {
                                                     fontWeight: 'bold'
                                                 },
                                                 onClick: function onClick() {
-                                                    _this3.handleDialogModel(FIELD_NAMES[key]);
+                                                    _this2.props.handleDialogModel(FIELD_NAMES[key]);
                                                 }
                                             },
                                             model[key]
@@ -27125,8 +27102,7 @@ var PostInfoContainer = function (_Component) {
                                                     onChange: function onChange(event, value) {
                                                         model.status = value;
                                                         // parentModel.updatePost(model);
-                                                        _this3.props.parentModel.updatePost(model);
-                                                        console.log(value);
+                                                        _this2.props.parentModel.updatePost(model);
                                                     }
                                                 },
                                                 _react2.default.createElement(_RadioButton.RadioButton, {
@@ -27176,10 +27152,10 @@ var PostInfoContainer = function (_Component) {
                                                     fontWeight: 'bold'
                                                 },
                                                 onClick: function onClick() {
-                                                    _this3.handleDialogModel('Public Date');
+                                                    _this2.props.handleDialogModel('Public Date');
                                                 }
                                             },
-                                            _this3.getDateTime(model.public_date)
+                                            _this2.getDateTime(model.public_date)
                                         )
                                     ));
                                     break;
@@ -27239,7 +27215,7 @@ var PostInfoContainer = function (_Component) {
                                             {
                                                 className: 'value'
                                             },
-                                            _this3.getDateTime(model.created_date)
+                                            _this2.getDateTime(model.created_date)
                                         )
                                     ));
                                     break;
@@ -27256,7 +27232,7 @@ var PostInfoContainer = function (_Component) {
                                         _react2.default.createElement(
                                             'span',
                                             { className: 'value' },
-                                            _this3.getDateTime(model.modified_date)
+                                            _this2.getDateTime(model.modified_date)
                                         )
                                     ));
                                     break;
@@ -27282,9 +27258,9 @@ var PostInfoContainer = function (_Component) {
                     };
 
                     for (var key in model) {
-                        var _ret4 = _loop2(key);
+                        var _ret3 = _loop(key);
 
-                        if (_ret4 === 'continue') continue;
+                        if (_ret3 === 'continue') continue;
                     }
 
                     if (model['data']) {
@@ -27293,39 +27269,41 @@ var PostInfoContainer = function (_Component) {
                                 if (postMeta[model.data[key].field]) {
                                     switch (postMeta[model.data[key].field].data_type) {
                                         case 'project':
-                                            fields.push(_react2.default.createElement(
-                                                'span',
-                                                {
-                                                    className: 'post-info-field-container',
-                                                    key: key
-                                                },
-                                                _react2.default.createElement(
+                                            if (_this2.props.allowEdit == true) {
+                                                fields.push(_react2.default.createElement(
                                                     'span',
                                                     {
-                                                        className: 'field'
+                                                        className: 'post-info-field-container',
+                                                        key: key
                                                     },
-                                                    model.data[key].field
-                                                ),
-                                                _react2.default.createElement(
-                                                    'span',
-                                                    {
-                                                        className: 'value',
-                                                        onTouchTap: function onTouchTap() {
-                                                            _this3.handleDialogModel(postMeta[model.data[key].field].data_type);
+                                                    _react2.default.createElement(
+                                                        'span',
+                                                        {
+                                                            className: 'field'
                                                         },
-                                                        style: {
-                                                            color: _global.THEME.primaryColor,
-                                                            cursor: 'pointer',
-                                                            fontWeight: 'bold'
-                                                        }
-                                                    },
-                                                    "Click here to edit"
-                                                )
-                                            ));
+                                                        model.data[key].field
+                                                    ),
+                                                    _react2.default.createElement(
+                                                        'span',
+                                                        {
+                                                            className: 'value',
+                                                            onTouchTap: function onTouchTap() {
+                                                                _this2.props.handleDialogModel(postMeta[model.data[key].field].data_type);
+                                                            },
+                                                            style: {
+                                                                color: _global.THEME.primaryColor,
+                                                                cursor: 'pointer',
+                                                                fontWeight: 'bold'
+                                                            }
+                                                        },
+                                                        "Click here to edit"
+                                                    )
+                                                ));
+                                            }
                                             break;
 
                                         case 'select':
-                                            var items = _this3.props.postMeta[model.data[key].field].data;
+                                            var items = _this2.props.postMeta[model.data[key].field].data;
 
                                             fields.push(_react2.default.createElement(
                                                 'span',
@@ -27365,7 +27343,7 @@ var PostInfoContainer = function (_Component) {
                                                             value: parseInt(model.data[key].content) ? parseInt(model.data[key].content) : items[0].value,
                                                             onChange: function onChange(event, index, value) {
                                                                 model.data[key].content = value;
-                                                                _this3.props.parentModel.updatePost(model);
+                                                                _this2.props.parentModel.updatePost(model);
                                                             }
                                                         },
                                                         items.map(function (element, _key) {
@@ -27404,7 +27382,7 @@ var PostInfoContainer = function (_Component) {
                                                             fontWeight: 'bold'
                                                         },
                                                         onTouchTap: function onTouchTap() {
-                                                            _this3.handleDialogModel(_this3.props.postMeta[model.data[key].field].data_type, key);
+                                                            _this2.props.handleDialogModel(_this2.props.postMeta[model.data[key].field].data_type, key);
                                                         }
                                                     },
                                                     model.data[key].content == '' ? 'Click here to edit' : model.data[key].content
@@ -27419,35 +27397,38 @@ var PostInfoContainer = function (_Component) {
                                                 data = JSON.parse(data);
                                             }
 
-                                            fields.push(_react2.default.createElement(
-                                                'span',
-                                                {
-                                                    className: 'post-info-field-container',
-                                                    key: key
-                                                },
-                                                _react2.default.createElement(
+                                            if (_this2.props.allowEdit == true) {
+                                                fields.push(_react2.default.createElement(
                                                     'span',
                                                     {
-                                                        className: 'field'
+                                                        className: 'post-info-field-container',
+                                                        key: key
                                                     },
-                                                    model.data[key].field
-                                                ),
-                                                _react2.default.createElement(
-                                                    'span',
-                                                    {
-                                                        className: 'value',
-                                                        style: {
-                                                            fontWeight: 'bold',
-                                                            cursor: 'pointer',
-                                                            color: _global.THEME.primaryColor
+                                                    _react2.default.createElement(
+                                                        'span',
+                                                        {
+                                                            className: 'field'
                                                         },
-                                                        onTouchTap: function onTouchTap() {
-                                                            _this3.handleDialogModel(_this3.props.postMeta[model.data[key].field].data_type, key);
-                                                        }
-                                                    },
-                                                    data ? data.id : 'Click here to edit'
-                                                )
-                                            ));
+                                                        model.data[key].field
+                                                    ),
+                                                    _react2.default.createElement(
+                                                        'span',
+                                                        {
+                                                            className: 'value',
+                                                            style: {
+                                                                fontWeight: 'bold',
+                                                                cursor: 'pointer',
+                                                                color: _global.THEME.primaryColor
+                                                            },
+                                                            onTouchTap: function onTouchTap() {
+                                                                _this2.props.handleDialogModel(_this2.props.postMeta[model.data[key].field].data_type, key);
+                                                            }
+                                                        },
+                                                        data ? data.id : 'Click here to edit'
+                                                    )
+                                                ));
+                                            }
+
                                             break;
 
                                         default:
@@ -27502,10 +27483,10 @@ var PostInfoContainer = function (_Component) {
                             'div',
                             null,
                             _react2.default.createElement(_postPreview2.default, {
-                                onPreviewLoad: _this3.props.onPreviewLoad,
+                                onPreviewLoad: _this2.props.onPreviewLoad,
                                 update: updatePreview,
                                 model: model,
-                                hyperlink: _this3.props.hyperlink
+                                hyperlink: _this2.props.hyperlink
                             }),
                             _react2.default.createElement(
                                 'div',
@@ -27516,7 +27497,7 @@ var PostInfoContainer = function (_Component) {
                     };
                 }();
 
-                if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
+                if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
             }
         }
     }]);
@@ -27677,7 +27658,7 @@ var Post = function (_Component) {
             this.props.handleTopLevelPlacer(true);
 
             var img = document.createElement('img');
-            img.src = "/images/blank.png";
+            img.src = "/assets/blank.png";
 
             event.dataTransfer.setData("text/html", "");
             event.dataTransfer.setDragImage(img, 0, 0);
@@ -28160,8 +28141,6 @@ var Post = function () {
                     }
                 }
 
-                console.log('hyperlink', node.parentNode.hyperlink);
-
                 return this.buildLink(node.parentNode.hyperlink + '/' + hyperlink, node.parentNode);
             } else {
                 if (this.container == 1) {
@@ -28396,8 +28375,6 @@ var ProjectBase = function () {
             }
 
             this.reindexRows();
-
-            console.log(this.rows);
         }
     }, {
         key: 'downRow',
@@ -28428,8 +28405,6 @@ var ProjectBase = function () {
             }
 
             this.reindexRows();
-
-            console.log(this.rows);
         }
     }, {
         key: 'duplicate',
@@ -28440,12 +28415,9 @@ var ProjectBase = function () {
             for (var i = 0; i < this.rows.length; i++) {
 
                 if (this.rows[i].index == row.index) {
-
                     var duplicatedRow = new _row3.default(this.index++);
 
                     duplicatedRow.copy(row, false);
-
-                    console.log(row, duplicatedRow);
 
                     this.rows.splice(i + 1, 0, duplicatedRow);
 
@@ -28638,10 +28610,7 @@ var Project = function (_ProjectBase) {
                 data: JSON.stringify(posts),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function success(response) {
-
-                    console.log('addPostReferece', response);
-                }
+                success: function success(response) {}
 
             });
         }
@@ -28719,8 +28688,6 @@ var Project = function (_ProjectBase) {
                     });
                 }
             });
-
-            console.log(this.rows);
 
             return this.rows;
         }
@@ -28848,9 +28815,6 @@ var ColView = function (_Component) {
 
             switch (type) {
                 case 'text':
-
-                    console.log(this.props.model);
-
                     this.props.handleDialogModel({
                         type: 'text-editor',
                         model: this.props.model.element
@@ -39354,7 +39318,7 @@ var Admin = function (_React$Component) {
                             },
                             _react2.default.createElement('img', {
                                 id: 'logo',
-                                src: '/images/logo.svg',
+                                src: '/assets/logo.svg',
                                 style: {
                                     height: '80%',
                                     marginTop: view != 'post-container' ? 100 : '',
@@ -40086,7 +40050,7 @@ var LoginDialog = function (_DialogHelper) {
                 return _react2.default.createElement('img', {
                     key: key,
                     id: 'logo',
-                    src: '/images/logo.svg',
+                    src: '/assets/logo.svg',
                     style: {
                         display: 'inline-block',
                         float: 'left',
@@ -41679,56 +41643,56 @@ var ProjectDialog = function (_DialogHelper) {
                                 _this.onExecute({ colIndex: 0 });
                             },
                             style: style,
-                            src: '/images/row-selector-1.svg'
+                            src: '/assets/row-selector-1.svg'
                         }),
                         _react2.default.createElement(_rowSelector2.default, {
                             onClick: function onClick() {
                                 _this.onExecute({ colIndex: 1 });
                             },
                             style: style,
-                            src: '/images/row-selector-2.svg'
+                            src: '/assets/row-selector-2.svg'
                         }),
                         _react2.default.createElement(_rowSelector2.default, {
                             onClick: function onClick() {
                                 _this.onExecute({ colIndex: 2 });
                             },
                             style: style,
-                            src: '/images/row-selector-3.svg'
+                            src: '/assets/row-selector-3.svg'
                         }),
                         _react2.default.createElement(_rowSelector2.default, {
                             onClick: function onClick() {
                                 _this.onExecute({ colIndex: 3 });
                             },
                             style: style,
-                            src: '/images/row-selector-4.svg'
+                            src: '/assets/row-selector-4.svg'
                         }),
                         _react2.default.createElement(_rowSelector2.default, {
                             onClick: function onClick() {
                                 _this.onExecute({ colIndex: 4 });
                             },
                             style: style,
-                            src: '/images/row-selector-5.svg'
+                            src: '/assets/row-selector-5.svg'
                         }),
                         _react2.default.createElement(_rowSelector2.default, {
                             onClick: function onClick() {
                                 _this.onExecute({ colIndex: 5 });
                             },
                             style: style,
-                            src: '/images/row-selector-6.svg'
+                            src: '/assets/row-selector-6.svg'
                         }),
                         _react2.default.createElement(_rowSelector2.default, {
                             onClick: function onClick() {
                                 _this.onExecute({ colIndex: 6 });
                             },
                             style: style,
-                            src: '/images/row-selector-7.svg'
+                            src: '/assets/row-selector-7.svg'
                         }),
                         _react2.default.createElement(_rowSelector2.default, {
                             onClick: function onClick() {
                                 _this.onExecute({ colIndex: 7 });
                             },
                             style: style,
-                            src: '/images/row-selector-8.svg'
+                            src: '/assets/row-selector-8.svg'
                         })
                     )
                 );
@@ -41855,6 +41819,7 @@ var ProjectDialog = function (_DialogHelper) {
                         name: element.name,
                         model: element.post_container,
                         allowMultiple: false,
+                        allowEdit: false,
                         width: {
                             container: 7,
                             info: 5
@@ -42148,7 +42113,6 @@ var ProjectEditor = function (_React$Component) {
                         }],
                         actions: {
                             execute: function execute(data) {
-                                console.log(data);
                                 post.name = data.name.value;
                                 post.hyperlink = (0, _global.formatHyperlink)(data.name.value);
                                 currentPostContainer.updatePost(post);
@@ -42627,7 +42591,6 @@ var ProjectEditor = function (_React$Component) {
                     break;
 
                 case 'post-container':
-
                     this.openDialog({
                         fields: [{
                             dataType: 'post-container',
@@ -42650,7 +42613,6 @@ var ProjectEditor = function (_React$Component) {
                             },
 
                             update: function update(_data) {
-                                console.log(_data);
                                 model.content = _data;
                                 model.contentRaw = {
                                     post_type_id: _data.post_type_id,
@@ -43268,9 +43230,7 @@ var Row = function (_React$Component) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
-
             if (nextProps.model.parent) {
-                console.log(nextProps.model.parent);
                 if (nextProps.model.parent.rows.length > 1 && this._row.className != 'parent-row' && nextProps.model.parent.dataKey == null) this._row.style.height = '50%';
             }
 
@@ -43429,7 +43389,7 @@ var Row = function (_React$Component) {
                             _Menu2.default,
                             {
                                 onChange: function onChange(event, data) {
-
+                                    _this2.handleActionMenuClose();
                                     if (data.type == 'add-row-from-col') {
 
                                         _this2.props.addRowFromCol(function () {
@@ -43674,14 +43634,10 @@ var Col = function (_ProjectBase) {
             }
 
             for (var i = 0; i < col.rows.length; i++) {
-
                 var newRow = new _row2.default();
 
                 newRow.copy(col.rows[i], true);
-
                 newRow.parent = this;
-
-                console.log('rew', newRow);
 
                 this.rows[i] = newRow;
             }
@@ -44054,7 +44010,7 @@ var StatusBar = function (_React$Component) {
                 _this2.setState({
                     transform: 'translate(0, 0%)'
                 });
-                setTimeout(function () {
+                _this2.disappear = setTimeout(function () {
                     _this2.setState({
                         transform: 'translate(0, -100%)'
                     });
@@ -44065,6 +44021,10 @@ var StatusBar = function (_React$Component) {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
             clearTimeout(this.transform);
+
+            if (this.disappear) {
+                clearTimeout(this.disappear);
+            }
         }
     }, {
         key: 'onClick',
@@ -44519,15 +44479,6 @@ var MaterialButton = function (_React$Component) {
     _createClass(MaterialButton, [{
         key: 'handleChange',
         value: function handleChange() {
-
-            // var value = this.state.value;
-            //
-            // var test = value ? false : true
-            //
-            // console.log('value');
-            //
-            // this.setState({ value : test });
-
             var value = !this.state.value;
 
             this.setState({ value: value });
@@ -45259,8 +45210,6 @@ var TextEditor = function (_Component) {
         var defaultValue = _this.props.defaultValue;
 
 
-        console.log(defaultValue);
-
         if (defaultValue) {
             _this.state = {
                 editorState: _draftJs.EditorState.createWithContent((0, _draftJs.convertFromRaw)(defaultValue))
@@ -45328,8 +45277,6 @@ var TextEditor = function (_Component) {
                         style: _textTypeControls.TEXT_STYLE_MAP[key]
                     };
                 }
-
-                console.log((0, _draftJs.convertToRaw)(content));
 
                 var options = { inlineStyles: inlineStyles };
 

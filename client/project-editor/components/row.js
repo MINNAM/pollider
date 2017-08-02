@@ -66,9 +66,7 @@ class Row extends React.Component {
     }
 
     componentWillReceiveProps ( nextProps ) {
-
         if (nextProps.model.parent) {
-            console.log(nextProps.model.parent);
             if( nextProps.model.parent.rows.length > 1 && this._row.className != 'parent-row' && nextProps.model.parent.dataKey == null)
                 this._row.style.height = '50%';
         }
@@ -225,7 +223,7 @@ class Row extends React.Component {
                     >
                         <Menu
                             onChange = {(event, data) => {
-
+                                this.handleActionMenuClose();
                                 if ( data.type == 'add-row-from-col' ) {
 
                                     this.props.addRowFromCol( () => {

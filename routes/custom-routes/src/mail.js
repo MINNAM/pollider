@@ -1,16 +1,12 @@
 import GoogleApi from './google-api';
-
 var nodemailer = require('nodemailer');
 var xoauth2 = require('xoauth2');
 import request    from 'request';
 
-
 class Mail {
 
     constructor () {
-
         this.googleApi = new GoogleApi();
-
     }
 
     send ( props, done ) {
@@ -43,8 +39,6 @@ class Mail {
 
             // send mail with defined transport object
             transporter.sendMail( mailOptions, function( error, info ){
-
-                console.log( error );
 
                 if ( !error )
                     done( true );

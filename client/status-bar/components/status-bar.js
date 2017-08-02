@@ -1,4 +1,5 @@
 import React from 'react';
+import {THEME} from '../../global.js';
 const STYLES = {
     success: {
         background: 'rgba(60,60,60,1)'
@@ -52,7 +53,8 @@ class StatusBar extends React.Component {
 
     render () {
         const {
-            text,
+            message,
+            model,
             type
         } = this.props;
         const {
@@ -85,8 +87,9 @@ class StatusBar extends React.Component {
                             width: '100%',
                             height: 60,
                             display : 'inline-block',
-                            color : 'white',
                             transition: '0.5s all',
+                            padding: '0 0 0 5%',
+                            color: 'white',
                             ...style
                         }}
                     >
@@ -95,11 +98,17 @@ class StatusBar extends React.Component {
                                 height: 60,
                                 lineHeight: '60px',
                                 display: 'inline-block',
-                                padding: '0 5% 0 5%',
                                 fontSize: 15
                             }}
                         >
-                            {text}
+                            {message}
+                            <span
+                                style = {{
+                                    fontWeight: 500
+                                }}
+                            >
+                                {model.name}
+                            </span>
                         </span>
                     </div>
             </div>

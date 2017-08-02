@@ -152,7 +152,8 @@ class ElementView extends Component {
             model,
             col,
             queueElement,
-            handler = {}
+            handler = {},
+            editor
         } = this.props;
         const {
             contentModel,
@@ -198,7 +199,7 @@ class ElementView extends Component {
                                     width: '100%',
                                     // why regular col 100% and this has to be 50% while they are all table-cell
                                     alignItems: 'center',
-                                    cursor: 'zoom-in'
+                                    cursor: editor ? '' : 'zoom-in'
                                 }}
                             >
                             <img

@@ -89,7 +89,7 @@ class PostContainer {
 
         setTimeout(() => {
 
-            this.onUpdate(1, date, 'Updating ' + post.name, 0);
+            this.onUpdate(1, date, 'Updating ', post, 0);
 
             // Fixing circular error when stringifying Post object
             const tempParent = {...post.parentNode};
@@ -121,9 +121,10 @@ class PostContainer {
                     done();
                 }
 
-                this.onUpdate(1, date, 'Updated ' + post.name , 1);
+                this.onUpdate(1, date, 'Updated ', post , 1);
             }).catch((error) => {
-                done(false);
+                console.log( error );
+                // done(false);
             });
         },250)
 

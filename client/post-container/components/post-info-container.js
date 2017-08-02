@@ -112,6 +112,7 @@ class PostInfoContainer extends Component {
                    ],
                     actions: {
                         execute: (data) => {
+                            console.log(data);
                             model.name = data.name.value;
                             model.hyperlink = formatHyperlink(data.name.value);
                             parentModel.updatePost(model);
@@ -155,15 +156,10 @@ class PostInfoContainer extends Component {
                                 _data.time = data.time.value;
                             }
 
-
-
                             let newDate = new Date(_data.public_date);
                             const newTime = _data.time.split(':');
 
-
                             newDate = new Date(newDate.setHours(newTime[0], newTime[1], newTime[2]));
-
-                            console.log(newDate);
 
                             model.public_date = newDate.toISOString();
                             parentModel.updatePost(model);
@@ -316,7 +312,7 @@ class PostInfoContainer extends Component {
                                     >
                                         <a
                                             target = {'_blank'}
-                                            href = { `${SITE.url}/${model.postContainerHyperlink ? model.postContainerHyperlink + '/' : ''}${model._hyperlink}`}
+                                            href = { `/${model.postContainerHyperlink ? model.postContainerHyperlink + '/' : ''}${model._hyperlink}`}
                                             style = {{
                                                 color: THEME.primaryColor,
                                                 cursor: 'pointer',

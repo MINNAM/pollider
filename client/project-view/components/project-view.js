@@ -10,6 +10,7 @@ class ProjectView extends Component {
             model,
             style,
             editor,
+            editorGuide,
             handler,
             handleDialogModel
         } = this.props;
@@ -31,6 +32,7 @@ class ProjectView extends Component {
                                 key = {rowKey}
                                 model = {row}
                                 editor = {editor}
+                                editorGuide = {editorGuide}
                                 handler = {handler}
                                 handleDialogModel = {handleDialogModel}
                             />

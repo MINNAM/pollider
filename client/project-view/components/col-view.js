@@ -82,6 +82,7 @@ class ColView extends Component {
             model,
             queueElement,
             editor,
+            editorGuide,
             handler
         } = this.props;
         const {
@@ -111,31 +112,34 @@ class ColView extends Component {
                             <div
                                 style = {{
                                     position: 'absolute',
-                                    top: 0,
-                                    left: -38
+                                    top: -38,
+                                    left: -38,
                                 }}
                             >
-                                <MaterialButton
-                                    style = {{
-                                        background: 'rgba(255,255,255,0.5)'
-                                    }}
-                                    onClick = {() => {
+                                {
+                                    editorGuide ? <MaterialButton
+                                        style = {{
+                                            background: 'rgba(255,255,255,0.5)',
+                                            borderRadius: '50%',
+                                        }}
+                                        onClick = {() => {
+                                            const editor = document.getElementById( 'project-editor-content' ).childNodes[0];
+                                            const view = document.getElementById( 'editor-' + model.element.uniqueId );
 
-                                        const editor = document.getElementById( 'project-editor-content' ).childNodes[0];
-                                        const view = document.getElementById( 'editor-' + model.element.uniqueId );
+                                            if (model.element) {
+                                                this.displayByType( model.element.type);
+                                            }
 
-                                        if (model.element) {
-                                            this.displayByType( model.element.type);
-                                        }
+                                            scroll(editor, editor.scrollTop, view.getBoundingClientRect().top + editor.scrollTop - 200);
 
-                                        scroll(editor, editor.scrollTop, view.getBoundingClientRect().top + editor.scrollTop - 200);
-
-                                    }}
-                                    icon = {'mode_edit'}
-                                    iconStyle = {{
-                                        color: 'rgb(60,60,60)'
-                                    }}
-                                />
+                                        }}
+                                        icon = {'mode_edit'}
+                                        iconStyle = {{
+                                            color: 'rgb(60,60,60)',
+                                            fontSize: 21
+                                        }}
+                                    /> : ''
+                                }
                             </div>
                             <ElementView
                                 col = {model}
@@ -195,6 +199,7 @@ class ColView extends Component {
                             key = { key }
                             model = { row }
                             handler = {handler}
+                            editorGuide = {editorGuide}
                             handleDialogModel = {this.props.handleDialogModel}
                         />
                     );

@@ -61,7 +61,8 @@ class MaterialButton extends React.Component{
                     background : this.props.disabled ? '' : ( this.state.hover ? 'rgba(153,153,153,0.2)' : this.props.style ? this.props.style.background : ''  ),
                     transition : 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
                     cursor : 'pointer',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    userSelect: 'none',
                 }}
                 onMouseEnter = {() =>{
 

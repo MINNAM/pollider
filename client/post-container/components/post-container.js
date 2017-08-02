@@ -1045,7 +1045,7 @@ class PostContainer extends Component {
                                 onDragEnter = {() => {
                                     this.setState({
                                         topLevelPlacerStyle : {
-                                            background: 'rgb(220, 220, 220)',
+                                            background: 'rgb(60, 60, 60)',
                                             color: 'white'
                                         }
                                     });
@@ -1072,7 +1072,7 @@ class PostContainer extends Component {
                                 ref = 'post-container'
                                 style = {{
                                     backgroundAttachment: 'local',
-                                    backgroundImage: `url('${SITE.url}/../images/post-list-background.png')`,
+                                    backgroundImage: `url('/images/post-list-background.png')`,
                                     height: displayTopLevelPlacer ? 'calc(100% - 240px)' : 'calc(100% - 100px)',
                                     overflow: 'auto',
                                 }}

@@ -66,8 +66,6 @@ class DebounceField extends Component {
             onChange,
         } = this.props;
 
-
-
         this.debounce(() => {
             let id = null;
             let parentId;
@@ -80,6 +78,13 @@ class DebounceField extends Component {
                 } else {
                     parentId = selected.parent_id;
                 }
+            } else {
+                if (model) {
+                    parentId = model.parent_id;
+                } else {
+                    parentId = null
+                }
+
             }
 
             this.props.parentModel.checkPostExist(parentId, value, hyperlink, (exists) => {

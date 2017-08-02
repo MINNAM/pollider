@@ -105,8 +105,8 @@ class Admin extends React.Component {
                 }
             });
 
-        }, (type, date, message, status) => {
-            this.triggerStatusBar(type, date, message, status);
+        }, (type, date, message, model, status) => {
+            this.triggerStatusBar(type, date, message, model, status);
         });
     }
 
@@ -137,7 +137,8 @@ class Admin extends React.Component {
                 view,
                 currentPost,
                 previousProject: new Project({model: currentPost, projectField: projectField, parentModel: postContainer}),
-                currentProject: new Project({model: currentPost, projectField: projectField, parentModel: postContainer})
+                currentProject: new Project({model: currentPost, projectField: projectField, parentModel: postContainer}),
+                currentPostContainer: postContainer,
            });
        } else {
             this.setState({
@@ -150,14 +151,14 @@ class Admin extends React.Component {
 
     }
 
-    triggerStatusBar (type, date, message, status) {
+    triggerStatusBar (type, date, message, model, status) {
         const {
             statusBarQueue
         } = this.state;
 
         this.popStatusBarQueue();
 
-        statusBarQueue.push({type, date, message, status});
+        statusBarQueue.push({type, date, message, model, status});
 
         this.setState({statusBarQueue});
 
@@ -248,7 +249,8 @@ class Admin extends React.Component {
                                src = {'/images/logo.svg'}
                                style = {{
                                    height: '80%',
-                                   marginTop: view != 'post-container' ? 100: ''
+                                   marginTop: view != 'post-container' ? 100: '',
+                                   userSelect: 'none',
                                }}
                             />
                             <MaterialButton
@@ -284,7 +286,7 @@ class Admin extends React.Component {
                                     switch (value) {
                                         case 'logout':
                                             user.logout(() => {
-                                                window.location.href = SITE.url + '/login';
+                                                window.location.href = '/login';
                                             });
                                             break;
                                     }
@@ -423,6 +425,24 @@ class Admin extends React.Component {
                                         float: 'right',
                                         fontWeight: 'semi-bold',
                                         marginTop: 3,
+                                        marginRight: 5
+                                    }}
+                                    onClick = {() => {
+                                        window.open(currentPost._hyperlink, "_blank");
+                                    }}
+                                    label = {'Go to Site'}
+                                    icon = {'web'}
+                                />
+                                <Seperator
+                                    style = {{
+                                        marginTop: 11
+                                   }}
+                                />
+                                <MaterialButton
+                                    style = {{
+                                        float: 'right',
+                                        fontWeight: 'semi-bold',
+                                        marginTop: 3,
                                     }}
                                     onClick = {(event) => {
                                         // const previousProject = {...this.state.previousProject};
@@ -510,6 +530,7 @@ class Admin extends React.Component {
                                         }}
                                         post = {currentPost}
                                         postContainer = {postTypes}
+                                        currentPostContainer = {this.state.currentPostContainer}
                                         display = {this.setView.bind(this)}
                                         postTypes = {postTypes}
                                     /> : ''

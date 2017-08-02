@@ -35,6 +35,7 @@ class RowView extends Component {
         const {
             model,
             editor,
+            editorGuide,
             handler,
             handleDialogModel
         } = this.props;
@@ -59,6 +60,7 @@ class RowView extends Component {
                                 index = {key}
                                 model = {col}
                                 editor = {editor}
+                                editorGuide = {editorGuide}
                                 handleDialogModel = {handleDialogModel}
                                 queueElement = {(element) => {
                                     elements[ key ] = element;

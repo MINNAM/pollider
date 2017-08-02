@@ -9,8 +9,10 @@ import { DialogHelper } from '../../dialog/';
 import {THEME} from '../../global.js';
 import {PostContainer} from '../../post-container/';
 import TouchRipple from '../../../node_modules/material-ui/internal/TouchRipple';
+import RowSelectorItem from './row-selector.js';
 import {
     TextEditor,
+    DebounceField,
     ToggleIcon,
     Seperator,
     MaterialButton
@@ -39,7 +41,7 @@ class ProjectDialog extends DialogHelper {
 
             'embed' : ( data, key ) => {
 
-                { this.setTitle( data ) }
+                { this.setTitle( data ); }
 
                 return (
                     <div
@@ -58,7 +60,8 @@ class ProjectDialog extends DialogHelper {
                                 color : THEME.primaryColor
                             }}
                             key = { key }
-                            value = { this.state.values ? this.state.values.content : data.default }
+                            value = {this.state.values ? this.state.values.content : data.default }
+                            autoFocus = {true}
                             onChange = {
 
                                 ( event ) => {
@@ -127,8 +130,7 @@ class ProjectDialog extends DialogHelper {
                 )
             },
 
-            'text-editor' : ( data, key ) => {
-
+            'text-editor': (data, key) => {
 
                 return (
                     <div
@@ -160,9 +162,63 @@ class ProjectDialog extends DialogHelper {
                 );
 
             },
+            'debounce-text': (data, key) => {
+                const {
+                    selected
+                } = this.props;
+                const {
+                    values = {},
+                } = this.state;
+
+                return (
+                    <div key = {key}>
+                        {this.setTitle(data)}
+                        <DebounceField
+                            autofocus = {true}
+                            parentModel = { data.parentModel }
+                            model    = {data.model}
+                            error = {values[data.field] ? values[data.field].error : null }
+                            setError = {this.setError.bind(this)}
+                            hintText = {`Type ${data.field}`}
+                            onChange = {(value, exists) => {
+                                const {
+                                    values = {},
+                                    error = {},
+                                } = this.state;
+
+                                values[data.field] = {value};
+
+                                if (exists) {
+                                    values[data.field].error = 'Post already exists'
+
+                                } else {
+                                    if (value == '') {
+                                        values[data.field].error = 'Post name cannot be empty'
+                                    } else {
+                                        delete values[data.field].error;
+                                        values[data.field].error = null;
+                                    }
+                                }
+
+                                for (let key in values) {
+                                    if (values[key].error) {
+                                        error[key] = values[key].error;
+                                    } else {
+                                        delete error[key];
+                                    }
+                                }
+
+                                this.setState({
+                                    values,
+                                    error
+                                });
+                            }}
+                        />
+                    </div>
+               );
+            },
 
             'code-editor' : ( data, key ) => {
-
                 return (
                     <div
                         style = {{
@@ -176,21 +232,15 @@ class ProjectDialog extends DialogHelper {
                             disableStyling = { true }
                             disableHTML = { true }
                             onChange = {
-
-                                ( values ) => {
-
+                                (values) => {
                                     this.setState({
-
-                                        error : false,
-                                        values : values
-
+                                        error: false,
+                                        values: values
                                     });
-
                                 }
                             }
 
                             onUpdate = { this.props.model.actions.update }
-
                         />
                     </div>
                 );
@@ -200,7 +250,6 @@ class ProjectDialog extends DialogHelper {
             'row-selector' : (data, key ) => {
 
                 const style = {
-                    padding   : '5%',
                     textAlign : 'center',
                     cursor    : 'pointer'
                 }
@@ -214,279 +263,47 @@ class ProjectDialog extends DialogHelper {
                     >
                         { this.setTitle( data ) }
                         <div className = 'row'>
-                            <span style = {style} className = 'col-sm-3' onTouchTap = { () => { this.onExecute({ colIndex : 0 } ); } }>
-                                <svg
-                                    style = {{
-                                        width : '100%',
-                                        height : 30
-                                    }}
-                                    viewBox = "-1 -1 2 2"
-                                >
-                                    <rect
-                                        x = {'-50%'}
-                                        y = {'-50%'}
-                                        width="100%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                </svg>
-                            </span>
-                            <span style = {style} className = 'col-sm-3' onTouchTap = { () => { this.onExecute({ colIndex : 1 } ); } }>
+                            <RowSelectorItem
+                                onClick = {() => {this.onExecute({ colIndex: 0 });}}
+                                style = {style}
+                                src = '/images/row-selector-1.svg'
+                            />
+                            <RowSelectorItem
+                                onClick = {() => {this.onExecute({ colIndex: 1 });}}
+                                style = {style}
+                                src = '/images/row-selector-2.svg'
+                            />
+                            <RowSelectorItem
+                                onClick = {() => {this.onExecute({ colIndex: 2 });}}
+                                style = {style}
+                                src = '/images/row-selector-3.svg'
+                            />
+                            <RowSelectorItem
+                                onClick = {() => {this.onExecute({ colIndex: 3 });}}
+                                style = {style}
+                                src = '/images/row-selector-4.svg'
+                            />
+                            <RowSelectorItem
+                                onClick = {() => {this.onExecute({ colIndex: 4});}}
+                                style = {style}
+                                src = '/images/row-selector-5.svg'
+                            />
+                            <RowSelectorItem
+                                onClick = {() => {this.onExecute({ colIndex: 5 });}}
+                                style = {style}
+                                src = '/images/row-selector-6.svg'
+                            />
+                            <RowSelectorItem
+                                onClick = {() => {this.onExecute({ colIndex: 6});}}
+                                style = {style}
+                                src = '/images/row-selector-7.svg'
+                            />
+                            <RowSelectorItem
+                                onClick = {() => {this.onExecute({ colIndex: 7 });}}
+                                style = {style}
+                                src = '/images/row-selector-8.svg'
+                            />
 
-                                <svg
-                                    style = {{
-                                        width : '100%',
-                                        height : 30
-                                    }}
-                                    viewBox = "-1 -1 2 2"
-                                >
-                                    <rect
-                                        x = {'-50%'}
-                                        y = {'-50%'}
-                                        width="49%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                    <rect
-                                        x = {'2%'}
-                                        y = {'-50%'}
-                                        width="49%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                </svg>
-
-                            </span>
-                            <span style = {style} className = 'col-sm-3' onTouchTap = { () => { this.onExecute({ colIndex : 2 } ); } }>
-                                <svg
-                                    style = {{
-                                        width : '100%',
-                                        height : 30
-                                    }}
-                                    viewBox = "-1 -1 2 2"
-                                >
-                                    <rect
-                                        x = {'-50%'}
-                                        y = {'-50%'}
-                                        width="32%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-
-                                    <rect
-                                        x = {'-14.7%'}
-                                        y = {'-50%'}
-                                        width="32%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-
-                                    <rect
-                                        x = {'20%'}
-                                        y = {'-50%'}
-                                        width="32%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-
-
-                                </svg>
-                            </span>
-                            <span style = {style} className = 'col-sm-3' onTouchTap = { () => { this.onExecute({ colIndex : 3 } ); } }>
-                                <svg
-                                    style = {{
-                                        width : '100%',
-                                        height : 30
-                                    }}
-                                    viewBox = "-1 -1 2 2"
-                                >
-                                    <rect
-                                        x = {'-50%'}
-                                        y = {'-50%'}
-                                        width="24%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                    <rect
-                                        x = {'-23%'}
-                                        y = {'-50%'}
-                                        width="24%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                    <rect
-                                        x = {'3%'}
-                                        y = {'-50%'}
-                                        width="24%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                    <rect
-                                        x = {'29%'}
-                                        y = {'-50%'}
-                                        width="24%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-
-                                </svg>
-                            </span>
-                        </div>
-
-                        <div className = 'row'>
-                            <span style = {style} className = 'col-sm-3' onTouchTap = { () => { this.onExecute({ colIndex : 4 } ); } }>
-
-                            <svg
-                                style = {{
-                                    width : '100%',
-                                    height : 30
-                                }}
-                                viewBox = "-1 -1 2 2"
-                            >
-                                <rect
-                                    x = {'-50%'}
-                                    y = {'-50%'}
-                                    width="24%"
-                                    height="1"
-                                    style = {{
-                                        fill : 'rgb(180,180,180)'
-                                    }}
-                                />
-                                <rect
-                                    x = {'-23%'}
-                                    y = {'-50%'}
-                                    width="74%"
-                                    height="1"
-                                    style = {{
-                                        fill : 'rgb(180,180,180)'
-                                    }}
-                                />
-                            </svg>
-
-                            </span>
-                            <span style = {style} className = 'col-sm-3' onTouchTap = { () => { this.onExecute({ colIndex : 5 } ); } }>
-                                <svg
-                                    style = {{
-                                        width : '100%',
-                                        height : 30
-                                    }}
-                                    viewBox = "-1 -1 2 2"
-                                >
-                                    <rect
-                                        x = {'-50%'}
-                                        y = {'-50%'}
-                                        width="74%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                    <rect
-                                        x = {'26%'}
-                                        y = {'-50%'}
-                                        width="24%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                </svg>
-                            </span>
-                            <span style = {style} className = 'col-sm-3' onTouchTap = { () => { this.onExecute({ colIndex : 6 } ); } }>
-                                <svg
-                                    style = {{
-                                        width : '100%',
-                                        height : 30
-                                    }}
-                                    viewBox = "-1 -1 2 2"
-                                >
-                                    <rect
-                                        x = {'-50%'}
-                                        y = {'-50%'}
-                                        width="50%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                    <rect
-                                        x = {'2%'}
-                                        y = {'-50%'}
-                                        width="24%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                    <rect
-                                        x = {'29%'}
-                                        y = {'-50%'}
-                                        width="24%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                </svg>
-                            </span>
-                            <span style = {style} className = 'col-sm-3' onTouchTap = { () => { this.onExecute({ colIndex : 7 } ); } }>
-                                <svg
-                                    style = {{
-                                        width : '100%',
-                                        height : 30
-                                    }}
-                                    viewBox = "-1 -1 2 2"
-                                >
-                                    <rect
-                                        x = {'-50%'}
-                                        y = {'-50%'}
-                                        width="24%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                    <rect
-                                        x = {'-23%'}
-                                        y = {'-50%'}
-                                        width="23%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-                                    <rect
-                                        x = {'3%'}
-                                        y = {'-50%'}
-                                        width="49%"
-                                        height="1"
-                                        style = {{
-                                            fill : 'rgb(180,180,180)'
-                                        }}
-                                    />
-
-                                </svg>
-                            </span>
                         </div>
                     </div>
 
@@ -496,10 +313,10 @@ class ProjectDialog extends DialogHelper {
             'element-selector' : ( data, key ) => {
 
                 const style = {
-                    padding: '5%',
+                    padding: 0,
                     textAlign: 'center',
                     cursor : 'pointer'
-                }
+                };
 
 
                 return (
@@ -507,59 +324,41 @@ class ProjectDialog extends DialogHelper {
                     <div
                         key       = { key }
                         className = 'col-sm-12'
-                        style     = {{ height: '100%', padding: 10 }}
+                        style     = {{ height: '100%', padding: 0 }}
                     >
                         { this.setTitle( data ) }
                         <div className = 'row'>
-                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'text' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-12' onTouchTap = { function () { this.onExecute({ type : 'text' }); }.bind( this ) }>
                                 <MaterialButton
                                     style = {{
-
+                                        width: '100%'
                                     }}
                                     icon  = { 'subject' }
                                     label = { 'TEXT' }
                                 />
                             </div>
-                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'image' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-12' onTouchTap = { function () { this.onExecute({ type : 'image' }); }.bind( this ) }>
                                 <MaterialButton
                                     style = {{
-
+                                        width: '100%'
                                     }}
                                     icon  = { 'image' }
                                     label = { 'IMAGE' }
                                 />
                             </div>
-                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'embed' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-12' onTouchTap = { function () { this.onExecute({ type : 'embed' }); }.bind( this ) }>
                                 <MaterialButton
                                     style = {{
-
+                                        width: '100%'
                                     }}
                                     icon  = { 'video_library' }
                                     label = { 'embed' }
                                 />
                             </div>
-                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'audio' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-12' onTouchTap = { function () { this.onExecute({ type : 'code' }); }.bind( this ) }>
                                 <MaterialButton
                                     style = {{
-
-                                    }}
-                                    icon  = { 'audiotrack' }
-                                    label = { 'AUDIO' }
-                                />
-                            </div>
-                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'video' }); }.bind( this ) }>
-                                <MaterialButton
-                                    style = {{
-
-                                    }}
-                                    icon  = { 'video_library' }
-                                    label = { 'VIDEO' }
-                                />
-                            </div>
-                            <div style = {style} className = 'col-sm-6' onTouchTap = { function () { this.onExecute({ type : 'code' }); }.bind( this ) }>
-                                <MaterialButton
-                                    style = {{
-
+                                        width: '100%'
                                     }}
                                     icon  = { 'code' }
                                     label = { 'CODE' }

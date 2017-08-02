@@ -9,8 +9,7 @@
   margin-bottom: 10;
   display: table;
 }
-.client header {
-  background: url("http://localhost:30000//uploads/2016/10/13.jpg");
+.client header {  
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;

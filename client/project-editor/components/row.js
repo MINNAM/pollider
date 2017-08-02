@@ -69,7 +69,7 @@ class Row extends React.Component {
 
         if (nextProps.model.parent) {
             console.log(nextProps.model.parent);
-            if( nextProps.model.parent.rows.length > 1 && this._row.className != 'parent-row')
+            if( nextProps.model.parent.rows.length > 1 && this._row.className != 'parent-row' && nextProps.model.parent.dataKey == null)
                 this._row.style.height = '50%';
         }
 
@@ -85,6 +85,19 @@ class Row extends React.Component {
 
         }
 
+    }
+
+    handleActionMenuOpen (event) {
+        this.setState({
+            actionMenuOpen: true,
+            actionMenuAnchorEl: event.currentTarget
+        });
+    }
+
+    handleActionMenuClose () {
+        this.setState({
+            actionMenuOpen: false
+        });
     }
 
     render () {
@@ -173,7 +186,6 @@ class Row extends React.Component {
                     background
                 }}
             >
-
                 <div
                     style = {{
                         display        : 'inline-block',
@@ -189,157 +201,185 @@ class Row extends React.Component {
                     }}
                 >
 
-                    <IconMenu
-                        style              = {{ float : 'right' }}
-                        iconButtonElement  = { <IconButton style = {{ marginTop: -5, marginRight: 5.5 }} iconStyle = {{ height : 22, width : 22, color : this.state._row ? this.state._row.parentNode.className == 'parent-row' ?  'rgb(60,60,60)' : 'rgb(60,60,60)' : ''}}><MoreHorizIcon /></IconButton> }
-                        anchorOrigin       = {{ horizontal: 'right', vertical: 'top' }}
-                        targetOrigin       = {{ horizontal: 'right', vertical: 'top' }}
-                        menuItemStyle = {{
-                            fontSize : 14
+                    <MaterialButton
+                        style = {{
+                            float: 'right',
+                            margin: '2px 9.5px 0 0',
+                            borderRadius: '50%'
                         }}
-                        onChange = {(event, data) => {
 
-                            if ( data.type == 'add-row-from-col' ) {
+                        onClick = { this.handleActionMenuOpen.bind(this) }
+                        icon = { 'more_horiz'}
+                        iconStyle = {{
+                            color: 'rgb(60,60,60)',
+                        }}
 
-                                alert();
+                    />
 
-                                this.props.addRowFromCol( () => {
+                    <Popover
+                      open           = { this.state.actionMenuOpen }
+                      anchorEl       = { this.state.actionMenuAnchorEl }
+                      anchorOrigin   = {{ horizontal: 'right', vertical: 'bottom' }}
+                      targetOrigin   = {{ horizontal: 'right', vertical: 'top' }}
+                      onRequestClose = { this.handleActionMenuClose.bind(this) }
+                    >
+                        <Menu
+                            onChange = {(event, data) => {
 
-                                    this.forceUpdate();
+                                if ( data.type == 'add-row-from-col' ) {
 
-                                });
+                                    this.props.addRowFromCol( () => {
 
+                                        this.forceUpdate();
 
-                            } else {
+                                    });
 
-                                if ( data.parentModel ) { // actions for Element
-
-                                    this.props.handleDialogModel( data, data.parentModel );
 
                                 } else {
 
-                                    this.props.handleDialogModel( data, this.props.parentModel );
+                                    if ( data.parentModel ) { // actions for Element
+
+                                        this.props.handleDialogModel( data, data.parentModel );
+
+                                    } else {
+
+                                        this.props.handleDialogModel( data, this.props.parentModel );
+
+                                    }
 
                                 }
 
+                            }}
+                            style = {{
+                                float: 'right'
+                            }}
+                            menuItemStyle = {{
+                                fontSize: 14
+                            }}
+                        >
+                            {
+
+                                actionsForElement.length > 0 ? <Subheader
+                                    style = {{
+                                        color : 'rgb(150,150,150)',
+                                        fontSize : 12
+                                    }}
+                                >
+                                    Element
+                                </Subheader> : ''
+
                             }
 
-                        }}
-                    >
-                        {
+                            {
+                                actionsForElement.length > 0 ? actionsForElement.map( (element,key) => {
+                                    return (
+                                        <MenuItem
+                                            key = {key}
+                                            primaryText = {element.primaryText}
+                                            value = {element.value}
+                                        />
+                                    );
+                                }) : ''
+                            }
 
-                            actionsForElement.length > 0 ? <Subheader
+                            {
+
+                                actionsForElement.length > 0 ? <Divider /> : ''
+
+                            }
+                            <Subheader
                                 style = {{
                                     color : 'rgb(150,150,150)',
                                     fontSize : 12
                                 }}
                             >
-                                Element
-                            </Subheader> : ''
+                                Row
+                            </Subheader>
+                            <MenuItem
+                                primaryText = "Delete"
+                                value       = {{ type : 'delete-row', model }}
+                            />
+                            <MenuItem
+                                primaryText = "Duplicate"
+                                value       = {{ type : 'duplicate-row', model }}
+                            />
+                            <MenuItem
+                                primaryText = "Move to Top"
+                                value = {{ type : 'row-to-top', model }}
+                            />
+                            <MenuItem
+                                primaryText = "Move to Bottom"
+                                value = {{ type : 'row-to-bottom', model }}
 
-                        }
+                            />
 
-                        {
-                            actionsForElement.length > 0 ? actionsForElement.map( (element,key) => {
-                                return (
-                                    <MenuItem
-                                        key = {key}
-                                        primaryText = {element.primaryText}
-                                        value = {element.value}
-                                    />
-                                );
-                            }) : ''
-                        }
+                           <Divider />
+                           {
+                               addRows.map( (element,key) => {
 
-                        {
+                                   return (
+                                       <MenuItem
+                                           key = {key+10}
+                                           primaryText = {element.primaryText}
+                                           value = {element.value}
+                                       />
+                                   );
 
-                            actionsForElement.length > 0 ? <Divider /> : ''
+                               })
+                           }
 
-                        }
-                        <Subheader
+                        </Menu>
+                    </Popover>
+
+                    <span
+                        style = {{
+                            display: this.props.parentModel.rows.length == 1 ? 'none' : ''
+                        }}
+                    >
+                        <MaterialButton
                             style = {{
-                                color : 'rgb(150,150,150)',
-                                fontSize : 12
+                                marginTop: 1.25,
+                                float     : 'left',
+                                borderRadius : 33,
+                                height : 33,
+                                width : 33,
+                                marginLeft : 5.5,
+                                marginTop: 3
                             }}
-                        >
-                            Row
-                        </Subheader>
-                        <MenuItem
-                            primaryText = "Delete"
-                            value       = {{ type : 'delete-row', model }}
+
+                            icon = { 'keyboard_arrow_down'}
+                            iconStyle = {{
+                                color : 'rgb(60,60,60)',
+                                fontSize : 20
+                            }}
+                            onClick = { () => {
+                                this.props.handleDialogModel({ type : 'down-row', model }, this.props.parentModel );
+                            }}
                         />
-                        <MenuItem
-                            primaryText = "Duplicate"
-                            value       = {{ type : 'duplicate-row', model }}
-                        />
-                        <MenuItem
-                            primaryText = "Move to Top"
-                            value = {{ type : 'row-to-top', model }}
-                        />
-                        <MenuItem
-                            primaryText = "Move to Bottom"
-                            value = {{ type : 'row-to-bottom', model }}
+                        <MaterialButton
+                            style = {{
+                                marginTop: 1.25,
+                                float     : 'left',
+                                borderRadius : '50%',
+                                height : 33,
+                                width : 33,
+                                marginLeft : 5.5,
+                                marginTop: 3
+                            }}
+
+                            icon = { 'keyboard_arrow_up'}
+                            iconStyle = {{
+                                color : 'rgb(60,60,60)',
+                                fontSize : 20
+                            }}
+                            onClick = { () => {
+
+                                this.props.handleDialogModel({ type : 'up-row', model }, this.props.parentModel );
+
+                            }}
 
                         />
-
-                       <Divider />
-                       {
-                           addRows.map( (element,key) => {
-
-                               return (
-                                   <MenuItem
-                                       key = {key+10}
-                                       primaryText = {element.primaryText}
-                                       value = {element.value}
-                                   />
-                               );
-
-                           })
-                       }
-
-                    </IconMenu>
-                    <MaterialButton
-                        style = {{
-                            marginTop: 1.25,
-                            float     : 'left',
-                            borderRadius : 33,
-                            height : 33,
-                            width : 33,
-                            marginLeft : 5.5
-                        }}
-
-                        icon = { 'keyboard_arrow_down'}
-                        iconStyle = {{
-                            color : 'rgb(60,60,60)',
-                            fontSize : 20
-                        }}
-                        onClick = { () => {
-                            this.props.handleDialogModel({ type : 'down-row', model }, this.props.parentModel );
-                        }}
-
-                    />
-                    <MaterialButton
-                        style = {{
-                            marginTop: 1.25,
-                            float     : 'left',
-                            borderRadius : '50%',
-                            height : 33,
-                            width : 33,
-                            marginLeft : 5.5
-                        }}
-
-                        icon = { 'keyboard_arrow_up'}
-                        iconStyle = {{
-                            color : 'rgb(60,60,60)',
-                            fontSize : 20
-                        }}
-                        onClick = { () => {
-
-                            this.props.handleDialogModel({ type : 'up-row', model }, this.props.parentModel );
-
-                        }}
-
-                    />
+                    </span>
 
                 </div>
 

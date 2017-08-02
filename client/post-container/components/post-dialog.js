@@ -39,6 +39,8 @@ class PostDialog extends DialogHelper {
                     values,
                 } = this.state;
 
+                console.log(data.selected);
+
                 return (
                     <div key = {key}>
                         {this.setTitle(data)}
@@ -106,10 +108,8 @@ class PostDialog extends DialogHelper {
                );
             },
             'date': (data, key) => {
-
                 const defaultDate = new Date(data.default);
                 const defaultTime = `${defaultDate.getHours()}:${defaultDate.getMinutes()}:${defaultDate.getSeconds() < 10 ? 0 : ''}${defaultDate.getSeconds()}`;
-
 
                 return (
                     <div key = {key}>

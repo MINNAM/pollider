@@ -56,7 +56,8 @@ class ToggleIcon extends React.Component{
                     height : 36,
                     background : this.state.hover ? 'rgba(153,153,153,0.2)' : (value ? 'rgba(153,153,153,0.2)' : '' ),
                     transition : 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-                    cursor : 'pointer'
+                    cursor : 'pointer',
+                    userSelect: 'none',
                 }}
                 onMouseEnter = {() =>{
 

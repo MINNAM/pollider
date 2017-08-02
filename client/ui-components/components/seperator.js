@@ -11,6 +11,7 @@ const Seperator = ( props ) => {
         display : 'inline-block',
         borderLeft : '1px solid rgb(235,235,235)',
         borderRight : '1px solid rgb(235,235,235)',
+        userSelect: 'none',
         ...props.style
     }
 

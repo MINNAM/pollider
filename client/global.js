@@ -48,7 +48,8 @@ const shortMonthNames = [
 ];
 
 const THEME = {
-    primaryColor : 'rgb(76,211,173)',
+    primaryColor: 'rgb(76,211,173)',
+    secondaryColor: '#F9B7B1',
     error: 'rgb(244,67, 54)'
 };
 
@@ -100,7 +101,7 @@ const scroll = (target, _from, _to, done) => {
 
         percent = easing(percent);
 
-        target.scrollTop = _from + diff * percent;
+        target.scrollTop = _from + diff * percent;        
 
         if (time < duration) {
             window.requestAnimationFrame( step );

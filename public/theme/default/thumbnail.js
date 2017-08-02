@@ -203,7 +203,7 @@ class Thumbnail extends React.Component {
                                     return (
                                         <img
                                             key = { key }
-                                            src = { `${element._hyperlink}`}
+                                            src = { `/${element._hyperlink}`}
                                             style = {{
                                                 width: '100%',
                                                 float: 'left',

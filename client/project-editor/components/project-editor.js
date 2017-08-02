@@ -1,13 +1,21 @@
 import React, {Component} from 'react';
 /* Material UI */
 import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
 import Divider from 'material-ui/Divider';
+import Toggle from 'material-ui/Toggle';
 
 /* Pollider */
-import {formatDate} from '../../global.js';
+import {
+    formatDate,
+    scroll,
+    THEME,
+    formatHyperlink
+} from '../../global.js';
 import RowContainer from './row-container.js';
 import ProjectDialog from './project-dialog.js';
 import {ProjectView} from '../../project-view/';
@@ -53,7 +61,7 @@ class ProjectEditor extends React.Component {
                 open: true
             });
 
-            this.setState({ model });                        
+            this.setState({ model });
 
         }
     }
@@ -96,8 +104,47 @@ class ProjectEditor extends React.Component {
 
     handleDialogModel (data, model = {}) {
         const prevModel = {...model};
+        const {
+            post,
+            currentPostContainer
+        } = this.props;
 
         switch (data.type) {
+
+            case 'Name':
+                this.openDialog({
+                    fields: [
+                        {
+                            title: 'Rename',
+                            subtitle: {
+                                pre: 'Enter ',
+                                middle: post.name,
+                                post: "'s new name"
+                            },
+                            field: 'name',
+                            dataType: 'debounce-text',
+                            model: post,
+                            parentModel: currentPostContainer
+                        }
+                   ],
+                    actions: {
+                        execute: (data) => {
+                            console.log(data);
+                            post.name = data.name.value;
+                            post.hyperlink = formatHyperlink(data.name.value);
+                            currentPostContainer.updatePost(post);
+                        }
+                    },
+                    style: {
+                        dialog: {
+                            width: '50%',
+                            height: 'calc(100% - 50px)',
+                            top: 50
+                        },
+                    }
+                });
+            break;
+
             /* New Row */
             case 'new-row':
                 this.openDialog({
@@ -123,6 +170,9 @@ class ProjectEditor extends React.Component {
                     actions: {
                         execute: (_data) => {
                             this.addRow(_data.colIndex);
+                            const projectEditorContent = document.getElementById('project-editor-content').childNodes[0];
+
+                            scroll(projectEditorContent, projectEditorContent.scrollTop, projectEditorContent.getBoundingClientRect().height);
                         }
                     },
                     style: {
@@ -457,6 +507,7 @@ class ProjectEditor extends React.Component {
                     },
                     fields: [
                         {
+                            title: 'Embed',
                             dataType: 'embed',
                             default: model.content,
                             content: model.content
@@ -531,6 +582,7 @@ class ProjectEditor extends React.Component {
                     },
                     fields: [
                         {
+                            title: 'Code',
                             dataType: 'code-editor',
                             default: model.contentRaw,
                             content: model.content
@@ -595,8 +647,6 @@ class ProjectEditor extends React.Component {
             break;
 
             case 'post-container':
-
-                console.log(model.contentRaw );
 
                 this.openDialog({
                     fields: [
@@ -748,30 +798,19 @@ class ProjectEditor extends React.Component {
 
 
     handleActionMenuOpen (event) {
-
         this.setState({
-
             actionMenuOpen: true,
             actionMenuAnchorEl: event.currentTarget
-
         });
-
     }
 
     handleActionMenuClose () {
-
         this.setState({
-
             actionMenuOpen: false
-
         });
-
     }
 
     render () {
-
-        console.log( 'rowContainer', this.state.model );
-
 
         return (
 
@@ -802,8 +841,19 @@ class ProjectEditor extends React.Component {
                                 marginLeft: 7.5
                             }}
                         >
-
-                            <span className = { 'file-name' } style = {{ paddingLeft: 5 }}>{ this.props.post.name }</span>
+                            <span
+                                className = {'file-name'}
+                                style = {{
+                                    paddingLeft: 5,
+                                    color: THEME.primaryColor,
+                                    cursor: 'pointer'
+                                }}
+                                onClick = {() => {
+                                    this.handleDialogModel({ type: 'Name'});
+                                }}
+                            >
+                                {this.props.post.name}
+                            </span>
                             <span className = { 'file-date' } style = {{ paddingLeft: 5 }}>{ formatDate(this.props.post.created_date) }</span>
                         </span>
 
@@ -812,6 +862,7 @@ class ProjectEditor extends React.Component {
                             style = {{
                                 marginTop: 11,
                                 float: 'right',
+                                borderRadius: '50%'
                             }}
 
                             onClick = { this.handleActionMenuOpen.bind(this) }
@@ -834,7 +885,7 @@ class ProjectEditor extends React.Component {
                                 float: 'right',
                                 margin: '9.5px 9.5px 0 0',
                                 float: 'right',
-                                boxShadow: '1px 1px 3px 1px rgba(0,0,0,0.1)'
+                                boxShadow: '1px 1px 3px 1px rgba(0,0,0,0.1)',
                             }}
                             hoverStyle = {{
                                 color: 'white'
@@ -856,9 +907,7 @@ class ProjectEditor extends React.Component {
                         >
                             <Menu
                                 onChange = {(event, value) => {
-
                                     this.handleDialogModel(value);
-
                                 }}
                                 style = {{
                                     float: 'right'
@@ -886,13 +935,13 @@ class ProjectEditor extends React.Component {
                     <div id = 'project-editor-content' style = {{ height: 'calc(100% - 56px)', paddingBottom: 56 }}>
 
                         <RowContainer
-                            top = { true }
-                            model = { this.state.model }
-                            display = { this.props.display }
-                            rowClassName = { 'parent-row' }
-                            uploads = { this.props.uploads }
-                            handleDialogModel =  { this.handleDialogModel.bind(this) }
-                            openDialog = { this.openDialog.bind(this) }
+                            top = {true}
+                            model = {this.state.model}
+                            display = {this.props.display}
+                            rowClassName = {'parent-row'}
+                            uploads = {this.props.uploads}
+                            handleDialogModel =  {this.handleDialogModel.bind(this)}
+                            openDialog = {this.openDialog.bind(this)}
                         />
                     </div>
 
@@ -904,27 +953,106 @@ class ProjectEditor extends React.Component {
                     className = {"col-sm-" + (this.state.displayFullPreview ? 12: 6) }
                     style = {{
                         height: 'calc(100% - 47px)',
-                        padding: '56px 2.5% 56px 2.5%',
-                        overflow: 'scroll',
+                        position: 'relative'
                     }}
                 >
-                    <PostHeader
-                        model = {{...this.state.model.model, ...this.props.user}}
-                        display = { true }
-                    />
                     <div
                         style = {{
-                            marginTop: 20
+                            width: '100%',
+                            height: 80,
+                            paddingRight: 10,
+                            paddingLeft: 10,
+                            position: 'absolute',
+                            top: 0
                         }}
                     >
-                        <ProjectView
-                            editor = {true}
-                            model = {this.state.model}
-                            handleDialogModel =  {this.handleDialogModel.bind(this)}
+                        <SelectField
+                            floatingLabelText = "Status"
                             style = {{
-                                minHeight: 750
+                                display: 'inline',
+                                fontWeight: 'bold',
+                                float: 'right',
+                                width: 223
                             }}
+                            labelStyle = {{
+                                color: THEME.primaryColor,
+                                fontSize: 12,
+                            }}
+                            menuItemStyle = {{
+                                fontSize: 12
+                            }}
+                            value = {this.props.post.status}
+                            onChange = {(event, index, value) => {
+                                // const post = {...this.props.post};
+
+                                this.props.post.status = value;
+                                this.props.currentPostContainer.updatePost(this.props.post);
+
+                                // this.props.parentModel.updatePost(model);
+                            }}
+                        >
+                            <MenuItem
+                                primaryText = {'Public'}
+                                value = {'public'}
+                            />
+                            <MenuItem
+                                primaryText = {'Private'}
+                                value = {'private'}
+                            />
+                            <MenuItem
+                                primaryText = {'Hidden'}
+                                value = {'hidden'}
+                            />
+                        </SelectField>
+                    </div>
+                    <div
+                        style = {{
+                            height: '100%',
+                            overflow: 'scroll',
+                            padding: '41px 5% 56px 5%',
+                        }}
+                    >
+                        <Toggle
+                            trackStyle = {{
+                                backgroundColor: 'rgb(220,220,220)',
+                            }}
+                            thumbStyle = {{
+                                backgroundColor: 'white'
+                            }}
+
+                            trackSwitchedStyle = {{
+                                backgroundColor: 'rgb(220,220,220)'
+                            }}
+                            style = {{
+                                width: 'initial'
+                            }}
+                            onToggle = {(event, toggled) => {
+                                this.setState({
+                                    displayEditorGuide: toggled
+                                });
+                            }}
+                            label="Show Edit Guides"
                         />
+                        <PostHeader
+                            model = {{...this.state.model.model, ...this.props.user}}
+                            display = { true }
+                        />
+
+                        <div
+                            style = {{
+                                marginTop: 20
+                            }}
+                        >
+                            <ProjectView
+                                editor = {true}
+                                editorGuide = {this.state.displayEditorGuide}
+                                model = {this.state.model}
+                                handleDialogModel =  {this.handleDialogModel.bind(this)}
+                                style = {{
+                                    minHeight: 750
+                                }}
+                            />
+                        </div>
                     </div>
 
                 </div>
@@ -933,6 +1061,7 @@ class ProjectEditor extends React.Component {
                         model = {this.state.dialogModel}
                         isOpen = {this.state.isDialogOpen ? true: false}
                         onRequestClose = {this.closeDialog.bind(this)}
+                        selected = {this.props.post}
                     /> : ''
                 }
 

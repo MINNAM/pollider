@@ -41779,21 +41779,60 @@ var ProjectDialog = function (_DialogHelper) {
                     'div',
                     null,
                     _this.setTitle(data),
-                    _react2.default.createElement(_Slider2.default, {
-                        defaultValue: data.default,
-                        max: 1,
-                        onChange: function onChange(event, value) {
-
-                            _this.setState({
-
-                                error: false,
-                                values: value
-
-                            });
-
-                            _this.props.model.actions.update(value);
-                        }
-                    })
+                    _react2.default.createElement(
+                        'div',
+                        {
+                            style: {
+                                width: '100%',
+                                padding: '27px 16px 0 16px',
+                                position: 'relative'
+                            }
+                        },
+                        _react2.default.createElement('div', {
+                            style: {
+                                width: 'calc(100% - 50px)',
+                                display: 'inline-block',
+                                height: 1,
+                                background: 'rgb(220,220,220)',
+                                position: 'absolute',
+                                left: 0,
+                                top: 59
+                            }
+                        }),
+                        _react2.default.createElement(
+                            'div',
+                            {
+                                style: {
+                                    width: 'calc(100% - 50px)',
+                                    float: 'left'
+                                }
+                            },
+                            _react2.default.createElement(_Slider2.default, {
+                                defaultValue: data.default,
+                                max: 1,
+                                step: 0.01,
+                                onChange: function onChange(event, value) {
+                                    _this.setState({
+                                        error: false,
+                                        values: value
+                                    });
+                                    console.log(_this.state.values);
+                                    _this.props.model.actions.update(value);
+                                }
+                            })
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            {
+                                style: {
+                                    float: 'right',
+                                    lineHeight: '64px',
+                                    color: 'rgb(60,60,60)'
+                                }
+                            },
+                            Math.round(_this.state.values ? _this.state.values * 100 : data.default * 100)
+                        )
+                    )
                 );
             },
 

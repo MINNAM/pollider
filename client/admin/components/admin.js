@@ -56,7 +56,7 @@ const muiTheme = {
         accent2Color: THEME.primaryColor,
         accent3Color: THEME.primaryColor,
     },
-    userAgent:  navigator.userAgent
+    userAgent:  navigator.userAgent,
 };
 
 class Admin extends React.Component {

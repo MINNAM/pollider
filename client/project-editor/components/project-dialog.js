@@ -376,22 +376,54 @@ class ProjectDialog extends DialogHelper {
                 return (
                     <div>
                         { this.setTitle( data ) }
-                        <Slider
-                            defaultValue = { data.default }
-                            max = { 1 }
-                            onChange  = { ( event, value ) => {
-
-                                this.setState({
-
-                                    error : false,
-                                    values : value
-
-                                });
-
-                                this.props.model.actions.update( value );
-
+                        <div
+                            style = {{
+                                width: '100%',
+                                padding: '27px 16px 0 16px',
+                                position: 'relative'
                             }}
-                        />
+                        >
+                            <div
+                                style = {{
+                                    width : 'calc(100% - 50px)',
+                                    display: 'inline-block',
+                                    height: 1,
+                                    background: 'rgb(220,220,220)',
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: 59
+                                }}
+                            />
+                            <div
+                                style = {{
+                                    width: 'calc(100% - 50px)',
+                                    float: 'left'
+                                }}
+                            >
+                                <Slider
+                                    defaultValue = {data.default}
+                                    max = { 1 }
+                                    step = {0.01}
+                                    onChange  = {(event, value) => {
+                                        this.setState({
+                                            error: false,
+                                            values: value
+                                        });
+                                        console.log( this.state.values );
+                                        this.props.model.actions.update(value);
+                                    }}
+                                />
+                            </div>
+                            <span
+                                style = {{
+                                    float: 'right',
+                                    lineHeight: '64px',
+                                    color: 'rgb(60,60,60)'
+                                }}
+                            >
+                                {Math.round(this.state.values ? this.state.values * 100 : data.default * 100)}
+                            </span>
+                        </div>
                     </div>
 
                 );

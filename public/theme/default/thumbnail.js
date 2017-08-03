@@ -158,16 +158,18 @@ class Thumbnail extends React.Component {
                                 <Heading
                                     textColor = {'rgb(160,160,160)'}
                                     content = {description}
-                                />
+                                />                            
                                 <span
                                     style = {{
                                         borderBottom: '2px solid rgb(76, 211, 173)',
                                         display: 'inline-block',
-                                        left: 0,
+                                        left: '50%',
                                         position: 'absolute',
                                         bottom: 3.5,
                                         transition: '.25s ease all',
                                         width: mouseOver ? '100%' : '0%',
+                                        transform: 'translate(-50%,0)'
+
                                     }}
                                 />
                             </span>

@@ -100,11 +100,9 @@ class Thumbnail extends React.Component {
                     className = {type == 0 ? 'col-sm-12' : 'col-sm-6'}
                     style = {{
                         background: 'white',
-                        borderBottom: '2px solid rgb(220,220,220)',
                         cursor: 'pointer',
                         float: 'left',
                         marginBottom: 36,
-                        paddingBottom: 36,
                         paddingLeft: 0,
                         paddingRight: 0,
                         position: 'relative',
@@ -158,7 +156,7 @@ class Thumbnail extends React.Component {
                                 <Heading
                                     textColor = {'rgb(160,160,160)'}
                                     content = {description}
-                                />                            
+                                />
                                 <span
                                     style = {{
                                         borderBottom: '2px solid rgb(76, 211, 173)',
@@ -221,6 +219,16 @@ class Thumbnail extends React.Component {
                             }
                         </div>
                     </a>
+                    <div
+                        style = {{
+                            borderBottom: '2px solid rgb(230,230,230)',
+                            marginLeft: '11%',
+                            marginTop: 60,
+                            width : '80%',
+                        }}
+                    >
+
+                    </div>
                 </div>
         );
     }

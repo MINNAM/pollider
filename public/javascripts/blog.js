@@ -16311,11 +16311,9 @@ var Thumbnail = function (_React$Component) {
                     className: type == 0 ? 'col-sm-12' : 'col-sm-6',
                     style: (_ref = {
                         background: 'white',
-                        borderBottom: '2px solid rgb(220,220,220)',
                         cursor: 'pointer',
                         float: 'left',
                         marginBottom: 36,
-                        paddingBottom: 36,
                         paddingLeft: 0,
                         paddingRight: 0,
                         position: 'relative'
@@ -16437,7 +16435,15 @@ var Thumbnail = function (_React$Component) {
                             });
                         })
                     )
-                )
+                ),
+                _react2.default.createElement('div', {
+                    style: {
+                        borderBottom: '2px solid rgb(230,230,230)',
+                        marginLeft: '11%',
+                        marginTop: 60,
+                        width: '80%'
+                    }
+                })
             );
         }
     }]);

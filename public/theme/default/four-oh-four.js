@@ -5,6 +5,7 @@ import Contact from './contact.js';
 import Profile from './profile.js';
 import Wrapper from './wrapper.js';
 import Footer from './footer.js';
+import Directory from './directory.js';
 
 import {createProjectView} from '../index.js';
 
@@ -59,6 +60,7 @@ class FourOhFour extends React.Component {
                     <Body
                         model = {model}
                         displayNav = {false}
+                        displayHeader = {false}
                         toggle = {toggle}
                         toggled = {toggled}
                         allowTransition = {allowTransition}
@@ -68,6 +70,18 @@ class FourOhFour extends React.Component {
                             padding: 0,
                         }}
                     >
+                        <div
+                            style = {{
+                                marginBottom: 35
+                            }}
+                        >
+                            <Directory
+                                model = {[{
+                                    hyperlink : '',
+                                    name : 'Go to Home'
+                                }]}
+                            />
+                        </div>
                         <div
                             id = 'post-content'
                             style = {{
@@ -125,14 +139,6 @@ class FourOhFour extends React.Component {
                                     here
                                 </span>
                                 <br />
-                                or click <span
-                                    style = {{borderBottom: '2px solid #F9B7B1', cursor: 'pointer'}}
-                                    onClick = {() => {
-                                        window.open('/');
-                                    }}
-                                >
-                                    here
-                                </span> to go to the home page.
                             </p>
                         </div>
                     </Body>

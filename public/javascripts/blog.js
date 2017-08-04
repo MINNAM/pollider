@@ -15987,7 +15987,7 @@ var Body = function (_React$Component) {
                                 width: '100%'
                             }
                         }),
-                        _react2.default.createElement(
+                        displayHeader !== false ? _react2.default.createElement(
                             _postHeader2.default,
                             {
                                 model: model,
@@ -16008,7 +16008,7 @@ var Body = function (_React$Component) {
                                     })
                                 )
                             )
-                        )
+                        ) : ''
                     )
                 ),
                 _react2.default.createElement(
@@ -85353,6 +85353,10 @@ var _footer = __webpack_require__(90);
 
 var _footer2 = _interopRequireDefault(_footer);
 
+var _directory = __webpack_require__(300);
+
+var _directory2 = _interopRequireDefault(_directory);
+
 var _index = __webpack_require__(114);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -85438,6 +85442,7 @@ var FourOhFour = function (_React$Component) {
                         {
                             model: model,
                             displayNav: false,
+                            displayHeader: false,
                             toggle: toggle,
                             toggled: toggled,
                             allowTransition: allowTransition,
@@ -85447,6 +85452,20 @@ var FourOhFour = function (_React$Component) {
                                 padding: 0
                             }
                         },
+                        _react2.default.createElement(
+                            'div',
+                            {
+                                style: {
+                                    marginBottom: 35
+                                }
+                            },
+                            _react2.default.createElement(_directory2.default, {
+                                model: [{
+                                    hyperlink: '',
+                                    name: 'Go to Home'
+                                }]
+                            })
+                        ),
                         _react2.default.createElement(
                             'div',
                             {
@@ -85516,19 +85535,7 @@ var FourOhFour = function (_React$Component) {
                                     },
                                     'here'
                                 ),
-                                _react2.default.createElement('br', null),
-                                'or click ',
-                                _react2.default.createElement(
-                                    'span',
-                                    {
-                                        style: { borderBottom: '2px solid #F9B7B1', cursor: 'pointer' },
-                                        onClick: function onClick() {
-                                            window.open('/');
-                                        }
-                                    },
-                                    'here'
-                                ),
-                                ' to go to the home page.'
+                                _react2.default.createElement('br', null)
                             )
                         )
                     ),

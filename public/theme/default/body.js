@@ -57,7 +57,7 @@ class Body extends React.Component {
             displayNav,
             style,
             innerContentStyle,
-            displayFooter
+            displayFooter            
         } = this.props;
         const {
             scrollY,
@@ -214,28 +214,30 @@ class Body extends React.Component {
                             }}
                         >
                         </div>
-                        <PostHeader
-                            model = { model }
-                            display = { displayPostInfo }
-                        >
-                            <div style = {{ marginBottom: 35 }} >
-                                <span
-                                    style = {{
-                                        display: 'inline-block'
-                                    }}
-                                >
-                                    <Directory
-                                        model = { model.hyperlinks }
-                                    />
-                                </span>
-                            </div>
-                        </PostHeader>
+                        {
+                            displayHeader !== false ? <PostHeader
+                                model = { model }
+                                display = { displayPostInfo }
+                            >
+                                <div style = {{ marginBottom: 35 }} >
+                                    <span
+                                        style = {{
+                                            display: 'inline-block'
+                                        }}
+                                    >
+                                        <Directory
+                                            model = { model.hyperlinks }
+                                        />
+                                    </span>
+                                </div>
+                            </PostHeader> : ''
+                        }
 
                     </div>
                 </Wrapper>
 
 
-                <Wrapper                    
+                <Wrapper
                     innerStyle = {{
                         ...innerContentStyle
                     }}

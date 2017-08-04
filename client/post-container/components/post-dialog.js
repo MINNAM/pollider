@@ -92,6 +92,7 @@ class PostDialog extends DialogHelper {
                     <div key = {key}>
                         {this.setTitle(data)}
                         <TextField
+                            autoFocus = {true}
                             defaultValue = {data.default}
                             hintText = {`Type ${data.field}`}
                             onChange = {(event, target, value) => {

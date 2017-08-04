@@ -24774,6 +24774,7 @@ var PostDialog = function (_DialogHelper) {
                     { key: key },
                     _this.setTitle(data),
                     _react2.default.createElement(_uiComponents.TextField, {
+                        autoFocus: true,
                         defaultValue: data.default,
                         hintText: 'Type ' + data.field,
                         onChange: function onChange(event, target, value) {

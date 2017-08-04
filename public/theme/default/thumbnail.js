@@ -209,7 +209,7 @@ class Thumbnail extends React.Component {
                                                 float: 'left',
                                                 top: 0,
                                                 left: 0,
-                                                position : selected == key ? 'relative' : 'absolute',
+                                                position: selected == key ? 'relative' : 'absolute',
                                                 opacity: selected == key ? 1 : 0,
                                                 transition: '.5s all'
                                             }}
@@ -224,7 +224,7 @@ class Thumbnail extends React.Component {
                             borderBottom: '2px solid rgb(230,230,230)',
                             marginLeft: '11%',
                             marginTop: 60,
-                            width : '80%',
+                            width: '80%',
                         }}
                     >
 

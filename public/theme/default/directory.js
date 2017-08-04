@@ -13,17 +13,24 @@ class Hyperlink extends React.Component {
     }
 
     render () {
-
-        const { name, hyperlink, index, current,onMouseEnter } = this.props;
-        const { mouseOver } = this.state;
+        const {
+            name,
+            hyperlink,
+            index,
+            current,
+            onMouseEnter
+        } = this.props;
+        const {
+            mouseOver
+        } = this.state;
 
         return (
 
             <span
                 style = {{
-                    position : 'relative',
-                    display : 'inline-block',
-                    borderBottom   : '2px solid rgb(76, 211, 173)',
+                    position: 'relative',
+                    display: 'inline-block',
+                    borderBottom: '2px solid rgb(76, 211, 173)',
                 }}
                 onMouseEnter = { () => {
 

@@ -165,7 +165,8 @@ class DialogHelper extends Component {
                         <div
                             key = {key}
                             style = {{
-                                width: '100%'
+                                width: '100%',
+                                height: '100%'
                             }}
                         >
                             {this.components[field.dataType](field, key)}

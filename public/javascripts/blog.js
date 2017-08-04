@@ -23014,8 +23014,7 @@ var Dialog = function (_React$Component) {
                             {
                                 style: {
                                     position: 'relative',
-                                    height: '100%',
-                                    overflow: 'auto'
+                                    height: '100%'
                                 }
                             },
                             children
@@ -46525,7 +46524,8 @@ var DialogHelper = function (_Component) {
                         {
                             key: key,
                             style: {
-                                width: '100%'
+                                width: '100%',
+                                height: '100%'
                             }
                         },
                         _this2.components[field.dataType](field, key)

@@ -253,8 +253,7 @@ class Dialog extends React.Component {
                         <div
                             style = {{
                                 position: 'relative',
-                                height: '100%',
-                                overflow: 'auto'
+                                height: '100%',                                
                             }}
                         >
                             {children}

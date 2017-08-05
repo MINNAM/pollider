@@ -24,7 +24,7 @@ class Profile extends React.Component {
                     className = 'toggle-close-button'
                 >
                     <CloseButton
-                        color = 'rgb(220,220,220)'
+                        color = 'rgba(244,67,54,0.5)'
                         style = {{
                             left: 0,
                             position: 'relative',
@@ -32,7 +32,7 @@ class Profile extends React.Component {
                             visibility: allowClose === false ? 'hidden' : '',
                         }}
                         hoverStyle  = {{
-                            stroke: 'rgb(160,160,160)'
+                            stroke: 'rgba(244,67,54,1)'
                         }}
                         size    = {17}
                         onClick = {() => {

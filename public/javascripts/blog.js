@@ -13759,44 +13759,16 @@ var Footer = function Footer(props) {
 
 
     return _react2.default.createElement(
-        _wrapper2.default,
-        {
-            innerStyle: _extends({}, innerContentStyle, {
-                maxWidth: 'none'
-            }),
-            style: {
-                display: 'inline-block'
-            }
-        },
+        'div',
+        { id: 'post-footer' },
         _react2.default.createElement(
             _wrapper2.default,
             {
-                innerStyle: _extends({
-                    position: 'relative'
-                }, innerContentStyle, {
-                    maxWidth: 'none',
-                    marginTop: 35
-                })
-            },
-            _react2.default.createElement(
-                'span',
-                {
-                    style: {
-                        float: 'right'
-                    }
-                },
-                _react2.default.createElement(_directory2.default, {
-                    model: model.hyperlinks
-                })
-            )
-        ),
-        _react2.default.createElement(
-            'div',
-            {
+                innerStyle: _extends({}, innerContentStyle, {
+                    maxWidth: 'none'
+                }),
                 style: {
-                    width: '100%',
-                    position: 'relative',
-                    marginTop: 12
+                    display: 'inline-block'
                 }
             },
             _react2.default.createElement(
@@ -13805,105 +13777,137 @@ var Footer = function Footer(props) {
                     innerStyle: _extends({
                         position: 'relative'
                     }, innerContentStyle, {
-                        maxWidth: 'none'
+                        maxWidth: 'none',
+                        marginTop: 35
                     })
                 },
                 _react2.default.createElement(
                     'span',
                     {
                         style: {
-                            color: 'rgb(120,120,120)',
-                            display: 'inline-block',
-                            fontSize: 12,
-                            letterSpacing: 2
+                            float: 'right'
                         }
                     },
-                    _react2.default.createElement(
-                        'span',
-                        {
-                            style: {
-                                lineHeight: '24px',
-                                float: 'left',
-                                marginRight: 7.5
-                            }
-                        },
-                        '\xA92017 Made with '
-                    ),
-                    _react2.default.createElement(
-                        'svg',
-                        {
-                            viewBox: '0 0 50 50',
-                            width: 24,
-                            style: {
-                                float: 'left'
-                            }
-                        },
-                        _react2.default.createElement('path', {
-                            style: {
-                                fill: '#F9B7B1'
-                            },
-
-                            d: 'M44.8,20.3c-0.1,0.4-0.3,1.7-0.9,3.1c-1.9,4.6-6.6,7-9.9,9.9c-2.2,1.9-5.5,4.9-8.9,8.9c-3.5-4-6.7-6.9-8.9-8.9 c-5.7-4.9-8.3-5.9-9.9-9.9c-0.6-1.5-2.1-5.8,0-10C6.6,12.7,8,10,11.1,8.6c3.7-1.7,7.1-0.4,8,0c4.7,1.8,5.6,4.4,5.9,5.2 c0.1-0.2,0.2-0.6,0.5-1.1c0.1-0.2,0.7-1.2,2-2.3'
-                        }),
-                        _react2.default.createElement('path', {
-                            style: {
-                                fill: 'rgba(0,0,0,0.1)',
-                                transform: 'translate(-1px,1px)'
-                            },
-                            d: 'M44.8,20.3c-0.4,0.4-1.6,1.2-3.5,1.9c-1.3,0.4-4.6,1.6-8,0c-3.1-1.4-4.5-4.1-4.9-4.9c-1.4-2.9-1.1-5.7-0.9-6.9'
-                        }),
-                        _react2.default.createElement('path', {
-                            style: {
-                                fill: 'rgb(240,240,240)'
-                            },
-                            d: 'M44.8,20.3c-0.4,0.4-1.6,1.2-3.5,1.9c-1.3,0.4-4.6,1.6-8,0c-3.1-1.4-4.5-4.1-4.9-4.9c-1.4-2.9-1.1-5.7-0.9-6.9'
+                    _react2.default.createElement(_directory2.default, {
+                        model: model.hyperlinks
+                    })
+                )
+            ),
+            _react2.default.createElement(
+                'div',
+                {
+                    style: {
+                        width: '100%',
+                        position: 'relative',
+                        marginTop: 12
+                    }
+                },
+                _react2.default.createElement(
+                    _wrapper2.default,
+                    {
+                        innerStyle: _extends({
+                            position: 'relative'
+                        }, innerContentStyle, {
+                            maxWidth: 'none'
                         })
-                    ),
+                    },
                     _react2.default.createElement(
                         'span',
                         {
                             style: {
-                                lineHeight: '24px',
-                                float: 'left',
-                                marginLeft: 7.5,
-                                borderBottom: '2px solid rgb(76, 211, 173)'
+                                color: 'rgb(120,120,120)',
+                                display: 'inline-block',
+                                fontSize: 12,
+                                letterSpacing: 2
                             }
                         },
-                        ' Pollider '
-                    )
-                ),
-                _react2.default.createElement(_fontAwesomeButton2.default, {
-                    className: 'fa-github',
-                    size: 24,
-                    iconStyle: {
-                        color: 'rgb(210,210,210)'
-                    },
-                    hoverStyle: { color: 'rgb(60,60,60)' },
-                    parentStyle: {
-                        position: 'relative',
-                        float: 'right'
-                    },
-                    onClick: function onClick() {
-                        window.open('https://github.com/minnam');
-                    }
-                }),
-                _react2.default.createElement(_fontAwesomeButton2.default, {
-                    className: 'fa-vimeo',
-                    size: 22,
-                    iconStyle: {
-                        color: 'rgb(210,210,210)'
-                    },
-                    hoverStyle: { color: 'rgb(60,60,60)' },
-                    parentStyle: {
-                        position: 'relative',
-                        float: 'right',
-                        marginTop: 2,
-                        marginRight: 22
-                    },
-                    onClick: function onClick() {
-                        window.open('https://vimeo.com/minnam');
-                    }
-                })
+                        _react2.default.createElement(
+                            'span',
+                            {
+                                style: {
+                                    lineHeight: '24px',
+                                    float: 'left',
+                                    marginRight: 7.5
+                                }
+                            },
+                            '\xA92017 Made with '
+                        ),
+                        _react2.default.createElement(
+                            'svg',
+                            {
+                                viewBox: '0 0 50 50',
+                                width: 24,
+                                style: {
+                                    float: 'left'
+                                }
+                            },
+                            _react2.default.createElement('path', {
+                                style: {
+                                    fill: '#F9B7B1'
+                                },
+
+                                d: 'M44.8,20.3c-0.1,0.4-0.3,1.7-0.9,3.1c-1.9,4.6-6.6,7-9.9,9.9c-2.2,1.9-5.5,4.9-8.9,8.9c-3.5-4-6.7-6.9-8.9-8.9 c-5.7-4.9-8.3-5.9-9.9-9.9c-0.6-1.5-2.1-5.8,0-10C6.6,12.7,8,10,11.1,8.6c3.7-1.7,7.1-0.4,8,0c4.7,1.8,5.6,4.4,5.9,5.2 c0.1-0.2,0.2-0.6,0.5-1.1c0.1-0.2,0.7-1.2,2-2.3'
+                            }),
+                            _react2.default.createElement('path', {
+                                style: {
+                                    fill: 'rgba(0,0,0,0.1)',
+                                    transform: 'translate(-1px,1px)'
+                                },
+                                d: 'M44.8,20.3c-0.4,0.4-1.6,1.2-3.5,1.9c-1.3,0.4-4.6,1.6-8,0c-3.1-1.4-4.5-4.1-4.9-4.9c-1.4-2.9-1.1-5.7-0.9-6.9'
+                            }),
+                            _react2.default.createElement('path', {
+                                style: {
+                                    fill: 'rgb(240,240,240)'
+                                },
+                                d: 'M44.8,20.3c-0.4,0.4-1.6,1.2-3.5,1.9c-1.3,0.4-4.6,1.6-8,0c-3.1-1.4-4.5-4.1-4.9-4.9c-1.4-2.9-1.1-5.7-0.9-6.9'
+                            })
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            {
+                                style: {
+                                    lineHeight: '24px',
+                                    float: 'left',
+                                    marginLeft: 7.5,
+                                    borderBottom: '2px solid rgb(76, 211, 173)'
+                                }
+                            },
+                            ' Pollider '
+                        )
+                    ),
+                    _react2.default.createElement(_fontAwesomeButton2.default, {
+                        className: 'fa-github',
+                        size: 24,
+                        iconStyle: {
+                            color: 'rgb(210,210,210)'
+                        },
+                        hoverStyle: { color: 'rgb(60,60,60)' },
+                        parentStyle: {
+                            position: 'relative',
+                            float: 'right'
+                        },
+                        onClick: function onClick() {
+                            window.open('https://github.com/minnam');
+                        }
+                    }),
+                    _react2.default.createElement(_fontAwesomeButton2.default, {
+                        className: 'fa-vimeo',
+                        size: 22,
+                        iconStyle: {
+                            color: 'rgb(210,210,210)'
+                        },
+                        hoverStyle: { color: 'rgb(60,60,60)' },
+                        parentStyle: {
+                            position: 'relative',
+                            float: 'right',
+                            marginTop: 2,
+                            marginRight: 22
+                        },
+                        onClick: function onClick() {
+                            window.open('https://vimeo.com/minnam');
+                        }
+                    })
+                )
             )
         )
     );
@@ -15818,7 +15822,7 @@ var Body = function (_React$Component) {
     }, {
         key: 'offsetRight',
         value: function offsetRight(element) {
-
+            console.log(this.refs.nav.parentNode);
             return (document.body.offsetWidth - this.refs.nav.parentNode.offsetWidth) / 2;
         }
     }, {
@@ -15856,7 +15860,7 @@ var Body = function (_React$Component) {
             var navTop = void 0;
 
             if (nav) {
-                navRight = this.offsetRight(nav.parentNode) + (toggled ? 175 : 0);
+                navRight = this.offsetRight(nav.parentNode) + (toggled ? nav.parentNode.offsetWidth / 2 : 0);
                 navTop = screen.availHeight / 4 - 30;
             }
 
@@ -15894,7 +15898,7 @@ var Body = function (_React$Component) {
                                     top: navTop,
                                     zIndex: 20,
                                     right: navRight,
-                                    transition: allowTransition ? '.5s all' : '.5 right'
+                                    transition: allowTransition ? '.4s all' : '.4 right'
                                 }
                             },
                             _react2.default.createElement(
@@ -22353,7 +22357,6 @@ var Contact = function (_React$Component) {
                 'div',
                 {
                     style: _extends({
-                        width: 350,
                         height: '100%',
                         background: 'white'
                     }, style)
@@ -22364,13 +22367,13 @@ var Contact = function (_React$Component) {
                         className: 'toggle-close-button'
                     },
                     _react2.default.createElement(_closeButton2.default, {
-                        color: 'rgb(220,220,220)',
+                        color: 'rgba(244,67,54,0.5)',
                         style: {
                             position: 'relative',
                             left: 0,
                             top: 0
                         },
-                        hoverStyle: { stroke: 'rgb(160,160,160)' },
+                        hoverStyle: { stroke: 'rgba(244,67,54,1)' },
                         size: 17,
                         onClick: function onClick() {
                             toggle(null);
@@ -22603,7 +22606,7 @@ var Profile = function (_React$Component) {
                         className: 'toggle-close-button'
                     },
                     _react2.default.createElement(_components.CloseButton, {
-                        color: 'rgb(220,220,220)',
+                        color: 'rgba(244,67,54,0.5)',
                         style: {
                             left: 0,
                             position: 'relative',
@@ -22611,7 +22614,7 @@ var Profile = function (_React$Component) {
                             visibility: allowClose === false ? 'hidden' : ''
                         },
                         hoverStyle: {
-                            stroke: 'rgb(160,160,160)'
+                            stroke: 'rgba(244,67,54,1)'
                         },
                         size: 17,
                         onClick: function onClick() {
@@ -27178,7 +27181,6 @@ var ElementView = function (_Component) {
                                 },
                                 _react2.default.createElement('img', {
                                     className: 'element',
-                                    ref: 'element',
                                     onLoad: function onLoad() {
                                         queueElement(element);
                                     },
@@ -46270,7 +46272,8 @@ var Index = function (_Component) {
                         {
                             id: type != 'home' && type != 'four-oh-four' ? 'content-parent-container' + (toggle ? '-toggled' : '') : 'content-parent-container',
                             style: {
-                                height: '100%'
+                                height: '100%',
+                                transition: '.4s ease all'
                             }
                         },
                         content ? _react2.default.cloneElement(content, {

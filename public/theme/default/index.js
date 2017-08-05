@@ -221,6 +221,7 @@ class Index extends Component {
                         id = {type != 'home' && type != 'four-oh-four' ? `content-parent-container${toggle ? '-toggled' : ''}` : 'content-parent-container'}
                         style = {{
                             height: '100%',
+                            transition: '.4s ease all',
                         }}
                     >
                         {

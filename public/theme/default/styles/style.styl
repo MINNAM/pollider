@@ -59,10 +59,19 @@ html, body {
 
     div#content-parent-container {
         margin-right: 0
+        #post-footer, #post-header, #post-content {
+            transform: none;
+            transition: .4s all
+        }
     }
 
     div#content-parent-container-toggled {
-        margin-right: 350px
+        #post-footer, #post-header, #post-content {
+            transform: translateX(-50%);
+            opacity: .25;
+            transition: .4s all
+        }
+
     }
 
     .toggle-close-button {
@@ -73,7 +82,12 @@ html, body {
     }
 
     div.toggle-content {
-        width: 350px;
+        padding: 0 150px 0 150px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        width: 100%;
     }
 
     #profile-home {
@@ -198,24 +212,24 @@ html, body {
     }
 
     div#profile-container {
-        width: 450px;
-        right: -450px;
+        width: 50%;
+        right: -50%;
     }
 
     div#profile-container-toggled {
         right: 0px;
-        width: 450px;
+        width: 50%;
     }
 
     div#contact-container {
-        width: 450px;
-        right: -450px;
+        width: 50%;
+        right: -50%;
         opacity: 0
     }
 
     div#contact-container-toggled {
         right: 0px;
-        width: 450px;
+        width: 50%;
         opacity: 1
     }
 
@@ -229,7 +243,7 @@ html, body {
 
     div.content .inner-content {
         width : 100%;
-        max-width : 1300px;
+        max-width : 1200px;
         padding : 0 150px 0 150px;
         display: table;
     }
@@ -310,7 +324,6 @@ html, body {
         opacity: 0;
 
         img {
-            width: 80%;
             position: absolute
             top: 30%
             left: 50%
@@ -333,7 +346,6 @@ html, body {
         opacity: 1;
 
         img {
-            width: 80%;
             position: absolute
             top: 50%
             left: 50%
@@ -417,6 +429,18 @@ html, body {
 
         div#content-parent-container {
             margin-right: 0
+        }
+
+        div#content-parent-container-toggled {
+            #post-footer, #post-header, #post-content {
+                transform: none;
+                transition: .4s all
+                opacity: 1;
+            }
+
+            #post-nav {
+                display : none
+            }
         }
 
         .scroll-down-button {
@@ -550,10 +574,8 @@ html, body {
 
         div.toggle-content {
             margin-top: 0;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%,-50%);
+            padding: 0 50px 0 50px
+
         }
 
         div#content-parent-container-toggled {

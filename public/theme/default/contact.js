@@ -185,7 +185,6 @@ class Contact extends React.Component {
 
             <div
                 style = {{
-                    width: 350,
                     height: '100%',
                     background: 'white',
                     ...style
@@ -196,13 +195,13 @@ class Contact extends React.Component {
                     className = 'toggle-close-button'
                 >
                     <CloseButton
-                        color   = 'rgb(220,220,220)'
+                        color = 'rgba(244,67,54,0.5)'
                         style = {{
                             position: 'relative',
                             left: 0,
                             top: 0,
                         }}
-                        hoverStyle  = {{stroke : 'rgb(160,160,160)'}}
+                        hoverStyle  = {{stroke : 'rgba(244,67,54,1)'}}
                         size    = { 17 }
                         onClick = {() => {
                             toggle(null);

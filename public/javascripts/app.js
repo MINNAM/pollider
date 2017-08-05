@@ -29234,7 +29234,6 @@ var ElementView = function (_Component) {
                                 },
                                 _react2.default.createElement('img', {
                                     className: 'element',
-                                    ref: 'element',
                                     onLoad: function onLoad() {
                                         queueElement(element);
                                     },

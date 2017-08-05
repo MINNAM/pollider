@@ -253,8 +253,7 @@ class ElementView extends Component {
                                 }}
                             >
                                 <img
-                                    className = 'element'
-                                    ref = 'element'
+                                    className = 'element'                                                                         
                                     onLoad = {() => {
                                         queueElement(element);
                                     }}

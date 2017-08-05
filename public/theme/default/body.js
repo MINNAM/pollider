@@ -42,7 +42,7 @@ class Body extends React.Component {
     }
 
     offsetRight (element) {
-
+        console.log(this.refs.nav.parentNode)
         return (document.body.offsetWidth - (this.refs.nav.parentNode.offsetWidth) ) / 2;
     }
 
@@ -57,7 +57,7 @@ class Body extends React.Component {
             displayNav,
             style,
             innerContentStyle,
-            displayFooter            
+            displayFooter
         } = this.props;
         const {
             scrollY,
@@ -81,7 +81,7 @@ class Body extends React.Component {
         let navTop;
 
         if (nav) {
-            navRight = this.offsetRight(nav.parentNode) + (toggled ? 175 : 0)
+            navRight = this.offsetRight(nav.parentNode) + (toggled ? nav.parentNode.offsetWidth/2 : 0)
             navTop = (screen.availHeight / 4) - 30;
         }
 
@@ -115,7 +115,7 @@ class Body extends React.Component {
                                     top: navTop,
                                     zIndex: 20,
                                     right: navRight,
-                                    transition: allowTransition ? '.5s all' : '.5 right',
+                                    transition: allowTransition ? '.4s all' : '.4 right',
                                 }}
                             >
                                 <div>

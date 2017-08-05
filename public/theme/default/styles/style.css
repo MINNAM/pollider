@@ -97,8 +97,18 @@ body {
 #pollider-public div#content-parent-container {
   margin-right: 0;
 }
-#pollider-public div#content-parent-container-toggled {
-  margin-right: 350px;
+#pollider-public div#content-parent-container #post-footer,
+#pollider-public div#content-parent-container #post-header,
+#pollider-public div#content-parent-container #post-content {
+  transform: none;
+  transition: 0.4s all;
+}
+#pollider-public div#content-parent-container-toggled #post-footer,
+#pollider-public div#content-parent-container-toggled #post-header,
+#pollider-public div#content-parent-container-toggled #post-content {
+  transform: translateX(-50%);
+  opacity: 0.25;
+  transition: 0.4s all;
 }
 #pollider-public .toggle-close-button {
   margin-top: 80px;
@@ -107,7 +117,12 @@ body {
   visibility: hidden;
 }
 #pollider-public div.toggle-content {
-  width: 350px;
+  padding: 0 150px 0 150px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
 }
 #pollider-public #profile-home {
   right: 0;
@@ -212,21 +227,21 @@ body {
   padding-right: 100px;
 }
 #pollider-public div#profile-container {
-  width: 450px;
-  right: -450px;
+  width: 50%;
+  right: -50%;
 }
 #pollider-public div#profile-container-toggled {
   right: 0px;
-  width: 450px;
+  width: 50%;
 }
 #pollider-public div#contact-container {
-  width: 450px;
-  right: -450px;
+  width: 50%;
+  right: -50%;
   opacity: 0;
 }
 #pollider-public div#contact-container-toggled {
   right: 0px;
-  width: 450px;
+  width: 50%;
   opacity: 1;
 }
 #pollider-public div.content {
@@ -237,7 +252,7 @@ body {
 }
 #pollider-public div.content .inner-content {
   width: 100%;
-  max-width: 1300px;
+  max-width: 1200px;
   padding: 0 150px 0 150px;
   display: table;
 }
@@ -290,7 +305,6 @@ body {
   transition: 0.4s all;
 }
 #pollider-public .image-enlarge-container img {
-  width: 80%;
   position: absolute;
   top: 30%;
   left: 50%;
@@ -310,7 +324,6 @@ body {
   transition: 0.4s all;
 }
 #pollider-public .image-enlarge-container-toggled img {
-  width: 80%;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -381,6 +394,16 @@ body {
   }
   #pollider-public div#content-parent-container {
     margin-right: 0;
+  }
+  #pollider-public div#content-parent-container-toggled #post-footer,
+  #pollider-public div#content-parent-container-toggled #post-header,
+  #pollider-public div#content-parent-container-toggled #post-content {
+    transform: none;
+    transition: 0.4s all;
+    opacity: 1;
+  }
+  #pollider-public div#content-parent-container-toggled #post-nav {
+    display: none;
   }
   #pollider-public .scroll-down-button {
     display: inline-block;
@@ -496,10 +519,7 @@ body {
   }
   #pollider-public div.toggle-content {
     margin-top: 0;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    padding: 0 50px 0 50px;
   }
   #pollider-public div#content-parent-container-toggled {
     margin-right: 0;

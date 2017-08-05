@@ -160,12 +160,10 @@ class Project extends ProjectBase {
 
         this.model.data = data;
 
-        this.parentModel.updatePost( this.model, () => {
-
+        this.parentModel.updatePost(this.model, () => {
             this.circularStructure( true );
 
             done();
-
         });
 
 

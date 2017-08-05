@@ -21,7 +21,7 @@ const displayRobot = (model) => {
 export default ({ body, title, initialState }) => {
     const model = JSON.parse( initialState ).model;
     let font = '';
-    
+
     FONT.map( ( element )=> {
         font += `<link href="${ element }" rel="stylesheet" />`;
     });
@@ -39,6 +39,7 @@ export default ({ body, title, initialState }) => {
             font
         }
         <link rel="shortcut icon" href="/images/favicon.png"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
         <link rel="stylesheet" href="/stylesheets/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.css" />

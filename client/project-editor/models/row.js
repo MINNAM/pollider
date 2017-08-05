@@ -38,29 +38,22 @@ class Row {
 
     }
 
-    copy ( row, copyIndex ) {
-
-        if ( copyIndex ) {
-
+    copy (row, copyIndex) {
+        if (copyIndex) {
             this.index = row.index;
-
         }
 
         this.dynamic = row.dynamic;
 
         for ( let i = 0; i < row.cols.length; i++ ) {
-
-            let newCol = new Col();
+            let newCol = new Col();            
 
             newCol.copy( row.cols[ i ] );
 
             newCol.parent = this;
 
             this.cols[ i ] = newCol;
-
         }
-
-
     }
 
     html () {

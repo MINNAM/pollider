@@ -37,10 +37,10 @@ class ButtonBase extends React.Component {
             <span
                 className = {className}
                 style = { parentStyle }
-                onClick = { () => {
+                onClick = { (event) => {
 
                     if ( this.props.onClick ) {
-                        this.props.onClick();
+                        this.props.onClick(event);
                     }
 
                 }}

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-
 import {SITE} from '../../global.js';
+import MaterialButton from '../../../public/theme/default/components/ui/buttons/material-button.js'
 import FontAwesomeButton from '../../../public/theme/default/components/ui/buttons/font-awesome-button.js';
 
 const RESERVES = [
@@ -224,7 +224,7 @@ class ElementView extends Component {
                                 src = { `/${ contentModel._hyperlink }` }
                                 alt = { contentModel.data ? (contentModel.data[ 'Alt Text' ] ? contentModel.data[ 'Alt Text' ].content: ''): '' }
                                 style = {{
-                                    width: (col.padding * 100) + '%', // 70
+                                    width: (col.elementWidth * 100) + '%', // 70
                                 }}
                             />
                             </div>
@@ -253,7 +253,7 @@ class ElementView extends Component {
                                 }}
                             >
                                 <img
-                                    className = 'element'                                                                         
+                                    className = 'element'
                                     onLoad = {() => {
                                         queueElement(element);
                                     }}
@@ -267,6 +267,108 @@ class ElementView extends Component {
                 } else {
                     return <div></div>;
                 }
+            break;
+
+            case 'video':
+                if (contentModel) {
+                    return (
+                        <div
+                            style = {{
+                                position: 'relative'
+                            }}
+                            onClick = {(event) => {
+                                event.stopPropagation();
+
+                                if (this.state.videoStatus === false) {
+                                    this.setState({
+                                        videoStatus: true
+                                    });
+                                    this.refs.video.play();
+                                } else {
+                                    this.setState({
+                                        videoStatus: false
+                                    });
+                                    this.refs.video.pause();
+                                }
+                            }}
+                            ref = 'video-container'
+                        >
+                            <video
+                                style = {{
+                                    width: '100%',
+                                }}
+                                ref = 'video'
+                                autoPlay
+                                loop
+                            >
+                                <source src = {`/${contentModel._hyperlink}`}/>
+                            </video>
+                            <div
+                                style = {{
+                                    position: 'absolute',
+                                    width: '100%',
+                                    height: this.refs.video ? this.refs.video.offsetHeight : '100%',
+                                    top: 0,
+                                    left: 0,
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                <div
+                                    style = {{
+                                        width: '100%',
+                                        height: '100%',
+                                        position: 'relative',
+                                        opacity: this.state.videoStatus === false ? 1 : 0,
+                                        background: 'rgba(60,60,60,0.5)'
+                                    }}
+                                >
+                                    <span
+                                        style = {{
+                                            fontSize: 22,
+                                            color: 'white',
+                                            position: 'absolute',
+                                            letterSpacing: 2,
+                                            left: '50%',
+                                            top: '50%',
+                                            transform: 'translate(-50%,-50%)'
+                                        }}
+                                    >
+                                        PAUSED
+                                    </span>
+                                </div>
+                                <MaterialButton
+                                    iconName = {'fullscreen'}
+                                    size = { 22 }
+                                    iconStyle = {{
+                                        color: 'white',
+                                        textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                                    }}
+                                    hoverStyle  = {{ color: 'rgb(60,60,60)' }}
+                                    parentStyle = {{
+                                        position: 'absolute',
+                                        bottom: 5,
+                                        right: 5
+                                    }}
+                                    onClick = {(event) => {
+                                        event.stopPropagation();
+                                        if (this.refs.video.requestFullscreen) {
+                                            this.refs.video.requestFullscreen();
+                                        } else if (this.refs.video.mozRequestFullScreen) {
+                                            this.refs.video.mozRequestFullScreen();
+                                        } else if (this.refs.video.webkitRequestFullscreen) {
+                                            this.refs.video.webkitRequestFullscreen();
+                                        }
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div/>
+                    )
+                }
+
             break;
 
             case 'code': {

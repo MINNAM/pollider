@@ -346,17 +346,12 @@ class ProjectEditor extends React.Component {
                     },
 
                     style: {
-
                         dialog: {
-
                             width: '50%',
                             height: 'calc(100% - 50px)',
                             top: 50
-
                         }
-
                     }
-
                 });
 
             break;
@@ -364,70 +359,94 @@ class ProjectEditor extends React.Component {
             case 'resize-image':
 
                 this.openDialog({
-
                     fields: [
                         {
                             title: 'Resize Image',
                             dataType: 'slider',
                             default: data.default
                         }
-
-                   ],
+                    ],
                     actions: {
-
                         execute: (_data) => {
-
-                            model.setPadding(_data);
-
+                            model.setElementWidth(_data);
                             this.setState({
-
                                 preview: this.props.model
-
                             });
-
                         },
 
                         update: (_data) => {
-
-                            model.setPadding(_data);
-
+                            model.setElementWidth(_data);
                             this.setState({
-
                                 preview: this.props.model
-
                             });
-
                         },
 
                         cancel: () => {
-
-                            model.padding = prevModel.padding;
-
+                            model.elementWidth = prevModel.elementWidth;
                             this.setState({
-
                                 preview: this.props.model
-
                             });
-
                         }
 
                     },
 
                     style: {
-
                         dialog: {
-
                             width: '50%',
                             height: 'calc(100% - 50px)',
                             top: 50
-
                         }
-
                     }
 
                 });
+            break;
 
+            case 'set-padding':
+                this.openDialog({
+                    options: {
+                        executeOnEnter: true
+                    },
+                    fields: [
+                        {
+                            title: 'Set Padding',
+                            dataType: 'set-padding',
+                            default: data.default,
+                        }
+                   ],
+                    actions: {
+                        execute: (_data) => {
+                            model.setPadding(_data);
+                            this.setState({
+                                preview: this.props.model
+                            });
 
+                        },
+
+                        update: (_data) => {
+                            model.setPadding(_data);
+                            this.setState({
+                                preview: this.props.model
+                            });
+                        },
+
+                        cancel: () => {
+                            model.padding = prevModel.padding;
+                            this.setState({
+                                preview: this.props.model
+                            });
+                        }
+
+                    },
+
+                    style: {
+                        dialog: {
+                            width: '50%',
+                            height: 'calc(100% - 50px)',
+                            top: 50
+                        }
+                    }
+
+                });
 
             break;
 

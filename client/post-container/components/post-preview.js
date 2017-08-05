@@ -96,6 +96,18 @@ class PostPreview extends Component {
                     </div>
                 );
             break;
+            case 'video':
+                return (
+                    <video
+                        controls
+                        style = {{
+                            width: '100%'
+                        }}
+                    >
+                        <source src = {this.props.hyperlink + '/' + model._hyperlink}/>
+                    </video>
+                )
+            break;
             case 'image':
                 if (model.hide.path == null) {
                     return this.displayDefault();

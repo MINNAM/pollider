@@ -78,9 +78,7 @@ class ProjectDialog extends DialogHelper {
 
                                 }
                             }
-
                             onUpdate = { this.props.model.actions.update }
-
                         />
                     </div>
                 )
@@ -310,14 +308,12 @@ class ProjectDialog extends DialogHelper {
                 );
             },
 
-            'element-selector' : ( data, key ) => {
-
+            'element-selector' : (data, key) => {
                 const style = {
                     padding: 0,
                     textAlign: 'center',
                     cursor : 'pointer'
                 };
-
 
                 return (
 
@@ -328,7 +324,7 @@ class ProjectDialog extends DialogHelper {
                     >
                         { this.setTitle( data ) }
                         <div className = 'row'>
-                            <div style = {style} className = 'col-sm-12' onTouchTap = { function () { this.onExecute({ type : 'text' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-12' onTouchTap = {() => { this.onExecute({ type : 'text' }); }}>
                                 <MaterialButton
                                     style = {{
                                         width: '100%'
@@ -337,7 +333,7 @@ class ProjectDialog extends DialogHelper {
                                     label = { 'TEXT' }
                                 />
                             </div>
-                            <div style = {style} className = 'col-sm-12' onTouchTap = { function () { this.onExecute({ type : 'image' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-12' onTouchTap = {() => { this.onExecute({ type : 'image' }); }}>
                                 <MaterialButton
                                     style = {{
                                         width: '100%'
@@ -346,7 +342,16 @@ class ProjectDialog extends DialogHelper {
                                     label = { 'IMAGE' }
                                 />
                             </div>
-                            <div style = {style} className = 'col-sm-12' onTouchTap = { function () { this.onExecute({ type : 'embed' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-12' onTouchTap = {() => { this.onExecute({ type : 'video' }); }}>
+                                <MaterialButton
+                                    style = {{
+                                        width: '100%'
+                                    }}
+                                    icon  = { 'videocam' }
+                                    label = { 'VIDEO' }
+                                />
+                            </div>
+                            <div style = {style} className = 'col-sm-12' onTouchTap = {() => { this.onExecute({ type : 'embed' }); }}>
                                 <MaterialButton
                                     style = {{
                                         width: '100%'
@@ -355,7 +360,7 @@ class ProjectDialog extends DialogHelper {
                                     label = { 'embed' }
                                 />
                             </div>
-                            <div style = {style} className = 'col-sm-12' onTouchTap = { function () { this.onExecute({ type : 'code' }); }.bind( this ) }>
+                            <div style = {style} className = 'col-sm-12' onTouchTap = {() => { this.onExecute({ type : 'code' }); }}>
                                 <MaterialButton
                                     style = {{
                                         width: '100%'
@@ -371,8 +376,125 @@ class ProjectDialog extends DialogHelper {
 
             },
 
-            'slider' : ( data, key ) => {
+            'set-padding' : (data,key) => {
 
+                return (
+                    <div>
+                        {this.setTitle(data)}
+                        <TextField
+                            style = {{
+                                width : '100%',
+                            }}
+                            floatingLabelText = 'Top'
+                            underlineFocusStyle = {{
+                                color : THEME.primaryColor
+                            }}
+                            value = {this.state.values ? this.state.values.top : data.default.top + '' }
+                            autoFocus = {true}
+                            onChange = {(event) => {
+                                this.setState({
+                                    error : false,
+                                    values : {
+                                        ...data.default,
+                                        ...this.state.values,
+                                        top: event.target.value,
+                                    }
+                                });
+                                if (this.updating) {
+                                    clearTimeout(this.updating);
+                                    this.updating = null;
+                                }
+                                this.updating = setTimeout(() => {
+                                    this.props.model.actions.update(this.state.values);
+                                }, 100);
+                            }}
+                        />
+                        <TextField
+                            style = {{
+                                width : '100%',
+                            }}
+                            floatingLabelText = 'Right'
+                            underlineFocusStyle = {{
+                                color : THEME.primaryColor
+                            }}
+                            value = {this.state.values ? this.state.values.right : data.default.right + '' }
+                            onChange = {(event) => {
+                                this.setState({
+                                    error : false,
+                                    values : {
+                                        ...data.default,
+                                        ...this.state.values,
+                                        right: event.target.value,
+                                    }
+                                });
+                                if (this.updating) {
+                                    clearTimeout(this.updating);
+                                    this.updating = null;
+                                }
+                                this.updating = setTimeout(() => {
+                                    this.props.model.actions.update(this.state.values);
+                                }, 100);
+                            }}
+                        />
+                        <TextField
+                            style = {{
+                                width : '100%',
+                            }}
+                            floatingLabelText = 'Bottom'
+                            underlineFocusStyle = {{
+                                color : THEME.primaryColor
+                            }}
+                            value = {this.state.values ? this.state.values.bottom : data.default.bottom + '' }
+                            onChange = {(event) => {
+                                this.setState({
+                                    error : false,
+                                    values : {
+                                        ...data.default,
+                                        ...this.state.values,
+                                        bottom: event.target.value,
+                                    }
+                                });
+                                if (this.updating) {
+                                    clearTimeout(this.updating);
+                                    this.updating = null;
+                                }
+                                this.updating = setTimeout(() => {
+                                    this.props.model.actions.update(this.state.values);
+                                }, 100);
+                            }}
+                        />
+                        <TextField
+                            style = {{
+                                width : '100%',
+                            }}
+                            floatingLabelText = 'Left'
+                            underlineFocusStyle = {{
+                                color : THEME.primaryColor
+                            }}
+                            value = {this.state.values ? this.state.values.left : data.default.left + '' }
+                            onChange = {(event) => {
+                                this.setState({
+                                    error : false,
+                                    values : {
+                                        ...data.default,
+                                        ...this.state.values,
+                                        left: event.target.value,
+                                    }
+                                });
+                                if (this.updating) {
+                                    clearTimeout(this.updating);
+                                    this.updating = null;
+                                }
+                                this.updating = setTimeout(() => {
+                                    this.props.model.actions.update(this.state.values);
+                                }, 100);
+                            }}
+                        />
+                    </div>
+                );
+            },
+
+            'slider' : ( data, key ) => {
                 return (
                     <div>
                         { this.setTitle( data ) }
@@ -409,7 +531,6 @@ class ProjectDialog extends DialogHelper {
                                             error: false,
                                             values: value
                                         });
-                                        console.log( this.state.values );
                                         this.props.model.actions.update(value);
                                     }}
                                 />

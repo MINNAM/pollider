@@ -98,7 +98,8 @@ class ColView extends Component {
                             float: 'none',
                             display: 'table-cell',
                             // why regular col 100% and this has to be 50% while they are all table-cell
-                            position: 'relative'
+                            position: 'relative',
+                            padding: model.padding ? `${model.padding.top} ${model.padding.right} ${model.padding.bottom} ${model.padding.left}` : 0
                         }}
                     >
                         <div
@@ -161,7 +162,8 @@ class ColView extends Component {
                             float: 'none',
                             display: 'table-cell',
                             // why regular col 100% and this has to be 50% while they are all table-cell
-                            position: 'relative'
+                            position: 'relative',
+                            padding: model.padding ? `${model.padding.top} ${model.padding.right} ${model.padding.bottom} ${model.padding.left}` : 0
                         }}
                     >
                         <ElementView
@@ -185,7 +187,8 @@ class ColView extends Component {
                 style = {{
                     float: 'none',
                     display: 'table-cell',
-                    verticalAlign: 'middle'
+                    verticalAlign: 'middle',
+                    padding: model.padding ? `${model.padding.top} ${model.padding.right} ${model.padding.bottom} ${model.padding.left}` : 0
                 }}
             >
             {

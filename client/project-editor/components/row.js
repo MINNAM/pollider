@@ -49,7 +49,7 @@ class Row extends React.Component {
 
         for( let i = 0; i < rowContainer.length; i++ ) {
 
-            rowContainer[ i ].style.height = documentHeight - 50 + 'px';
+            rowContainer[i].style.height = documentHeight - 50 + 'px';
 
         }
 
@@ -110,30 +110,41 @@ class Row extends React.Component {
         let actionsForElement = [];
         let addRows = [];
 
-        if ( model.cols.length == 1 && model.cols[ 0 ].element ) {
+        if ( model.cols.length == 1 && model.cols[0].element ) {
 
             actionsForElement.push({
                 primaryText: "Delete Element",
                 value: {
                     title : 'Delete Element',
                     type : 'delete-element',
-                    model : model.cols[ 0 ].element,
-                    parentModel : model.cols[ 0 ]
+                    model : model.cols[0].element,
+                    parentModel : model.cols[0]
+                }
+            });            
+
+            actionsForElement.push({
+                primaryText: "Set Padding",
+                value: {
+                    title: 'Set Padding',
+                    type: 'set-padding',
+                    model: model.cols[0].element,
+                    parentModel: model.cols[0],
+                    default:  model.cols[0].padding
                 }
             });
 
-            switch ( model.cols[ 0 ].element.type ) {
+            switch ( model.cols[0].element.type ) {
 
+                case 'video':
                 case 'image':
-
                     actionsForElement.push({
                         primaryText: "Resize Image",
                         value: {
                             title: 'Resize Image',
                             type: 'resize-image',
-                            model: model.cols[ 0 ].element,
-                            parentModel: model.cols[ 0 ],
-                            default: model.cols[ 0 ].padding
+                            model: model.cols[0].element,
+                            parentModel: model.cols[0],
+                            default: model.cols[0].padding
                         }
                     });
 

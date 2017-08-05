@@ -67,14 +67,21 @@ class Element extends React.Component {
                 break;
 
             case 'image' :
-
                 this.props.handleDialogModel(
                     {
                         type: 'post-container',
                         model
                     },
                     this.props.model
-
+                );
+                break;
+            case 'video' :
+                this.props.handleDialogModel(
+                    {
+                        type: 'post-container',
+                        model
+                    },
+                    this.props.model
                 );
                 break;
             case 'code' :
@@ -85,10 +92,7 @@ class Element extends React.Component {
                     },
                     this.props.model
                 );
-
-                // alert('code');
             break;
-
             case 'embed' :
                 this.props.handleDialogModel(
                     {
@@ -97,8 +101,6 @@ class Element extends React.Component {
                     },
                     this.props.model
                 );
-
-                // alert('code');
             break;
 
 
@@ -130,32 +132,25 @@ class Element extends React.Component {
     }
 
     render () {
-
         const {
             model
         } = this.state;
-
-
         let icon;
 
-
-        switch ( model.type ) {
-
+        switch (model.type) {
             case 'image':
                 icon = 'image';
             break;
-
+            case 'video' :
+                icon = 'videocam';
+            break;
             case 'code' :
                 icon = 'code';
             break;
-
             case 'text' :
                 icon = 'subject';
             break;
-
-
         }
-
 
         return (
 

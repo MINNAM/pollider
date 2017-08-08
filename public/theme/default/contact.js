@@ -53,20 +53,6 @@ class Contact extends React.Component {
 
     }
 
-    componentDidMount () {
-
-        document.body.addEventListener('keydown', (event) => {
-
-            if (event.keyCode == 13 && this.props.toggled ) {
-
-                this.submit();
-
-            }
-
-        });
-
-    }
-
     submit () {
         const _data =  [...this.state.data];
 

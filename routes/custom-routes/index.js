@@ -72,11 +72,39 @@ const customRoutes = (router, database, user) => {
                                                 </div>
                                                 <div style="margin-top:15px;padding-bottom:15px;padding-left:15px;padding-right:15px">
                                                     <div>
-                                                        <b style = "font-weight: 600">${_user.first_name} ${_user.last_name}</b>, Web Developer
-                                                        <br>
-                                                        ${_user.username}
-                                                        <br>
-                                                        778 989 2385
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    <b style = "font-weight: 600">${_user.first_name} ${_user.last_name}</b>, Web Developer
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table>
+                                                            <tr>
+                                                                <td style = 'color:rgb(180,180,180); padding-right: 12px'>
+                                                                    Website
+                                                                </td>
+                                                                <td>
+                                                                    <a href='http://minnam.io'>minnam.io</a><br>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style = 'color:rgb(180,180,180); padding-right: 12px'>
+                                                                    Email
+                                                                </td>
+                                                                <td>
+                                                                    ${_user.username}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style = 'color:rgb(180,180,180); padding-right: 12px'>
+                                                                    Phone
+                                                                </td>
+                                                                <td>
+                                                                    1 (778) 989-2385
+                                                                </td>
+                                                            </tr>
+                                                        </table>
                                                     </div>
                                                     <div style = "border-bottom: 2px solid rgb(230,230,230);margin-bottom: 15px;margin-top: 15px;">
                                                     </div>

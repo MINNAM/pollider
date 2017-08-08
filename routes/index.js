@@ -366,7 +366,8 @@ router.get('/*', ( req, res ) => {
                                                     }]
                                                 },
                                                 children: posts,
-                                                type: 'four-oh-four'
+                                                type: 'four-oh-four',
+                                                status: 'private'
                                             };
 
                                             const content = renderToString(<Index {...initialState }></Index>);
@@ -406,7 +407,8 @@ router.get('/*', ( req, res ) => {
                                                     hyperlinks: [{
                                                         name: home.name,
                                                         hyperlink: ''
-                                                    }]
+                                                    }],
+                                                    status: 'private'
                                                 },
                                                 children: posts,
                                                 type: 'four-oh-four'

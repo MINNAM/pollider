@@ -22962,22 +22962,9 @@ var Contact = function (_React$Component) {
     }
 
     _createClass(Contact, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            var _this2 = this;
-
-            document.body.addEventListener('keydown', function (event) {
-
-                if (event.keyCode == 13 && _this2.props.toggled) {
-
-                    _this2.submit();
-                }
-            });
-        }
-    }, {
         key: 'submit',
         value: function submit() {
-            var _this3 = this;
+            var _this2 = this;
 
             var _data = [].concat(_toConsumableArray(this.state.data));
 
@@ -23057,7 +23044,7 @@ var Contact = function (_React$Component) {
                     dataType: "json",
                     success: function success(response) {
 
-                        _this3.setState({
+                        _this2.setState({
                             sending: false,
                             sent: true
                         });
@@ -23069,7 +23056,7 @@ var Contact = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
+            var _this3 = this;
 
             var _props = this.props,
                 display = _props.display,
@@ -23104,13 +23091,13 @@ var Contact = function (_React$Component) {
                         onClick: function onClick() {
                             toggle(null);
 
-                            var _data = [].concat(_toConsumableArray(_this4.state.data));
+                            var _data = [].concat(_toConsumableArray(_this3.state.data));
 
                             _data.map(function (element) {
                                 element.error = false;
                             });
 
-                            _this4.setState({ data: _data });
+                            _this3.setState({ data: _data });
                         }
                     })
                 ),
@@ -23149,7 +23136,7 @@ var Contact = function (_React$Component) {
                                             label: element.label,
                                             value: element.value,
                                             error: element.error,
-                                            disabled: _this4.state.sent,
+                                            disabled: _this3.state.sent,
                                             required: element.required,
                                             onChange: function onChange(value) {
                                                 var _data = [].concat(_toConsumableArray(data));
@@ -23157,7 +23144,7 @@ var Contact = function (_React$Component) {
                                                 _data[key].value = value;
                                                 _data[key].error = false;
 
-                                                _this4.setState({ _data: data });
+                                                _this3.setState({ _data: data });
                                             }
                                         });
                                         break;
@@ -23169,7 +23156,7 @@ var Contact = function (_React$Component) {
                                             key: key,
                                             label: element.label,
                                             value: element.value,
-                                            disabled: _this4.state.sent || _this4.state.sending,
+                                            disabled: _this3.state.sent || _this3.state.sending,
                                             multiline: true,
                                             error: element.error,
                                             required: element.required,
@@ -23179,7 +23166,7 @@ var Contact = function (_React$Component) {
                                                 _data[key].value = value;
                                                 _data[key].error = false;
 
-                                                _this4.setState({ _data: data });
+                                                _this3.setState({ _data: data });
                                             },
                                             max: 500
                                         });
@@ -23208,19 +23195,19 @@ var Contact = function (_React$Component) {
                                 },
 
                                 onMouseEnter: function onMouseEnter() {
-                                    _this4.setState({
+                                    _this3.setState({
                                         submitMouseEnter: true
                                     });
                                 },
 
                                 onMouseLeave: function onMouseLeave() {
-                                    _this4.setState({
+                                    _this3.setState({
                                         submitMouseEnter: false
                                     });
                                 },
                                 onClick: function onClick() {
-                                    if (!_this4.state.sending) {
-                                        _this4.submit();
+                                    if (!_this3.state.sending) {
+                                        _this3.submit();
                                     }
                                 }
                             },

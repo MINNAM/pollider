@@ -25,12 +25,9 @@ class GoogleApi {
                     client_id: this.client_id,
 
                 }
-            }, function( err, httpResponse, body ){
-
+            }, function(err, httpResponse, body){
                 console.log( err );
-
                 callback( JSON.parse( body )[ 'access_token' ] );
-
             }
 
         );

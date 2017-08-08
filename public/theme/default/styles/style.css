@@ -125,8 +125,9 @@ body {
   transition: 0.4s all;
 }
 #pollider-public .toggle-close-button {
-  margin-top: 80px;
-  margin-bottom: 84px;
+  position: absolute;
+  left: 15px;
+  top: 15px;
   opacity: 1;
   visibility: hidden;
 }
@@ -185,20 +186,22 @@ body {
 }
 #pollider-public #contact-home div.content {
   background: #fff;
+  height: 100%;
+}
+#pollider-public #contact-home div.toggle-close-button {
+  visibility: visible;
 }
 #pollider-public #contact-home .inner-content {
   padding: 0;
-}
-#pollider-public #contact-home div.toggle-close-button {
-  margin-bottom: 85px;
+  height: 100%;
 }
 #pollider-public #contact-home div.toggle-content {
   margin-top: 0;
   position: relative;
-  left: 0;
-  top: 0;
-  transform: translate(0, 0);
   width: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 #pollider-public #contact-home-toggled {
   right: 0;
@@ -209,31 +212,28 @@ body {
   width: calc(50% - 25px);
   height: 100%;
   transition: 0.6s all;
-  padding-left: 75px;
 }
 #pollider-public #contact-home-toggled div.content {
   background: #fff;
+  height: 100%;
 }
 #pollider-public #contact-home-toggled div.toggle-close-button {
-  margin-bottom: 81px;
   visibility: visible;
-}
-#pollider-public #contact-home-toggled div.toggle-close-button {
-  margin-bottom: 85px;
 }
 #pollider-public #contact-home-toggled .inner-content {
   padding: 0;
+  height: 100%;
 }
 #pollider-public #contact-home-toggled div.toggle-content {
   margin-top: 0;
   position: relative;
-  left: 0;
-  top: 0;
-  transform: translate(0, 0);
   width: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 #pollider-public #home {
-  padding: 0 10% 0 10%;
+  padding: 0 150px 0 150px;
 }
 #pollider-public .home-body {
   width: calc(50% + 25px);

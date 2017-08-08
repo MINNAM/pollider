@@ -87,8 +87,9 @@ html, body {
     }
 
     .toggle-close-button {
-        margin-top: 80px;
-        margin-bottom: 84px;
+        position: absolute;
+        left: 15px
+        top: 15px;
         opacity: 1;
         visibility: hidden
     }
@@ -155,23 +156,25 @@ html, body {
 
         div.content {
             background: white;
+            height: 100%
+        }
+
+        div.toggle-close-button {
+            visibility: visible;
         }
 
         .inner-content {
             padding: 0
-        }
-
-        div.toggle-close-button {
-            margin-bottom: 85px
+            height: 100%
         }
 
         div.toggle-content {
             margin-top: 0;
             position: relative;
-            left: 0;
-            top: 0;
-            transform: translate(0,0);
             width: 100%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
     }
 
@@ -184,37 +187,33 @@ html, body {
         width: calc(50% - 25px);
         height: 100%;
         transition: .6s all;
-        padding-left: 75px;
 
         div.content {
             background: white;
+            height: 100%
         }
 
         div.toggle-close-button {
-            margin-bottom: 81px
             visibility: visible;
-        }
-
-        div.toggle-close-button {
-            margin-bottom: 85px
         }
 
         .inner-content {
             padding: 0
+            height: 100%
         }
 
         div.toggle-content {
             margin-top: 0;
             position: relative;
-            left: 0;
-            top: 0;
-            transform: translate(0,0);
             width: 100%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
     }
 
     #home {
-        padding: 0 10% 0 10%;
+        padding: 0 150px 0 150px;
     }
 
     .home-body {

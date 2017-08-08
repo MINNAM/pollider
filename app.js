@@ -3,7 +3,6 @@ var express = require('express');
 var fs = require('fs');
 var path = require('path');
 var favicon = require('serve-favicon');
-var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');

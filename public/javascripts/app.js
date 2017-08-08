@@ -6279,7 +6279,7 @@ var formatDateTime = function formatDateTime(unformattedDate) {
 };
 
 var formatHyperlink = function formatHyperlink(name) {
-    return name.toLowerCase().replace(/[^a-zA-Z0-9]/g, '-').replace(/[-]+/g, '-').replace(/[-]$/g, '');
+    return name.toLowerCase().replace(/[^a-zA-Z0-9.]/g, '-').replace(/[-]+/g, '-').replace(/[-]$/g, '');
 };
 
 var buildHyperlink = function buildHyperlink(parentId, parentPosts, hyperlink) {
@@ -17843,7 +17843,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var COL_WIDTH = [['12'], ['6', '6'], ['4', '4', '4'], ['3', '3', '3', '3'], ['3', '9'], ['9', '3'], ['6', '3', '3'], ['3', '6', '3'], ['3', '3', '6'], ['4', '8'], ['8', '4']];
 
 var Row = function () {
-    function Row(index, colIndex, dynamic, updated, parent) {
+    function Row(index, colIndex, dynamic, updated, parent, pushAndPull) {
         _classCallCheck(this, Row);
 
         this.index = index;
@@ -17851,6 +17851,7 @@ var Row = function () {
         this.dynamic = dynamic;
         this.updated = updated;
         this.parent = parent;
+        this.pushAndPull = pushAndPull;
 
         if (colIndex != undefined) {
 
@@ -17868,6 +17869,7 @@ var Row = function () {
                 this.index = row.index;
             }
 
+            this.pushAndPull = row.pushAndPull;
             this.dynamic = row.dynamic;
 
             for (var i = 0; i < row.cols.length; i++) {
@@ -17997,7 +17999,26 @@ var RowView = function (_Component) {
                         width: '100%'
                     }
                 },
-                model.cols.map(function (col, key) {
+                model.pushAndPull ? model.cols.map(function (col, key) {
+                    return _react2.default.createElement(_colView2.default, {
+                        push: key == 0,
+                        pull: key == 1,
+                        key: key,
+                        index: key,
+                        model: col,
+                        editor: editor,
+                        editorGuide: editorGuide,
+                        handleDialogModel: handleDialogModel,
+                        queueElement: function queueElement(element) {
+                            elements[key] = element;
+
+                            _this2.setState({
+                                elements: elements
+                            });
+                        },
+                        handler: handler
+                    });
+                }) : model.cols.map(function (col, key) {
                     return _react2.default.createElement(_colView2.default, {
                         key: key,
                         index: key,
@@ -28448,13 +28469,24 @@ var ProjectBase = function () {
             });
         }
     }, {
+        key: 'setPushAndPull',
+        value: function setPushAndPull(row) {
+            for (var i = 0; i < this.rows.length; i++) {
+
+                if (this.rows[i].index == row.index) {
+                    this.rows[i].pushAndPull = !this.rows[i].pushAndPull;
+                    console.log(this.rows[i]);
+                    break;
+                }
+            }
+        }
+    }, {
         key: 'deleteRow',
         value: function deleteRow(row) {
 
             for (var i = 0; i < this.rows.length; i++) {
 
                 if (this.rows[i].index == row.index) {
-
                     this.rows.splice(i, 1);
                     break;
                 }
@@ -28594,10 +28626,8 @@ var ProjectBase = function () {
     }, {
         key: 'addRow',
         value: function addRow(data) {
-
             if (!data.selected) {
-
-                this.rows.push(new _row3.default(this.index++, data.colIndex, data.dynamic, true, this));
+                this.rows.push(new _row3.default(this.index++, data.colIndex, data.dynamic, true, this, data.pushAndPull));
             } else {
 
                 var _row;
@@ -28606,7 +28636,7 @@ var ProjectBase = function () {
 
                     if (this.rows[i].index == data.selected.index) {
 
-                        this.rows.splice(i + data.position, 0, new _row3.default(this.index++, data.colIndex, data.dynamic, true, this));
+                        this.rows.splice(i + data.position, 0, new _row3.default(this.index++, data.colIndex, data.dynamic, true, this, data.pushAndPull));
 
                         break;
                     }
@@ -28976,9 +29006,23 @@ var ColView = function (_Component) {
                 queueElement = _props.queueElement,
                 editor = _props.editor,
                 editorGuide = _props.editorGuide,
-                handler = _props.handler;
+                handler = _props.handler,
+                push = _props.push,
+                pull = _props.pull;
             var verticalAlign = this.state.verticalAlign;
 
+
+            var pushAndPullStyle = {};
+            //
+            if (push) {
+                pushAndPullStyle.left = '50%';
+            }
+
+            if (pull) {
+                pushAndPullStyle.right = '50%';
+            }
+
+            console.log(push, model.width);
 
             if (model.element) {
                 if (editor) {
@@ -28994,7 +29038,7 @@ var ColView = function (_Component) {
                                 display: 'table-cell',
                                 // why regular col 100% and this has to be 50% while they are all table-cell
                                 position: 'relative',
-                                padding: model.padding ? model.padding.top + ' ' + model.padding.right + ' ' + model.padding.bottom + ' ' + model.padding.left : 0
+                                padding: model.padding ? (model.padding.top ? model.padding.top : 0) + ' ' + (model.padding.right ? model.padding.right : 0) + ' ' + (model.padding.bottom ? model.padding.bottom : 0) + ' ' + (model.padding.left ? model.padding.left : 0) : 0
                             }
                         },
                         _react2.default.createElement(
@@ -29079,7 +29123,7 @@ var ColView = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 {
-                    className: 'col-sm-' + model.width,
+                    className: 'col-sm-' + model.width + ' ' + (push ? 'push' : '') + ' ' + (pull ? 'pull' : ''),
                     style: {
                         float: 'none',
                         display: 'table-cell',
@@ -42599,6 +42643,31 @@ var ProjectEditor = function (_React$Component) {
                     });
                     break;
 
+                /* Delete Row */
+                case 'push-and-pull':
+                    this.openDialog({
+                        fields: [{
+                            title: 'Push and Pull',
+                            subtitle: {
+                                pre: data.model.pushAndPull ? 'Disable push and pull?' : 'Able push and pull?'
+                            },
+                            dataType: null
+                        }],
+                        actions: {
+                            execute: function execute() {
+                                model.setPushAndPull(data.model);
+                            }
+                        },
+                        style: {
+                            dialog: {
+                                width: '50%',
+                                height: 'calc(100% - 50px)',
+                                top: 50
+                            }
+                        }
+                    });
+                    break;
+
                 /* Up Row */
                 case 'up-row':
                     model.upRow(data.model);
@@ -42619,7 +42688,6 @@ var ProjectEditor = function (_React$Component) {
 
                     this.setState({
                         preview: this.props.model
-
                     });
                     break;
 
@@ -42704,9 +42772,7 @@ var ProjectEditor = function (_React$Component) {
 
                 /* Add Row Below */
                 case 'add-row-below':
-
                     this.openDialog({
-
                         fields: [{
                             title: 'Add Row Below',
                             subtitle: {
@@ -42714,16 +42780,11 @@ var ProjectEditor = function (_React$Component) {
                             },
                             dataType: 'row-selector'
                         }],
-
                         actions: {
-
                             execute: function execute(_data) {
-
                                 _this2.addRow(_data.colIndex, data.model, 1);
                             }
-
                         },
-
                         style: {
                             dialog: {
                                 width: '50%',
@@ -43748,7 +43809,6 @@ var Row = function (_React$Component) {
 
                 }
             }
-
             if (this.props.addRowFromCol) {
 
                 addRows.push({
@@ -43884,6 +43944,10 @@ var Row = function (_React$Component) {
                                 },
                                 'Row'
                             ),
+                            this.state.model.cols.length == 2 ? _react2.default.createElement(_MenuItem2.default, {
+                                primaryText: 'Push & Pull',
+                                value: { type: 'push-and-pull', model: model }
+                            }) : '',
                             _react2.default.createElement(_MenuItem2.default, {
                                 primaryText: 'Delete',
                                 value: { type: 'delete-row', model: model }

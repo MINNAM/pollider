@@ -1,11 +1,11 @@
 import React from 'react';
-import Body from './body.js';
+import Body      from './body.js';
 import Thumbnail from './thumbnail.js';
 import Contact from './contact.js';
 import Profile from './profile.js';
-import Wrapper from './wrapper.js';
 import Footer from './footer.js';
-import Directory from './directory.js';
+import Wrapper from './wrapper.js';
+import ScrollDownButton from './components/ui/buttons/scroll-down-button.js';
 
 import {createProjectView} from '../index.js';
 
@@ -24,7 +24,10 @@ class FourOhFour extends React.Component {
             toggle,
             toggled,
             allowTransition,
-            getMarginRight
+            getMarginRight,
+            loadFinish,
+            addLoadingQueue,
+            addLoadedQueue
         } = this.props;
 
         return (
@@ -40,6 +43,46 @@ class FourOhFour extends React.Component {
                         height: '100%'
                     }}
                 >
+                    <div
+                        id = 'profile-home'
+                        ref = 'profile'
+                        style = {{
+                            float: 'right',
+                            height: '100%'
+                        }}
+                    >
+                        <Wrapper
+                            style = {{
+                                position: 'relative'
+                            }}
+                            innerStyle = {{
+                                padding: 0,
+                            }}
+                        >
+                            <Profile
+                                toggle = {toggle}
+                                allowClose = {false}
+                                title = 'Page not found!'
+                            />
+                            <ScrollDownButton
+                                onMouseEnter = {() => {
+                                    this.setState({ scrollDownOver : true });
+                                }}
+                                onMouseLeave = {() => {
+                                    this.setState({ scrollDownOver : false });
+                                }}
+                                hover   = { this.state.scrollDownOver }
+                                style = {{
+                                    left: '50%',
+                                    transform: 'translate(-50%,0)',
+                                    bottom: 12.5
+                                }}
+                                target = {() => {
+                                    return this.refs.profile;
+                                }}
+                            />
+                        </Wrapper>
+                    </div>
                     <div
                         id = {`contact-home${toggled == 'contact' ? '-toggled' : ''}`}
                     >
@@ -58,9 +101,9 @@ class FourOhFour extends React.Component {
                         </Wrapper>
                     </div>
                     <Body
+                        className = {'home-body'}
                         model = {model}
                         displayNav = {false}
-                        displayHeader = {false}
                         toggle = {toggle}
                         toggled = {toggled}
                         allowTransition = {allowTransition}
@@ -69,77 +112,35 @@ class FourOhFour extends React.Component {
                             margin : '0',
                             padding: 0,
                         }}
+                        loadFinish = {loadFinish}
+                        addLoadingQueue= {addLoadingQueue}
+                        addLoadedQueue = {addLoadedQueue}
                     >
-                        <div
-                            style = {{
-                                marginBottom: 35
-                            }}
-                        >
-                            <Directory
-                                model = {[{
-                                    hyperlink : '',
-                                    name : 'Go to Home'
-                                }]}
-                            />
-                        </div>
                         <div
                             id = 'post-content'
                             style = {{
                                 paddingRight: 0,
                             }}
                         >
-                            <h1
-                                style = {{
-                                    fontFamily: 'hind',
-                                    letterSpacing: '2px',
-                                    width: '100%',
-                                    fontSize: 44,
-                                    color: 'rgb(40,40,40)',
-                                    marginBottom: 50,
-                                    marginTop: 5,
-                                    display: 'inline-block',
-                                    borderBottom: '2px solid rgb(220,220,220)',
-                                    paddingBottom: 20,
-                                }}
-                            >
-                                Ooooooooooops, Page Not Found!
-                            </h1>
-                            <h1
-                                style = {{
-                                    fontFamily: 'hind',
-                                    letterSpacing: '2px',
-                                    width: '100%',
-                                    fontSize: 33,
-                                    color: 'rgb(40,40,40)',
-                                    marginBottom: 12,
-                                    marginTop: 5,
-                                    display: 'inline-block',
-                                }}
-                            >
-                                Hello!
-                            </h1>
-                            <p
-                                style = {{
-                                    fontSize : 18,
-                                    letterSpacing : '.85px',
-                                    fontFamily : 'Hind',
-                                    fontWeight : 300,
-                                    lineHeight : '35px',
-                                }}
-                            >
-                                <br/>
-                                It seems like the page you are looking for does not exists or may not be available in public.
-                                <br/>
-                                If you wish to inquire about the post, please {`contact me `} <span
-                                    style = {{borderBottom: '2px solid rgb(76, 211, 173)', cursor: 'pointer'}}
-                                    onClick = {() => {
-                                        toggle('contact');
-                                    }}
-                                >
-                                    here
-                                </span>
-                                <br />
-                            </p>
+                            {createProjectView(model)}
+                            {
+                                children ? children.map( ( element, key ) => {
+                                    return (
+                                        <Thumbnail
+                                            key = {key}
+                                            type = {element.data ? (element.data['Type'] ? element.data['Type'].content : 1 ) : 1}
+                                            index = {key}
+                                            model = {element}
+                                            parentModel = {model}
+                                            name = {element.name}
+                                            hyperlink = {element.hyperlink}
+                                            description = {element.data ? (element.data[ 'Description' ] ? element.data[ 'Description' ].content : '') : ''}
+                                            addLoadingQueue= {addLoadingQueue}
+                                            addLoadedQueue = {addLoadedQueue}
+                                        />
+                                    );
+                                }) : ''
+                            }
                         </div>
                     </Body>
                     <Footer
@@ -147,6 +148,7 @@ class FourOhFour extends React.Component {
                         innerContentStyle = {{
                             margin : '0',
                             padding: 0,
+                            zIndex: 100
                         }}
                     />
                 </div>

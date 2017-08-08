@@ -28,6 +28,9 @@ class Post extends React.Component {
             toggle,
             toggled,
             allowTransition,
+            loadFinish,
+            addLoadingQueue,
+            addLoadedQueue
         } = this.props;
 
         return (
@@ -42,10 +45,13 @@ class Post extends React.Component {
                     margin: '0 auto'
                 }}
                 displayFooter = {true}
+                loadFinish = {loadFinish}
+                addLoadingQueue = {addLoadingQueue}
+                addLoadedQueue = {addLoadedQueue}
             >
                 <div id = 'post-content'>
                     {createProjectView(model, this.handler)}
-                </div>                
+                </div>
             </Body>
         );
     }

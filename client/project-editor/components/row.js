@@ -120,7 +120,7 @@ class Row extends React.Component {
                     model : model.cols[0].element,
                     parentModel : model.cols[0]
                 }
-            });            
+            });
 
             actionsForElement.push({
                 primaryText: "Set Padding",
@@ -153,9 +153,6 @@ class Row extends React.Component {
             }
 
         }
-
-
-
             if ( this.props.addRowFromCol ) {
 
                 addRows.push({
@@ -304,6 +301,12 @@ class Row extends React.Component {
                             >
                                 Row
                             </Subheader>
+                            {
+                                this.state.model.cols.length == 2 ? <MenuItem
+                                    primaryText = "Push & Pull"
+                                    value = {{ type : 'push-and-pull', model }}
+                                /> : ''
+                            }
                             <MenuItem
                                 primaryText = "Delete"
                                 value       = {{ type : 'delete-row', model }}

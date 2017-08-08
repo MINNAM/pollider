@@ -19,24 +19,34 @@
             },
             "meta": [
                 {
-                    "field": "Type",
+                    "field": "Description",
+                    "data_type": "text",
+                    "display": 1
+                },
+                {
+                    "field": "Banner 1",
+                    "data_type": "post-container",
+                    "display": 1
+                },
+                {
+                    "field": "Banner 2",
+                    "data_type": "post-container",
+                    "display": 1
+                },
+                {
+                    "field": "Banner Type",
                     "data_type": "select",
                     "display": 1,
                     "data": [
                         {
-                            "name": "Full Width",
+                            "name": "Primary Color",
                             "value": 0
                         },
                         {
-                            "name": "Half Width",
+                            "name": "Secondary Color",
                             "value": 1
                         }
                     ]
-                },
-                {
-                    "field": "Description",
-                    "data_type": "text",
-                    "display": 1
                 },
                 {
                     "field": "Thumbnail",

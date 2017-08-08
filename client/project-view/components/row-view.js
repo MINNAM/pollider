@@ -53,7 +53,28 @@ class RowView extends Component {
                 }}
             >
                 {
-                    model.cols.map((col, key)=> {
+                    model.pushAndPull ? model.cols.map((col, key)=> {
+                        return (
+                            <ColView
+                                push = {key == 0}
+                                pull = {key == 1}
+                                key = {key}
+                                index = {key}
+                                model = {col}
+                                editor = {editor}
+                                editorGuide = {editorGuide}
+                                handleDialogModel = {handleDialogModel}
+                                queueElement = {(element) => {
+                                    elements[ key ] = element;
+
+                                    this.setState({
+                                        elements
+                                    });
+                                }}
+                                handler = {handler}
+                            />
+                        );
+                    }) : model.cols.map((col, key)=> {
                         return (
                             <ColView
                                 key = {key}

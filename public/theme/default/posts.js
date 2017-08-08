@@ -22,13 +22,34 @@ class Posts extends React.Component {
         }
     }
 
+    constructor (props) {
+        super(props);
+
+        const {
+            children,
+            addLoadedQueue
+        } = this.props;
+
+        if (children) {
+            if (children.length == 0) {
+                addLoadedQueue(null);
+            }
+        } else {
+            addLoadedQueue(null);
+        }
+
+    }
+
     render () {
         const {
             model,
             children,
             toggle,
             toggled,
-            allowTransition
+            allowTransition,
+            loadFinish,
+            addLoadingQueue,
+            addLoadedQueue
         } = this.props;
 
         return (
@@ -43,6 +64,9 @@ class Posts extends React.Component {
                     margin: '0 auto'
                 }}
                 displayFooter = {true}
+                loadFinish = {loadFinish}
+                addLoadingQueue = {addLoadingQueue}
+                addLoadedQueue = {addLoadedQueue}
             >
                 <div id = 'post-content'>
                     <div>
@@ -62,6 +86,8 @@ class Posts extends React.Component {
                                     name = {element.name}
                                     hyperlink = {element.hyperlink}
                                     description = {element.data ? (element.data['Description'] ? element.data['Description'].content : '') : ''}
+                                    addLoadingQueue = {addLoadingQueue}
+                                    addLoadedQueue = {addLoadedQueue}
                                 />
 
                             );

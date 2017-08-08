@@ -18,13 +18,14 @@ const COL_WIDTH = [
 
 class Row {
 
-    constructor ( index, colIndex, dynamic, updated, parent  ) {
+    constructor ( index, colIndex, dynamic, updated, parent, pushAndPull ) {
 
         this.index   = index;
         this.cols    = [];
         this.dynamic = dynamic;
         this.updated = updated;
         this.parent = parent;
+        this.pushAndPull = pushAndPull;
 
         if ( colIndex != undefined ) {
 
@@ -43,10 +44,11 @@ class Row {
             this.index = row.index;
         }
 
+        this.pushAndPull = row.pushAndPull;
         this.dynamic = row.dynamic;
 
         for ( let i = 0; i < row.cols.length; i++ ) {
-            let newCol = new Col();            
+            let newCol = new Col();
 
             newCol.copy( row.cols[ i ] );
 

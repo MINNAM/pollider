@@ -5,85 +5,10 @@ import Contact from './contact.js';
 import Profile from './profile.js';
 import Footer from './footer.js';
 import Wrapper from './wrapper.js';
+import ScrollDownButton from './components/ui/buttons/scroll-down-button.js';
 
 import {createProjectView} from '../index.js';
 
-const PRIMARY_COLOR = 'rgb(76, 211, 173)';
-
-const ScrollDownButton = (props) => {
-    const {
-        onMouseEnter,
-        onMouseLeave,
-        onClick,
-        hover
-    } = props;
-
-    return (
-        <div
-            className = 'scroll-down-button'
-            style = {{
-                animationDuration: '4s',
-                animationIterationCount: 'infinite',
-                animationName: 'example2',
-                bottom: 12.5,
-                height: 50,
-                left: '50%',
-                transform: 'translate(-50%,0)',
-                position: 'absolute',
-                width: 50,
-                zIndex: 5,
-                cursor: 'pointer',
-                animationPlayState: hover ? 'paused' : ''
-            }}
-            onMouseEnter = {() => {onMouseEnter();}}
-            onMouseLeave = {() => {onMouseLeave();}}
-            onClick = {onClick}
-        >
-            <svg
-                style = {{
-                    height: 50,
-                    left: 0,
-                    position: 'absolute',
-                    top:0,
-                    width: 50,
-                }}
-            >
-                <polyline
-                    points = "12.5,17.5 25,34 37.5,17.5"
-                    style  = {{
-                        fill: 'none',
-                        stroke: 'rgb(76, 211, 173)',
-                        strokeWidth: 2,
-                    }}
-                />
-            </svg>
-            <svg
-                style = {{
-                    animationDuration: '4s',
-                    animationIterationCount: 'infinite',
-                    animationName: 'example',
-                    background: 'rgba(0,0,0,0)',
-                    height: 30,
-                    left: 0,
-                    position: 'absolute',
-                    top: 0,
-                    width: 50,
-                    animationPlayState:hover ? 'paused' : '',
-                }}
-            >
-                <polyline
-                    points = "12.5,17.5 25,34 37.5,17.5"
-                    style = {{
-                        fill: 'none',
-                        strokeWidth: 2,
-                        stroke: 'rgb(30,30,30)'
-                    }}
-                />
-            </svg>
-        </div>
-    );
-
-};
 
 class Home extends React.Component {
 
@@ -98,7 +23,10 @@ class Home extends React.Component {
             toggle,
             toggled,
             allowTransition,
-            getMarginRight
+            getMarginRight,
+            loadFinish,
+            addLoadingQueue,
+            addLoadedQueue
         } = this.props;
 
         return (
@@ -127,12 +55,13 @@ class Home extends React.Component {
                                 position: 'relative'
                             }}
                             innerStyle = {{
-                                paddingLeft: 0,
+                                padding: 0,
                             }}
                         >
                             <Profile
                                 toggle = {toggle}
                                 allowClose = {false}
+                                title = 'Hello!'
                             />
                             <ScrollDownButton
                                 onMouseEnter = {() => {
@@ -142,32 +71,13 @@ class Home extends React.Component {
                                     this.setState({ scrollDownOver : false });
                                 }}
                                 hover   = { this.state.scrollDownOver }
-                                onClick = {() => {
-
-                                    let startingY = window.scrollY;
-                                    let diff = this.refs.profile.clientHeight - startingY
-                                    let start = 0;
-                                    let duration = 750;
-                                    let easing = function (t) { return (--t)*t*t+1 }
-
-                                  // Bootstrap our animation - it will get called right before next frame shall be rendered.
-                                    window.requestAnimationFrame(function step(timestamp) {
-                                        if (!start) {
-                                            start = timestamp;
-                                        }
-
-                                        let time = timestamp - start
-                                        let percent = Math.min(time / duration, 1);
-
-                                        percent = easing(percent);
-
-                                        window.scrollTo(0, startingY + diff * percent);
-
-                                        if (time < duration) {
-                                            window.requestAnimationFrame(step);
-                                        }
-                                    });
-
+                                style = {{
+                                    left: '50%',
+                                    transform: 'translate(-50%,0)',
+                                    bottom: 12.5
+                                }}
+                                target = {() => {
+                                    return this.refs.profile;
                                 }}
                             />
                         </Wrapper>
@@ -201,6 +111,9 @@ class Home extends React.Component {
                             margin : '0',
                             padding: 0,
                         }}
+                        loadFinish = {loadFinish}
+                        addLoadingQueue= {addLoadingQueue}
+                        addLoadedQueue = {addLoadedQueue}
                     >
                         <div
                             id = 'post-content'
@@ -221,6 +134,8 @@ class Home extends React.Component {
                                             name = {element.name}
                                             hyperlink = {element.hyperlink}
                                             description = {element.data ? (element.data[ 'Description' ] ? element.data[ 'Description' ].content : '') : ''}
+                                            addLoadingQueue= {addLoadingQueue}
+                                            addLoadedQueue = {addLoadedQueue}
                                         />
                                     );
                                 }) : ''

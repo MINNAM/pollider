@@ -32,12 +32,25 @@ export default ({ body, title, initialState }) => {
       <head>
         <title>${title}</title>
         <meta name="viewport" content="width=device-width" />
+        <meta http-equiv="ScreenOrientation" content="autoRotate:disabled">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="description" content="Hello">
         ${ displayRobot( JSON.parse( initialState ).model ) }
-        ${
-            font
-        }
+        ${font}
+        <noscript>
+            <div
+                style = "position:fixed;width:100%;height:100%;background:white;z-index:200"
+            >
+                <p
+                    style = "position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family: hind;font-size: 20px; font-weight: 300"
+                >
+                    <span style = "font-size: 30px">Hello!</span>
+                    <br/>
+                    <br/>
+                    Please enable javascript to view this site.
+                </p>
+            </div>
+        </noscript>
         <link rel="shortcut icon" href="/images/favicon.png"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
         <link rel="stylesheet" href="/stylesheets/bootstrap-3.3.7-dist/css/bootstrap.min.css" />

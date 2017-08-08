@@ -2,6 +2,7 @@ import express from 'express';
 import fs from 'fs';
 import url from 'url';
 import mime from 'mime';
+import path from 'path';
 import React, {Component} from 'react';
 import {renderToString} from 'react-dom/server';
 import {RouterContext, match, createRoutes} from 'react-router';
@@ -224,6 +225,8 @@ router.get('/*', ( req, res ) => {
 
             const _post = Object.assign({ ...postByHyperlink, post_data_count : home.post_data_count, hyperlink : req.originalUrl });
 
+
+
             user._get((_user) => {
                 if (!postByHyperlink) {
 
@@ -249,20 +252,63 @@ router.get('/*', ( req, res ) => {
 
                                     const _post = Object.assign({ ...post, post_data_count : postType.post_data_count, hyperlink : req.originalUrl });
 
-                                    if ( !post ) {
-
-                                        res.send( 'not found' );
-
+                                    if (!post) {
+                                        res.send('not found');
                                     } else {
 
                                         if ( post.extension && post.path ) {
 
-                                            const path = __dirname + '/../src' + post.path + post.filename + '.' + post.extension;
+                                            const _path = __dirname + '/../src' + post.path + post.filename + '.' + post.extension;
 
-                                            var file = fs.readFileSync( path );
+                                            if (post.extension === 'mp4') {
 
-                                            res.writeHead(200, {'Content-Type': mime.lookup( path ) });
-                                            res.end(file, 'binary');
+                                                var streamPath = path.resolve(_path);
+                                                //Calculate the size of the file
+                                                var stat = fs.statSync(streamPath);
+                                                var total = stat.size;
+                                                var file;
+                                                var contentType = "video/mp4";
+
+                                                if (req.headers.range) {
+                                                    var range = req.headers.range;
+                                                    var parts = range.replace(/bytes=/, "").split("-");
+                                                    var partialstart = parts[0];
+                                                    var partialend = parts[1];
+
+                                                    var start = parseInt(partialstart, 10);
+                                                    var end = partialend ? parseInt(partialend, 10) : total - 1;
+                                                    var chunksize = (end - start) + 1;
+
+                                                    file = fs.createReadStream(streamPath, {
+                                                        start: start,
+                                                        end: end
+                                                    });
+                                                    res.writeHead(206, {
+                                                        'Content-Range': 'bytes ' + start + '-' + end + '/' + total,
+                                                        'Accept-Ranges': 'bytes',
+                                                        'Content-Length': chunksize,
+                                                        'Content-Type': contentType
+                                                    });
+                                                    res.openedFile = file;
+                                                    file.pipe(res);
+                                                } else {
+                                                    file = fs.createReadStream(streamPath);
+                                                    res.writeHead(200, {
+                                                        'Content-Length': total,
+                                                        'Content-Type': contentType
+                                                    });
+                                                    res.openedFile = file;
+                                                    file.pipe(res);
+                                                }
+                                          } else {
+
+                                              var file = fs.readFileSync( _path );
+
+                                              res.writeHead(200, {'Content-Type': mime.lookup(_path)});
+                                              res.end(file, 'binary');
+                                          }
+
+
 
                                         } else {
 
@@ -296,44 +342,86 @@ router.get('/*', ( req, res ) => {
                                 })
 
                             } else {
-                                const initialState = {
-                                    model: {
-                                        ..._user
-                                    },
-                                    type: 'four-oh-four'
+                                post._getPostType((postTypes) => {
+                                    let home = {};
 
-                                };
-                                const content = renderToString(
-                                    <Index {...initialState }></Index>
-                                 );
+                                    postTypes.map(postType => {
+                                        if (postType.home == 1) {
+                                            home = postType;
+                                        }
+                                    });
 
-                                res.send( Template({
-                                    body: content,
-                                    title: `${_user.first_name } ${_user.last_name } | Oooooooooops`,
-                                    initialState: JSON.stringify( initialState )
-                                }));
+                                    post.getBlog({
+                                        postTypeId: 1,
+                                        container: false,
+                                        hyperlink: ''
+                                    }, ( posts ) => {
+                                        user._get((_user) => {
+                                            const initialState = {
+                                                model : {
+                                                    ..._user,
+                                                    hyperlinks: [{
+                                                        name: home.name,
+                                                        hyperlink: ''
+                                                    }]
+                                                },
+                                                children: posts,
+                                                type: 'four-oh-four'
+                                            };
+
+                                            const content = renderToString(<Index {...initialState }></Index>);
+
+                                            res.send( Template({
+                                                body : content,
+                                                title: `${_user.first_name } ${_user.last_name } | Oooooooooops`,
+                                                initialState : JSON.stringify(initialState)
+                                            }));
+                                        });
+                                    });
+                                });
                             }
 
                         } else {
 
                             if (!postType) {
 
-                                const initialState = {
-                                    model: {
-                                        ..._user
-                                    },
-                                    type: 'four-oh-four'
+                                post._getPostType((postTypes) => {
+                                    let home = {};
 
-                                };
-                                const content = renderToString(
-                                    <Index {...initialState }></Index>
-                                 );
+                                    postTypes.map(postType => {
+                                        if (postType.home == 1) {
+                                            home = postType;
+                                        }
+                                    });
 
-                                res.send( Template({
-                                    body: content,
-                                    title: `${_user.first_name } ${_user.last_name } | Oooooooooops`,
-                                    initialState: JSON.stringify( initialState )
-                                }));
+                                    post.getBlog({
+                                        postTypeId: 1,
+                                        container: false,
+                                        hyperlink: ''
+                                    }, ( posts ) => {
+                                        user._get((_user) => {
+                                            const initialState = {
+                                                model : {
+                                                    ..._user,
+                                                    hyperlinks: [{
+                                                        name: home.name,
+                                                        hyperlink: ''
+                                                    }]
+                                                },
+                                                children: posts,
+                                                type: 'four-oh-four'
+                                            };
+
+                                            const content = renderToString(<Index {...initialState }></Index>);
+
+                                            res.send( Template({
+                                                body : content,
+                                                title: `${_user.first_name } ${_user.last_name } | Oooooooooops`,
+                                                initialState : JSON.stringify(initialState)
+                                            }));
+                                        });
+                                    });
+                                });
 
                             } else {
 

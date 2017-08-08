@@ -29,6 +29,8 @@ class Index extends Component {
             loaded: false,
             loading: true,
             toggle: null,
+            loadingQueue: 0,
+            loadedQueue: 0,
             allowTransition: false
         };
 
@@ -42,19 +44,6 @@ class Index extends Component {
         } = this.props;
 
         if (typeof window  != 'undefined') {
-            window.onload = () => {
-                setTimeout(() => {
-                    this.setState({
-                        loaded: true,
-                        loading: false
-                    });
-                }, 1000);
-                setTimeout(() => {
-                    this.setState({
-                        allowTransition: true
-                    });
-                }, 2000);
-            };
             const anchors = document.getElementsByTagName('a');
             const self = this;
 
@@ -69,13 +58,24 @@ class Index extends Component {
 
                         setTimeout(function(){
                              window.location = href;
-                        },400);
+                        },501);
 
                     });
                 }
             }
-
         }
+
+        window.addEventListener("pageshow", function(evt){
+                if(evt.persisted){
+                setTimeout(function(){
+                    window.location.reload();
+                },10);
+            }
+        }, false);
+
+        this.safetyLoad = setTimeout(() => {
+            this.load();
+        },5000);
 
         this.onKeyDown = this.onKeyDown.bind(this);
         document.body.addEventListener('keydown', this.onKeyDown);
@@ -138,11 +138,32 @@ class Index extends Component {
                     children = {children}
                 />);
             case 'four-oh-four':
-                return (<FourOhFour model = {model}/>);
+                return (
+                    <FourOhFour
+                        model = {model}
+                        children = {children}
+                />);
 
             default:
                 return null;
         }
+    }
+
+    load (delay = 500) {
+
+        clearTimeout(this.safetyLoad);
+
+        setTimeout(() => {
+            this.setState({
+                loaded: true,
+                loading: false
+            });
+        }, delay);
+        setTimeout(() => {
+            this.setState({
+                allowTransition: true
+            });
+        }, delay * 2);
     }
 
     render () {
@@ -215,8 +236,6 @@ class Index extends Component {
                         height: '100%'
                     }}
                 >
-                    <header id = 'main-header'>
-                    </header>
                     <div
                         id = {type != 'home' && type != 'four-oh-four' ? `content-parent-container${toggle ? '-toggled' : ''}` : 'content-parent-container'}
                         style = {{
@@ -230,15 +249,77 @@ class Index extends Component {
                                     header: this.refs.header,
                                     toggle: this.toggle,
                                     toggled: this.state.toggle,
-                                    allowTransition: this.state.allowTransition
+                                    allowTransition: this.state.allowTransition,
+                                    addLoadingQueue: (index) => {
+                                        if (index) {
+                                            this.setState({
+                                                loadingQueue: this.state.loadingQueue + index
+                                            });
+                                        } else {
+                                            this.setState({
+                                                loadingQueue: this.state.loadingQueue + 1
+                                            });
+                                        }
+                                    },
+                                    addLoadedQueue: (element) => {
+                                        const {
+                                            loadedElements = {}
+                                        } = this.state;
+
+                                        if (element == null) {
+                                            this.load();
+                                        } else {
+                                            if (!loadedElements[element]) {
+                                                loadedElements[element] = true;
+                                                this.setState({
+                                                    loadedElements,
+                                                    loadedQueue: this.state.loadedQueue + 1
+                                                });
+                                            }
+                                            if (this.state.loadedQueue == this.state.loadingQueue) {
+                                                this.load();
+                                            }
+
+                                        }
+                                    }
                                 })
                            ) : ''
                         }
                     </div>
                 </div>
+                <div
+                    className = 'desktop-only'
+                    style = {{
+                        width: '100%',
+                        height: '100%',
+                        left: 0,
+                        top: 0,
+                        position: 'fixed',
+                        display: 'inline-block',
+                        background: 'white',
+                        opacity: this.state.toggle != null ? this.state.toggleWrapperHover ? 0 : 0.75 : 0,
+                        zIndex: this.state.toggle != null ? 6 : -1,
+                        transition: '.4s all',
+                        cursor: 'pointer'
+                    }}
+                    onMouseOver = {() => {
+                        this.setState({
+                            toggleWrapperHover: true
+                        })
+                    }}
+                    onMouseLeave = {() => {
+                        this.setState({
+                            toggleWrapperHover: false
+                        })
+                    }}
+                    onClick = {() => {
+                        this.toggle(null);
+                    }}
+                />
+
 
                 {
-                    this.props.type != 'home' ? <div
+                    type != 'home' && type != 'four-oh-four' ? <div
                         id = {`contact-container${toggle == 'profile' ? '-toggled' : ''}`}
                         style = {{
                             background : 'white',
@@ -252,6 +333,7 @@ class Index extends Component {
                     >
                         <Profile
                             toggle = {this.toggle}
+                            title = 'Hello!'
                         />
                     </div> : ''
                 }

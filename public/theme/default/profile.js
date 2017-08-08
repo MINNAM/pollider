@@ -13,7 +13,8 @@ class Profile extends React.Component {
         const {
             model,
             toggle,
-            allowClose
+            allowClose,
+            title
         } = this.props;
 
         return (
@@ -54,7 +55,7 @@ class Profile extends React.Component {
                             marginTop: 5,
                         }}
                     >
-                        Hello!
+                        {title}
                     </h1>
                     <div>
                         <p
@@ -67,32 +68,43 @@ class Profile extends React.Component {
                             }}
                         >
                             <br/>
-                            My name is <span style = {{ fontWeight: 500, fontSize : 25, paddingLeft: 10, paddingRight: 10 }}>{`Sung Min Nam`}.</span>
+                            My name is <span style = {{ fontWeight: 500, fontSize : 25, paddingLeft: 10, paddingRight: 10 }}>{`Min Nam`}.</span>
                             I am a web developer resides in Vancouver, Canada.
                             I love the world of coding where a grain of ideas can turn in to a rolling stone, something big!
                             <br/>
                             <br/>
                             If you are interested in collaborating, please {`contact me `}
                             <span
+                                id = 'contact-button-desktop'
                                 style = {{borderBottom: '2px solid rgb(76, 211, 173)', cursor: 'pointer'}}
                                 onClick = {() => {
                                     toggle('contact');
                                 }}
                             >
-                                here
+                                {`here`}
                             </span>
-                            <br/>
+                            <span
+                                id = 'contact-button-mobile'
+                            >
+                                {`at `}
+                                <span
+                                    style = {{borderBottom: '2px solid rgb(76, 211, 173)', cursor: 'pointer'}}
+                                    onClick = {() => {
+                                        window.location.href = "mailto:hi@minnam.io";
+                                    }}
+                                >
+                                    {`hi@minnam.io`}
+                                </span>
+                            </span>
                         </p>
                     </div>
-
-
                 </div>
             </div>
         );
     }
 
-
-
 }
+
+
 
 export default Profile;

@@ -20,17 +20,25 @@ class ProjectBase {
 
     }
 
+    setPushAndPull (row) {
+        for (var i = 0; i < this.rows.length; i++) {
+
+            if (this.rows[ i ].index == row.index) {
+                this.rows[i].pushAndPull = !this.rows[i].pushAndPull;
+                console.log(this.rows[i]);
+                break;
+            }
+        }
+    }
+
     deleteRow ( row ) {
 
-        for ( var i = 0; i < this.rows.length; i++ ) {
+        for (var i = 0; i < this.rows.length; i++) {
 
-            if ( this.rows[ i ].index == row.index ) {
-
+            if (this.rows[ i ].index == row.index) {
                 this.rows.splice( i, 1 );
                 break;
-
             }
-
         }
 
         this.reindexRows();
@@ -179,11 +187,8 @@ class ProjectBase {
 
 
     addRow ( data ) {
-
-
         if ( !data.selected ) {
-
-            this.rows.push( new Row( this.index++, data.colIndex, data.dynamic, true, this ) );
+            this.rows.push( new Row( this.index++, data.colIndex, data.dynamic, true, this, data.pushAndPull ) );
 
         } else {
 
@@ -193,7 +198,7 @@ class ProjectBase {
 
                 if ( this.rows[ i ].index == data.selected.index ) {
 
-                    this.rows.splice( i + data.position , 0, new Row( this.index++, data.colIndex, data.dynamic, true, this ) );
+                    this.rows.splice( i + data.position , 0, new Row( this.index++, data.colIndex, data.dynamic, true, this, data.pushAndPull ) );
 
                     break;
 

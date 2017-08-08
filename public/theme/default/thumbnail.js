@@ -44,7 +44,9 @@ class Thumbnail extends React.Component {
 
     componentDidMount() {
         const {
-            model
+            model,
+            addLoadingQueue,
+            addLoadedQueue
         } = this.props;
 
         if (model.data['Thumbnail'].content) {
@@ -58,7 +60,24 @@ class Thumbnail extends React.Component {
                         selected: 0,
                         loaded: true
                     });
+                    addLoadingQueue(contentModel.length);
+                    contentModel.map((element) => {
+                        const image = new Image();
+                        image.src = `/${element._hyperlink}`;
+                        image.onload = () => {
+                            addLoadedQueue(`/${element._hyperlink}`);
+                        }
+                    })
+
                 } else {
+                    addLoadingQueue();
+                    [contentModel].map((element) => {
+                        const image = new Image();
+                        image.src = `/${element._hyperlink}`;
+                        image.onload = () => {
+                            addLoadedQueue(`/${element._hyperlink}`);
+                        }
+                    })
                     this.setState({
                         thumbnails: [contentModel],
                         loaded: true
@@ -85,7 +104,9 @@ class Thumbnail extends React.Component {
             index,
             description,
             type,
-            hyperlink
+            hyperlink,
+            addLoadingQueue,
+            addLoadedQueue
         } = this.props;
         const {
             thumbnails,
@@ -97,10 +118,9 @@ class Thumbnail extends React.Component {
         return (
 
                 <div
-                    className = {type == 0 ? 'col-sm-12' : 'col-sm-6'}
+                    className = {'col-sm-12'}
                     style = {{
                         background: 'white',
-                        cursor: 'pointer',
                         float: 'left',
                         marginBottom: 36,
                         paddingLeft: 0,
@@ -109,33 +129,34 @@ class Thumbnail extends React.Component {
                         position:'inline-block',
                         transition: '.25s all',
                     }}
-                    onMouseEnter = {() => {
-                        if (loaded) {
-                            this.nextImage();
-                            this.setState({
-                                mouseOver: true
-                            });
-                            this.slideInterval = setInterval(() => {
-                                this.nextImage();
-                            }, 1000);
-                        }
-                    }}
-                    onMouseLeave = {() => {
-                        if (loaded) {
-                            if (this.slideInterval) {
-                                clearInterval(this.slideInterval);
-                            }
-                            this.setState({
-                                mouseOver : false
-                            });
-                        }
-                    }}
                 >
                     <a
                         href = {`${ hyperlink }`}
                         style = {{
                             color: 'rgb(60,60,60)',
-                            textDecoration: 'none'
+                            textDecoration: 'none',
+                            cursor: 'pointer',
+                        }}
+                        onMouseEnter = {() => {
+                            if (loaded) {
+                                this.nextImage();
+                                this.setState({
+                                    mouseOver: true
+                                });
+                                this.slideInterval = setInterval(() => {
+                                    this.nextImage();
+                                }, 1000);
+                            }
+                        }}
+                        onMouseLeave = {() => {
+                            if (loaded) {
+                                if (this.slideInterval) {
+                                    clearInterval(this.slideInterval);
+                                }
+                                this.setState({
+                                    mouseOver : false
+                                });
+                            }
                         }}
                     >
                         <div
@@ -176,6 +197,7 @@ class Thumbnail extends React.Component {
                                     display: 'block',
                                     fontFamily: 'hind',
                                     fontSize: 33,
+                                    marginBottom: 20,
                                     letterSpacing: '2px',
                                     fontWeight: 400
                                 }}
@@ -200,6 +222,7 @@ class Thumbnail extends React.Component {
                         >
                             {
                                 thumbnails.map(( element, key ) => {
+
                                     return (
                                         <img
                                             key = { key }
@@ -222,13 +245,10 @@ class Thumbnail extends React.Component {
                     <div
                         style = {{
                             borderBottom: '2px solid rgb(230,230,230)',
-                            marginLeft: '11%',
                             marginTop: 60,
-                            width: '80%',
+                            width: '100%',
                         }}
-                    >
-
-                    </div>
+                    />
                 </div>
         );
     }

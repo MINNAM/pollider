@@ -211,6 +211,33 @@ class ProjectEditor extends React.Component {
                 });
             break;
 
+            /* Delete Row */
+            case 'push-and-pull':
+                this.openDialog({
+                    fields: [
+                        {
+                            title: 'Push and Pull',
+                            subtitle: {
+                                pre: data.model.pushAndPull ? 'Disable push and pull?' : 'Able push and pull?',
+                            },
+                            dataType: null
+                        }
+                    ],
+                    actions: {
+                        execute: () => {
+                            model.setPushAndPull(data.model);
+                        }
+                    },
+                    style: {
+                        dialog: {
+                            width: '50%',
+                            height: 'calc(100% - 50px)',
+                            top: 50
+                        },
+                    }
+                });
+            break;
+
             /* Up Row */
             case 'up-row':
                 model.upRow(data.model);
@@ -231,7 +258,6 @@ class ProjectEditor extends React.Component {
 
                 this.setState({
                     preview: this.props.model
-
                 });
             break;
 
@@ -321,9 +347,7 @@ class ProjectEditor extends React.Component {
 
             /* Add Row Below */
             case 'add-row-below':
-
                 this.openDialog({
-
                     fields: [
                         {
                             title: 'Add Row Below',
@@ -332,19 +356,12 @@ class ProjectEditor extends React.Component {
                             },
                             dataType: 'row-selector'
                         }
-
-                   ],
-
+                    ],
                     actions: {
-
                         execute: (_data) => {
-
                             this.addRow(_data.colIndex, data.model, 1);
-
                         }
-
                     },
-
                     style: {
                         dialog: {
                             width: '50%',

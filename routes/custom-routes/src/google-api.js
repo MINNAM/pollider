@@ -4,10 +4,10 @@ class GoogleApi {
 
     constructor () {
 
-        this.user          = "nsm12889@gmail.com";
-        this.client_secret = 'sPcOSXz411zYY86lqBt-EPM2';
-        this.refresh_token = '1/p7NfUHeJieflsy5KhFGtdf8nfyRSUd3xjFrGFPe8YW522Qs0KQNmHr0Z4MgRV-aj';
-        this.client_id     = '518157074136-9vl3cgjaup45hk583v0bq9mvncdpdget.apps.googleusercontent.com';
+        this.user          = "hi@minnam.io";
+        this.client_secret = 'OpTZ-Y1KBHkXm1zeyh1WTgmP';
+        this.refresh_token = '1/gmanqqjrsES3Bv-wMwqQWgb9XREySPKfqRWCZ8dkffw';
+        this.client_id     = '871610360530-shuinpl59btc88dll12k24ujcno33d8j.apps.googleusercontent.com';
 
     }
 

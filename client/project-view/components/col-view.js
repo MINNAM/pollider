@@ -80,11 +80,26 @@ class ColView extends Component {
             queueElement,
             editor,
             editorGuide,
-            handler
+            handler,
+            push,
+            pull
         } = this.props;
         const {
             verticalAlign
         } = this.state;
+
+        let pushAndPullStyle = {};
+        //
+        if (push) {
+            pushAndPullStyle.left = '50%';
+        }
+
+        if (pull) {
+            pushAndPullStyle.right = '50%';
+        }
+
+        console.log(push, model.width);
+
 
         if (model.element) {
             if (editor) {
@@ -99,7 +114,7 @@ class ColView extends Component {
                             display: 'table-cell',
                             // why regular col 100% and this has to be 50% while they are all table-cell
                             position: 'relative',
-                            padding: model.padding ? `${model.padding.top} ${model.padding.right} ${model.padding.bottom} ${model.padding.left}` : 0
+                            padding: model.padding ? `${model.padding.top ? model.padding.top : 0} ${model.padding.right ? model.padding.right : 0} ${model.padding.bottom ? model.padding.bottom : 0} ${model.padding.left ? model.padding.left : 0 }` : 0,
                         }}
                     >
                         <div
@@ -183,28 +198,28 @@ class ColView extends Component {
 
         return (
             <div
-                className = {'col-sm-' + model.width}
+                className = {`col-sm-${model.width} ${push ? 'push' : ''} ${pull ? 'pull' : ''}`}
                 style = {{
                     float: 'none',
                     display: 'table-cell',
                     verticalAlign: 'middle',
-                    padding: model.padding ? `${model.padding.top} ${model.padding.right} ${model.padding.bottom} ${model.padding.left}` : 0
+                    padding: model.padding ? `${model.padding.top} ${model.padding.right} ${model.padding.bottom} ${model.padding.left}` : 0,
                 }}
             >
-            {
-                model.rows.map((row, key) => {
-                    return (
-                        <RowView
-                            editor = { editor }
-                            key = { key }
-                            model = { row }
-                            handler = {handler}
-                            editorGuide = {editorGuide}
-                            handleDialogModel = {this.props.handleDialogModel}
-                        />
-                    );
-                })
-            }
+                {
+                    model.rows.map((row, key) => {
+                        return (
+                            <RowView
+                                editor = { editor }
+                                key = { key }
+                                model = { row }
+                                handler = {handler}
+                                editorGuide = {editorGuide}
+                                handleDialogModel = {this.props.handleDialogModel}
+                            />
+                        );
+                    })
+                }
             </div>
         );
 

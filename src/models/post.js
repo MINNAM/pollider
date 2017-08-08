@@ -1150,7 +1150,7 @@ class Post {
                 ],
                 ( err, rows ) => {
 
-                    let _row;                    
+                    let _row;
                     rows.map ((row) =>  {
                         if (row.parent_id == parentId) {
                             _row = row;
@@ -1416,7 +1416,7 @@ class Post {
     */
     formatFileName ( filename ) {
 
-        return filename.replace( /[^0-9a-zA-Z\-]+/g, '-' ).toLowerCase().replace( /^-/, '' ).replace( /-$/, '' );
+        return filename.replace( /[^0-9a-zA-Z\-.]+/g, '-' ).toLowerCase().replace( /^-/, '' ).replace( /-$/, '' );
 
     }
 

@@ -64,7 +64,7 @@ const formatDateTime = ( unformattedDate ) => {
 };
 
 const formatHyperlink = (name) => {
-    return name.toLowerCase().replace(/[^a-zA-Z0-9]/g, '-' ).replace(/[-]+/g, '-').replace(/[-]$/g, '');
+    return name.toLowerCase().replace(/[^a-zA-Z0-9.]/g, '-' ).replace(/[-]+/g, '-').replace(/[-]$/g, '');
 };
 
 const buildHyperlink = (parentId, parentPosts, hyperlink) => {
@@ -101,7 +101,7 @@ const scroll = (target, _from, _to, done) => {
 
         percent = easing(percent);
 
-        target.scrollTop = _from + diff * percent;        
+        target.scrollTop = _from + diff * percent;
 
         if (time < duration) {
             window.requestAnimationFrame( step );

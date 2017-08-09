@@ -106,7 +106,8 @@ function highlightSyntax (code, colors = {
 class ElementView extends Component {
 
     state = {
-        contentModel: null
+        contentModel: null,
+        scrolled: false
     }
 
     componentDidMount () {
@@ -125,7 +126,12 @@ class ElementView extends Component {
 
         setTimeout(()=>{
             model.getPostById((contentModel) => {
+
                 this.setState({ contentModel });
+
+                this.checkScrolled();
+                this.resize();
+
 
                 if (model.type == 'image') {
                     setVerticalAlign('center');
@@ -134,6 +140,31 @@ class ElementView extends Component {
                 }
             });
         },500);
+
+        window.addEventListener('scroll', this.checkScrolled.bind(this));
+
+        window.addEventListener('resize', () => {
+            this.resize();
+        });
+    }
+
+    resize () {
+        this.setState({
+            elementHeight: this.refs.element ? this.refs.element.offsetHeight : 0
+        })
+    }
+
+    checkScrolled () {
+        if (this.refs.element) {
+            if (window.scrollY >= this.refs.element.getBoundingClientRect().top - (window.innerHeight * 0.5)) {
+                if (this.state.scrolled == false) {
+                    this.setState({
+                        scrolled: true
+                    });
+                    window.removeEventListener('scroll', this.checkScrolled)
+                }
+            }
+        }
     }
 
     componentWillReceiveProps (props, state) {
@@ -146,8 +177,7 @@ class ElementView extends Component {
         });
     }
 
-    render () {
-
+    display () {
         const {
             model,
             col,
@@ -175,6 +205,7 @@ class ElementView extends Component {
 
                     let enlargeClassName = '';
                     let enlargeTimeout = null;
+                    let scrolledClassName = '';
                     if ( imageHandler.enlarge ) {
                         if (imageHandler.enlarge.classNames) {
                             if (this.state.enlarge) {
@@ -189,8 +220,19 @@ class ElementView extends Component {
                         }
                     }
 
+                    if (imageHandler.scrolled) {
+                        if (imageHandler.scrolled.classNames) {
+                            if (this.state.scrolled) {
+                                scrolledClassName = imageHandler.scrolled.classNames.after;
+                            } else {
+                                scrolledClassName = imageHandler.scrolled.classNames.before;
+                            }
+                        }
+                    }
+
                     return (
-                        <div>
+                        <div
+                        >
                             <div
                                 style = {{
                                     justifyContent: 'center',
@@ -199,10 +241,16 @@ class ElementView extends Component {
                                     width: '100%',
                                     // why regular col 100% and this has to be 50% while they are all table-cell
                                     alignItems: 'center',
-                                    cursor: editor ? '' : 'zoom-in'
+                                    cursor: editor ? '' : 'zoom-in',
                                 }}
                             >
                             <img
+                                className = {scrolledClassName}
+                                style = {{
+                                    position: 'absolute',
+                                    left: 0,
+                                    right: 0
+                                }}
                                 ref = 'element'
                                 onLoad = {() => {
                                     queueElement(element);
@@ -273,6 +321,7 @@ class ElementView extends Component {
                 if (contentModel) {
                     return (
                         <div
+                            ref = 'element'
                             style = {{
                                 position: 'relative'
                             }}
@@ -387,7 +436,7 @@ class ElementView extends Component {
 
                 const code = <div
                     className = {'code'}
-                    ref = 'code'
+                    ref = 'element'
                     style = {{
                         display: 'inline-block',
                         padding: 0,
@@ -438,13 +487,32 @@ class ElementView extends Component {
                         style = {{
                             float: 'none',
                             display: 'table-cell',
-                            verticalAlign: 'top'
+                            verticalAlign: 'top',
+                            width: '100%'
                         }}
                         dangerouslySetInnerHTML = {{ __html: model.content }}
                     />
 
                 );
         }
+    }
+
+    render () {
+
+        return (
+            <div
+                style = {{
+                    // height: this.state.elementHeight,
+                    // width: '100%',
+                    // display: 'inline-block',
+                    // position: 'relative',
+                    // overflow: 'hidden'
+                }}
+            >
+                {this.display()}
+            </div>
+        )
+
     }
 
 }

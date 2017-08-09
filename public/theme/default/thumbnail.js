@@ -49,7 +49,7 @@ class Thumbnail extends React.Component {
             addLoadedQueue
         } = this.props;
 
-        if (model.data['Thumbnail'].content) {
+        if (model.data['Thumbnail'] && model.data['Thumbnail'].content) {
 
             const element = new Element('image', JSON.parse(model.data['Thumbnail'].content), JSON.parse(model.data['Thumbnail'].content));
 

@@ -31,13 +31,35 @@ class Body extends React.Component {
             this.state = {
                 scrollY: window.scrollY,
                 navTop: 0,
-                allowTransition: this.props.allowTransition
+                allowTransition: this.props.allowTransition,
+                videoStatus: true
             };
 
             window.addEventListener('scroll', () => {
                 this.setState({
-                    scrollY: window.scrollY
+                    scrollY: window.scrollY,
+                    navAbsoluteTop: this.refs['post-header'].getBoundingClientRect().height + 100
                 });
+
+                if (this.state.banner) {
+                    this.setState({
+                        bannerHeight: this.refs.video.parentNode.offsetHeight
+                    })
+                }
+
+                this.setVideoStatus();
+
+            });
+
+            window.addEventListener('resize', () => {
+
+                if (this.state.banner) {
+                    this.setState({
+                        bannerHeight: this.refs.video.parentNode.offsetHeight
+                    })
+                }
+
+
             });
         }
     }
@@ -53,6 +75,8 @@ class Body extends React.Component {
         let banner = model.data ? model.data['Banner 1'] : null;
         let backupBanner = model.data ? model.data['Banner 2'] : null;
         let bannerType = model.data ? model.data[ 'Banner Type'] : null;
+
+        this.setVideoStatus();
 
         if (backupBanner) {
 
@@ -160,6 +184,27 @@ class Body extends React.Component {
         });
     }
 
+    setVideoStatus () {
+
+        if (this.refs.video) {
+
+            if (window.scrollY < this.refs.video.parentNode.offsetHeight) {
+
+                if (this.state.videoStatus == false) {
+                    this.setState({videoStatus: true });
+                    this.refs.video.play();
+                }
+
+            } else {
+
+                if (this.state.videoStatus == true) {
+                    this.setState({videoStatus: false });
+                    this.refs.video.pause();
+                }
+            }
+        }
+    }
+
     offsetRight (element) {
         return (document.body.offsetWidth - (this.refs.nav.parentNode.offsetWidth) ) / 2;
     }
@@ -265,7 +310,7 @@ class Body extends React.Component {
                             height: 45,
                             lineHeight: '45px',
                             float: 'right',
-                            width: '25%',
+                            width: '30%',
                             borderLeft: '1px solid rgb(220,220,220)',
                             textAlign: 'center',
                             textTransform: 'uppercase',
@@ -421,6 +466,7 @@ class Body extends React.Component {
                                         zIndex: 20,
                                         right: scrollY < bannerHeight ? navRight - this.offsetRightAbsolute() : navRight,
                                         transform: 'translateY(-50%)',
+                                        transition: toggled != null ? '.4s all' : 'none'
                                     }}
                                 >
                                     <div>

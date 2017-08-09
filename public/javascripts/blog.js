@@ -14033,12 +14033,12 @@ var Footer = function Footer(props) {
                         iconStyle: {
                             color: 'rgb(210,210,210)'
                         },
-                        hoverStyle: { color: 'rgb(60,60,60)' },
+                        hoverStyle: { color: '#00ADEF' },
                         parentStyle: {
                             position: 'relative',
                             float: 'right',
                             marginTop: 2,
-                            marginRight: 22
+                            marginRight: 12.5
                         },
                         onClick: function onClick() {
                             window.open('https://vimeo.com/minnam');
@@ -15949,13 +15949,32 @@ var Body = function (_React$Component) {
             _this.state = {
                 scrollY: window.scrollY,
                 navTop: 0,
-                allowTransition: _this.props.allowTransition
+                allowTransition: _this.props.allowTransition,
+                videoStatus: true
             };
 
             window.addEventListener('scroll', function () {
                 _this.setState({
-                    scrollY: window.scrollY
+                    scrollY: window.scrollY,
+                    navAbsoluteTop: _this.refs['post-header'].getBoundingClientRect().height + 100
                 });
+
+                if (_this.state.banner) {
+                    _this.setState({
+                        bannerHeight: _this.refs.video.parentNode.offsetHeight
+                    });
+                }
+
+                _this.setVideoStatus();
+            });
+
+            window.addEventListener('resize', function () {
+
+                if (_this.state.banner) {
+                    _this.setState({
+                        bannerHeight: _this.refs.video.parentNode.offsetHeight
+                    });
+                }
             });
         }
         return _this;
@@ -15976,6 +15995,8 @@ var Body = function (_React$Component) {
             var banner = model.data ? model.data['Banner 1'] : null;
             var backupBanner = model.data ? model.data['Banner 2'] : null;
             var bannerType = model.data ? model.data['Banner Type'] : null;
+
+            this.setVideoStatus();
 
             if (backupBanner) {
 
@@ -16072,6 +16093,27 @@ var Body = function (_React$Component) {
                 allowTransition: nextProps.allowTransition,
                 toggled: nextProps.toggled
             });
+        }
+    }, {
+        key: 'setVideoStatus',
+        value: function setVideoStatus() {
+
+            if (this.refs.video) {
+
+                if (window.scrollY < this.refs.video.parentNode.offsetHeight) {
+
+                    if (this.state.videoStatus == false) {
+                        this.setState({ videoStatus: true });
+                        this.refs.video.play();
+                    }
+                } else {
+
+                    if (this.state.videoStatus == true) {
+                        this.setState({ videoStatus: false });
+                        this.refs.video.pause();
+                    }
+                }
+            }
         }
     }, {
         key: 'offsetRight',
@@ -16186,7 +16228,7 @@ var Body = function (_React$Component) {
                                     height: 45,
                                     lineHeight: '45px',
                                     float: 'right',
-                                    width: '25%',
+                                    width: '30%',
                                     borderLeft: '1px solid rgb(220,220,220)',
                                     textAlign: 'center',
                                     textTransform: 'uppercase',
@@ -16352,7 +16394,8 @@ var Body = function (_React$Component) {
                                         top: navAbsoluteTop,
                                         zIndex: 20,
                                         right: scrollY < bannerHeight ? navRight - this.offsetRightAbsolute() : navRight,
-                                        transform: 'translateY(-50%)'
+                                        transform: 'translateY(-50%)',
+                                        transition: toggled != null ? '.4s all' : 'none'
                                     }
                                 },
                                 _react2.default.createElement(
@@ -16586,7 +16629,7 @@ var Thumbnail = function (_React$Component) {
                 addLoadedQueue = _props.addLoadedQueue;
 
 
-            if (model.data['Thumbnail'].content) {
+            if (model.data['Thumbnail'] && model.data['Thumbnail'].content) {
 
                 var element = new _element2.default('image', JSON.parse(model.data['Thumbnail'].content), JSON.parse(model.data['Thumbnail'].content));
 
@@ -22779,7 +22822,7 @@ var ScrollDownButton = function ScrollDownButton(props) {
             style: _extends({
                 animationDuration: '4s',
                 animationIterationCount: 'infinite',
-                animationName: 'example2',
+                animationName: 'scroll-down-animation-2',
                 height: 50,
                 position: 'absolute',
                 width: 50,
@@ -22794,6 +22837,14 @@ var ScrollDownButton = function ScrollDownButton(props) {
                 _onMouseLeave();
             },
             onClick: function onClick() {
+
+                var videos = document.getElementsByTagName('video');
+
+                if (videos.length > 0) {
+                    for (var i = 0; i < videos.length; i++) {
+                        videos[i].pause();
+                    }
+                }
 
                 var startingY = window.scrollY;
                 var diff = target().clientHeight + 25 - startingY;
@@ -22848,7 +22899,7 @@ var ScrollDownButton = function ScrollDownButton(props) {
                 style: {
                     animationDuration: '4s',
                     animationIterationCount: 'infinite',
-                    animationName: 'example',
+                    animationName: 'scroll-down-animation-1',
                     background: 'rgba(0,0,0,0)',
                     height: 30,
                     left: 0,
@@ -23344,11 +23395,11 @@ var Profile = function (_React$Component) {
                     _react2.default.createElement(
                         'h1',
                         {
+                            className: 'greeting',
                             style: {
                                 color: 'rgb(40,40,40)',
                                 display: 'inline-block',
                                 fontFamily: 'hind',
-                                fontSize: 44,
                                 letterSpacing: '2px',
                                 marginBottom: 12,
                                 marginTop: 5
@@ -23364,7 +23415,6 @@ var Profile = function (_React$Component) {
                             {
                                 style: {
                                     fontFamily: 'Hind',
-                                    fontSize: 18,
                                     fontWeight: 300,
                                     letterSpacing: '.85px',
                                     lineHeight: '35px'
@@ -23374,7 +23424,7 @@ var Profile = function (_React$Component) {
                             'My name is ',
                             _react2.default.createElement(
                                 'span',
-                                { style: { fontWeight: 500, fontSize: 25, paddingLeft: 10, paddingRight: 10 } },
+                                { className: 'user-name', style: { fontWeight: 500, paddingLeft: 10, paddingRight: 10 } },
                                 'Min Nam',
                                 '.'
                             ),
@@ -23450,18 +23500,20 @@ var TEXT_STYLE = {
         lineHeight: '35px'
     },
     HEADING1: {
+        fontSize: 28,
+        letterSpacing: '.85px',
+        fontFamily: 'Hind',
+        fontWeight: 300,
+        lineHeight: '35px',
+        color: 'rgb(160,160,160)'
+    },
+    HEADING2: {
         fontSize: 24,
         letterSpacing: '.85px',
         fontFamily: 'Hind',
         fontWeight: 300,
-        lineHeight: '35px'
-    },
-    HEADING2: {
-        fontSize: 20,
-        letterSpacing: '.85px',
-        fontFamily: 'Hind',
-        fontWeight: 300,
-        lineHeight: '35px'
+        lineHeight: '35px',
+        color: 'rgb(160,160,160)'
     },
     CODE: {
         fontFamily: 'courier',
@@ -27454,8 +27506,6 @@ var ColView = function (_Component) {
                 pushAndPullStyle.right = '50%';
             }
 
-            console.log(push, model.width);
-
             if (model.element) {
                 if (editor) {
                     return _react2.default.createElement(
@@ -27676,7 +27726,8 @@ var ElementView = function (_Component) {
         }
 
         return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ElementView.__proto__ || Object.getPrototypeOf(ElementView)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-            contentModel: null
+            contentModel: null,
+            scrolled: false
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
@@ -27698,7 +27749,11 @@ var ElementView = function (_Component) {
 
             setTimeout(function () {
                 model.getPostById(function (contentModel) {
+
                     _this2.setState({ contentModel: contentModel });
+
+                    _this2.checkScrolled();
+                    _this2.resize();
 
                     if (model.type == 'image') {
                         setVerticalAlign('center');
@@ -27707,6 +27762,33 @@ var ElementView = function (_Component) {
                     }
                 });
             }, 500);
+
+            window.addEventListener('scroll', this.checkScrolled.bind(this));
+
+            window.addEventListener('resize', function () {
+                _this2.resize();
+            });
+        }
+    }, {
+        key: 'resize',
+        value: function resize() {
+            this.setState({
+                elementHeight: this.refs.element ? this.refs.element.offsetHeight : 0
+            });
+        }
+    }, {
+        key: 'checkScrolled',
+        value: function checkScrolled() {
+            if (this.refs.element) {
+                if (window.scrollY >= this.refs.element.getBoundingClientRect().top - window.innerHeight * 0.5) {
+                    if (this.state.scrolled == false) {
+                        this.setState({
+                            scrolled: true
+                        });
+                        window.removeEventListener('scroll', this.checkScrolled);
+                    }
+                }
+            }
         }
     }, {
         key: 'componentWillReceiveProps',
@@ -27721,8 +27803,8 @@ var ElementView = function (_Component) {
             });
         }
     }, {
-        key: 'render',
-        value: function render() {
+        key: 'display',
+        value: function display() {
             var _this4 = this;
 
             var _props2 = this.props,
@@ -27751,6 +27833,7 @@ var ElementView = function (_Component) {
 
                         var enlargeClassName = '';
                         var enlargeTimeout = null;
+                        var scrolledClassName = '';
                         if (imageHandler.enlarge) {
                             if (imageHandler.enlarge.classNames) {
                                 if (this.state.enlarge) {
@@ -27762,6 +27845,16 @@ var ElementView = function (_Component) {
 
                             if (imageHandler.enlarge.timeout) {
                                 enlargeTimeout = imageHandler.enlarge.timeout;
+                            }
+                        }
+
+                        if (imageHandler.scrolled) {
+                            if (imageHandler.scrolled.classNames) {
+                                if (this.state.scrolled) {
+                                    scrolledClassName = imageHandler.scrolled.classNames.after;
+                                } else {
+                                    scrolledClassName = imageHandler.scrolled.classNames.before;
+                                }
                             }
                         }
 
@@ -27781,7 +27874,13 @@ var ElementView = function (_Component) {
                                         cursor: editor ? '' : 'zoom-in'
                                     }
                                 },
-                                _react2.default.createElement('img', {
+                                _react2.default.createElement('img', _defineProperty({
+                                    className: scrolledClassName,
+                                    style: {
+                                        position: 'absolute',
+                                        left: 0,
+                                        right: 0
+                                    },
                                     ref: 'element',
                                     onLoad: function onLoad() {
                                         queueElement(element);
@@ -27800,10 +27899,9 @@ var ElementView = function (_Component) {
                                         }
                                     },
                                     src: '/' + contentModel._hyperlink,
-                                    alt: contentModel.data ? contentModel.data['Alt Text'] ? contentModel.data['Alt Text'].content : '' : '',
-                                    style: {
-                                        width: col.elementWidth * 100 + '%' }
-                                })
+                                    alt: contentModel.data ? contentModel.data['Alt Text'] ? contentModel.data['Alt Text'].content : '' : ''
+                                }, 'style', {
+                                    width: col.elementWidth * 100 + '%' }))
                             ),
                             _react2.default.createElement(
                                 'div',
@@ -27849,7 +27947,8 @@ var ElementView = function (_Component) {
                     if (contentModel) {
                         return _react2.default.createElement(
                             'div',
-                            {
+                            _defineProperty({
+                                ref: 'element',
                                 style: {
                                     position: 'relative'
                                 },
@@ -27867,9 +27966,8 @@ var ElementView = function (_Component) {
                                         });
                                         _this4.refs.video.pause();
                                     }
-                                },
-                                ref: 'video-container'
-                            },
+                                }
+                            }, 'ref', 'video-container'),
                             _react2.default.createElement(
                                 'video',
                                 {
@@ -27972,7 +28070,7 @@ var ElementView = function (_Component) {
                             'div',
                             {
                                 className: 'code',
-                                ref: 'code',
+                                ref: 'element',
                                 style: _defineProperty({
                                     display: 'inline-block',
                                     padding: 0,
@@ -28022,11 +28120,30 @@ var ElementView = function (_Component) {
                         style: {
                             float: 'none',
                             display: 'table-cell',
-                            verticalAlign: 'top'
+                            verticalAlign: 'top',
+                            width: '100%'
                         },
                         dangerouslySetInnerHTML: { __html: model.content }
                     });
             }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+
+            return _react2.default.createElement(
+                'div',
+                {
+                    style: {
+                        // height: this.state.elementHeight,
+                        // width: '100%',
+                        // display: 'inline-block',
+                        // position: 'relative',
+                        // overflow: 'hidden'
+                    }
+                },
+                this.display()
+            );
         }
     }]);
 
@@ -46930,15 +47047,26 @@ var Index = function (_Component) {
                     for (var key in anchors) {
                         if (anchors[key].addEventListener) {
                             anchors[key].addEventListener('click', function (event) {
-                                event.preventDefault();
 
-                                var href = this.getAttribute("href");
+                                if (!this.getAttribute('target')) {
+                                    event.preventDefault();
 
-                                self.setState({ loaded: false });
+                                    var videos = document.getElementsByTagName('video');
 
-                                setTimeout(function () {
-                                    window.location = href;
-                                }, 501);
+                                    if (videos.length > 0) {
+                                        for (var i = 0; i < videos.length; i++) {
+                                            videos[i].pause();
+                                        }
+                                    }
+
+                                    var href = this.getAttribute("href");
+
+                                    self.setState({ loaded: false });
+
+                                    setTimeout(function () {
+                                        window.location = href;
+                                    }, 501);
+                                }
                             });
                         }
                     }
@@ -47034,7 +47162,7 @@ var Index = function (_Component) {
         value: function load() {
             var _this3 = this;
 
-            var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 500;
+            var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
 
 
             clearTimeout(this.safetyLoad);
@@ -47080,40 +47208,16 @@ var Index = function (_Component) {
                         height: '100%'
                     }
                 },
-                loading ? _react2.default.createElement(
-                    'svg',
-                    {
-                        width: 60,
-                        height: 35,
-                        className: 'loading-element',
-                        style: {
-                            position: 'fixed',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%,-50%)'
-                        }
-                    },
-                    _react2.default.createElement('circle', {
-                        cx: 7.5,
-                        r: 3,
-                        fill: 'rgb(76, 211, 173)'
-                    }),
-                    _react2.default.createElement('circle', {
-                        cx: 22.5,
-                        r: 3,
-                        fill: 'rgb(76, 211, 173)'
-                    }),
-                    _react2.default.createElement('circle', {
-                        cx: 37.5,
-                        r: 3,
-                        fill: 'rgb(76, 211, 173)'
-                    }),
-                    _react2.default.createElement('circle', {
-                        cx: 52.5,
-                        r: 3,
-                        fill: 'rgb(76, 211, 173)'
-                    })
-                ) : '',
+                loading ? _react2.default.createElement('img', {
+                    src: '/assets/loading.gif',
+                    style: {
+                        zIndex: 300,
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%,-50%)'
+                    }
+                }) : '',
                 _react2.default.createElement(
                     'div',
                     {
@@ -86607,6 +86711,8 @@ var Home = function (_React$Component) {
                                 title: 'Hello!'
                             }),
                             _react2.default.createElement(_scrollDownButton2.default, {
+                                primaryColor: 'rgb(60,60,60)',
+                                secondaryColor: 'rgb(60,60,60)',
                                 onMouseEnter: function onMouseEnter() {
                                     _this2.setState({ scrollDownOver: true });
                                 },
@@ -86999,6 +87105,12 @@ var Post = function (_React$Component) {
                         classNames: {
                             before: 'image-enlarge-container',
                             after: 'image-enlarge-container-toggled'
+                        }
+                    },
+                    scrolled: {
+                        classNames: {
+                            before: 'image-scrolled-before',
+                            after: 'image-scrolled-after'
                         }
                     }
                 }

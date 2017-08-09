@@ -19,6 +19,20 @@ body {
 #pollider-public a {
   transition: 0.25s all;
 }
+#pollider-public ul {
+  list-style: none;
+  padding: 0;
+}
+#pollider-public li {
+  padding-left: 2.3em;
+}
+#pollider-public li:before {
+  content: "\f00c";
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-left: -2.3em;
+  width: 2.3em;
+}
 #pollider-public .row {
 /*min-height : 500px*/
   margin-bottom: 35px;
@@ -138,6 +152,15 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
+}
+#pollider-public div.toggle-content .greeting {
+  font-size: 44px;
+}
+#pollider-public div.toggle-content p {
+  font-size: 18px;
+}
+#pollider-public div.toggle-content .user-name {
+  font-size: 25px;
 }
 #pollider-public #profile-home {
   right: 0;
@@ -335,6 +358,8 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   transition: 0.4s all;
+  max-height: 100%;
+  max-width: 100%;
 }
 #pollider-public .image-enlarge-container-toggled {
   width: 100%;
@@ -354,8 +379,20 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   transition: 0.4s all;
+  max-height: 100%;
+  max-width: 100%;
 }
-@-webkit-keyframes example {
+#pollider-public .image-scrolled-before {
+  opacity: 0;
+  margin-top: 100px;
+  transition: 0.4s all;
+}
+#pollider-public .image-scrolled-after {
+  opacity: 1;
+  margin-top: 0px;
+  transition: 0.4s all;
+}
+@-webkit-keyframes scroll-down-animation-1 {
   0% {
     height: 25px;
   }
@@ -366,7 +403,7 @@ body {
     height: 25px;
   }
 }
-@-webkit-keyframes example2 {
+@-webkit-keyframes scroll-down-animation-2 {
   0% {
     height: 25px;
   }
@@ -467,9 +504,6 @@ body {
     padding-bottom: 0;
     min-height: 450px;
   }
-  #pollider-public #profile-home h1 {
-    font-size: 44px !important;
-  }
   #pollider-public #profile-home #profile-parent {
     height: initial;
     width: 100%;
@@ -565,6 +599,15 @@ body {
   #pollider-public div.toggle-content {
     margin-top: 0;
     padding: 0 50px 0 50px;
+  }
+  #pollider-public div.toggle-content .greeting {
+    font-size: 42px;
+  }
+  #pollider-public div.toggle-content p {
+    font-size: 18px;
+  }
+  #pollider-public div.toggle-content .user-name {
+    font-size: 24px;
   }
   #pollider-public div#content-parent-container-toggled {
     margin-right: 0;
@@ -740,7 +783,7 @@ body {
 @media only screen and (max-width: 450px) and (orientation: portrait) {
   #pollider-public #home {
     float: left;
-    padding: 0 10% 0 10%;
+    padding: 0 15px 0 15px;
     width: 100%;
   }
   #pollider-public #home #mobile-nav {
@@ -763,7 +806,7 @@ body {
     display: inline-block;
   }
   #pollider-public div.content .inner-content {
-    padding: 0 20px 0 20px;
+    padding: 0 15px 0 15px;
   }
   #pollider-public div#profile-container {
     width: 100%;
@@ -802,6 +845,16 @@ body {
   #pollider-public div.toggle-content {
     margin-top: 0;
     padding: 0 20px 0 20px;
+  }
+  #pollider-public div.toggle-content .greeting {
+    font-size: 35px;
+  }
+  #pollider-public div.toggle-content p {
+    font-size: 14px;
+    line-height: 32px !important;
+  }
+  #pollider-public div.toggle-content .user-name {
+    font-size: 18px;
   }
   #pollider-public .col-lg-1,
   #pollider-public .col-lg-10,
@@ -865,7 +918,7 @@ body {
 @media only screen and (max-width: 800px) and (orientation: landscape) {
   #pollider-public #home {
     float: left;
-    padding: 0 10% 0 10%;
+    padding: 0 15px 0 15px;
     width: 100%;
   }
   #pollider-public #home #mobile-nav {
@@ -888,7 +941,7 @@ body {
     display: inline-block;
   }
   #pollider-public div.content .inner-content {
-    padding: 0 20px 0 20px;
+    padding: 0 15px 0 15px;
   }
   #pollider-public div#profile-container {
     width: 100%;
@@ -927,6 +980,16 @@ body {
   #pollider-public div.toggle-content {
     margin-top: 0;
     padding: 0 20px 0 20px;
+  }
+  #pollider-public div.toggle-content .greeting {
+    font-size: 35px;
+  }
+  #pollider-public div.toggle-content p {
+    font-size: 14px;
+    line-height: 32px !important;
+  }
+  #pollider-public div.toggle-content .user-name {
+    font-size: 18px;
   }
   #pollider-public .col-lg-1,
   #pollider-public .col-lg-10,

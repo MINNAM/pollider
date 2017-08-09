@@ -15,18 +15,20 @@ const TEXT_STYLE = {
         lineHeight : '35px',
     },
     HEADING1: {
+        fontSize : 28,
+        letterSpacing : '.85px',
+        fontFamily : 'Hind',
+        fontWeight : 300,
+        lineHeight : '35px',
+        color: 'rgb(160,160,160)'
+    },
+    HEADING2: {
         fontSize : 24,
         letterSpacing : '.85px',
         fontFamily : 'Hind',
         fontWeight : 300,
         lineHeight : '35px',
-    },
-    HEADING2: {
-        fontSize : 20,
-        letterSpacing : '.85px',
-        fontFamily : 'Hind',
-        fontWeight : 300,
-        lineHeight : '35px',
+        color: 'rgb(160,160,160)'
     },
     CODE : {
         fontFamily : 'courier',

@@ -129,12 +129,12 @@ const Footer = (props) => {
                             iconStyle   = {{
                                 color: 'rgb(210,210,210)',
                             }}
-                            hoverStyle  = {{ color: 'rgb(60,60,60)' }}
+                            hoverStyle  = {{ color: '#00ADEF' }}
                             parentStyle = {{
                                 position: 'relative',
                                 float: 'right',
                                 marginTop: 2,
-                                marginRight: 22
+                                marginRight: 12.5
                             }}
                             onClick = {() => {
                                 window.open('https://vimeo.com/minnam');

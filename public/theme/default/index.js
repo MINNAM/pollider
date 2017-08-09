@@ -50,16 +50,26 @@ class Index extends Component {
             for (let key in anchors) {
                 if (anchors[key].addEventListener) {
                     anchors[key].addEventListener('click', function(event) {
-                        event.preventDefault();
 
-                        const href = this.getAttribute("href");
+                        if (!this.getAttribute('target')) {
+                            event.preventDefault();
 
-                        self.setState({loaded: false});
+                            const videos = document.getElementsByTagName('video');
 
-                        setTimeout(function(){
-                             window.location = href;
-                        },501);
+                            if (videos.length > 0) {
+                                for( let i = 0; i < videos.length; i++ ) {
+                                    videos[i].pause();
+                                }
+                            }
 
+                            const href = this.getAttribute("href");
+
+                            self.setState({loaded: false});
+
+                            setTimeout(function(){
+                                 window.location = href;
+                            },501);
+                        }
                     });
                 }
             }
@@ -149,7 +159,7 @@ class Index extends Component {
         }
     }
 
-    load (delay = 500) {
+    load (delay = 1000) {
 
         clearTimeout(this.safetyLoad);
 
@@ -194,38 +204,16 @@ class Index extends Component {
             >
 
                 {
-                    loading ? <svg
-                        width  = {60}
-                        height  = {35}
-                        className = {'loading-element'}
+                    loading ? <img
+                        src = '/assets/loading.gif'
                         style = {{
+                            zIndex: 300,
                             position: 'fixed',
                             top: '50%',
                             left: '50%',
                             transform: 'translate(-50%,-50%)'
                         }}
-                    >
-                        <circle
-                            cx = {7.5}
-                            r  = {3}
-                            fill = {'rgb(76, 211, 173)'}
-                        />
-                        <circle
-                            cx = {22.5}
-                            r  = {3}
-                            fill = {'rgb(76, 211, 173)'}
-                        />
-                        <circle
-                            cx = {37.5}
-                            r  = {3}
-                            fill = {'rgb(76, 211, 173)'}
-                        />
-                        <circle
-                            cx = {52.5}
-                            r  = {3}
-                            fill = {'rgb(76, 211, 173)'}
-                        />
-                    </svg> : ''
+                    /> : ''
                 }
 
                 <div

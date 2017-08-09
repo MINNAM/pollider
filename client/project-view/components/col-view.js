@@ -98,9 +98,6 @@ class ColView extends Component {
             pushAndPullStyle.right = '50%';
         }
 
-        console.log(push, model.width);
-
-
         if (model.element) {
             if (editor) {
                 return (

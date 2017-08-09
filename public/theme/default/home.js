@@ -64,6 +64,8 @@ class Home extends React.Component {
                                 title = 'Hello!'
                             />
                             <ScrollDownButton
+                                primaryColor = {'rgb(60,60,60)'}
+                                secondaryColor = {'rgb(60,60,60)'}
                                 onMouseEnter = {() => {
                                     this.setState({ scrollDownOver : true });
                                 }}

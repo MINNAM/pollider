@@ -24653,18 +24653,20 @@ var TEXT_STYLE = {
         lineHeight: '35px'
     },
     HEADING1: {
+        fontSize: 28,
+        letterSpacing: '.85px',
+        fontFamily: 'Hind',
+        fontWeight: 300,
+        lineHeight: '35px',
+        color: 'rgb(160,160,160)'
+    },
+    HEADING2: {
         fontSize: 24,
         letterSpacing: '.85px',
         fontFamily: 'Hind',
         fontWeight: 300,
-        lineHeight: '35px'
-    },
-    HEADING2: {
-        fontSize: 20,
-        letterSpacing: '.85px',
-        fontFamily: 'Hind',
-        fontWeight: 300,
-        lineHeight: '35px'
+        lineHeight: '35px',
+        color: 'rgb(160,160,160)'
     },
     CODE: {
         fontFamily: 'courier',
@@ -29022,8 +29024,6 @@ var ColView = function (_Component) {
                 pushAndPullStyle.right = '50%';
             }
 
-            console.log(push, model.width);
-
             if (model.element) {
                 if (editor) {
                     return _react2.default.createElement(
@@ -29244,7 +29244,8 @@ var ElementView = function (_Component) {
         }
 
         return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ElementView.__proto__ || Object.getPrototypeOf(ElementView)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-            contentModel: null
+            contentModel: null,
+            scrolled: false
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
@@ -29266,7 +29267,11 @@ var ElementView = function (_Component) {
 
             setTimeout(function () {
                 model.getPostById(function (contentModel) {
+
                     _this2.setState({ contentModel: contentModel });
+
+                    _this2.checkScrolled();
+                    _this2.resize();
 
                     if (model.type == 'image') {
                         setVerticalAlign('center');
@@ -29275,6 +29280,33 @@ var ElementView = function (_Component) {
                     }
                 });
             }, 500);
+
+            window.addEventListener('scroll', this.checkScrolled.bind(this));
+
+            window.addEventListener('resize', function () {
+                _this2.resize();
+            });
+        }
+    }, {
+        key: 'resize',
+        value: function resize() {
+            this.setState({
+                elementHeight: this.refs.element ? this.refs.element.offsetHeight : 0
+            });
+        }
+    }, {
+        key: 'checkScrolled',
+        value: function checkScrolled() {
+            if (this.refs.element) {
+                if (window.scrollY >= this.refs.element.getBoundingClientRect().top - window.innerHeight * 0.5) {
+                    if (this.state.scrolled == false) {
+                        this.setState({
+                            scrolled: true
+                        });
+                        window.removeEventListener('scroll', this.checkScrolled);
+                    }
+                }
+            }
         }
     }, {
         key: 'componentWillReceiveProps',
@@ -29289,8 +29321,8 @@ var ElementView = function (_Component) {
             });
         }
     }, {
-        key: 'render',
-        value: function render() {
+        key: 'display',
+        value: function display() {
             var _this4 = this;
 
             var _props2 = this.props,
@@ -29319,6 +29351,7 @@ var ElementView = function (_Component) {
 
                         var enlargeClassName = '';
                         var enlargeTimeout = null;
+                        var scrolledClassName = '';
                         if (imageHandler.enlarge) {
                             if (imageHandler.enlarge.classNames) {
                                 if (this.state.enlarge) {
@@ -29330,6 +29363,16 @@ var ElementView = function (_Component) {
 
                             if (imageHandler.enlarge.timeout) {
                                 enlargeTimeout = imageHandler.enlarge.timeout;
+                            }
+                        }
+
+                        if (imageHandler.scrolled) {
+                            if (imageHandler.scrolled.classNames) {
+                                if (this.state.scrolled) {
+                                    scrolledClassName = imageHandler.scrolled.classNames.after;
+                                } else {
+                                    scrolledClassName = imageHandler.scrolled.classNames.before;
+                                }
                             }
                         }
 
@@ -29349,7 +29392,13 @@ var ElementView = function (_Component) {
                                         cursor: editor ? '' : 'zoom-in'
                                     }
                                 },
-                                _react2.default.createElement('img', {
+                                _react2.default.createElement('img', _defineProperty({
+                                    className: scrolledClassName,
+                                    style: {
+                                        position: 'absolute',
+                                        left: 0,
+                                        right: 0
+                                    },
                                     ref: 'element',
                                     onLoad: function onLoad() {
                                         queueElement(element);
@@ -29368,10 +29417,9 @@ var ElementView = function (_Component) {
                                         }
                                     },
                                     src: '/' + contentModel._hyperlink,
-                                    alt: contentModel.data ? contentModel.data['Alt Text'] ? contentModel.data['Alt Text'].content : '' : '',
-                                    style: {
-                                        width: col.elementWidth * 100 + '%' }
-                                })
+                                    alt: contentModel.data ? contentModel.data['Alt Text'] ? contentModel.data['Alt Text'].content : '' : ''
+                                }, 'style', {
+                                    width: col.elementWidth * 100 + '%' }))
                             ),
                             _react2.default.createElement(
                                 'div',
@@ -29417,7 +29465,8 @@ var ElementView = function (_Component) {
                     if (contentModel) {
                         return _react2.default.createElement(
                             'div',
-                            {
+                            _defineProperty({
+                                ref: 'element',
                                 style: {
                                     position: 'relative'
                                 },
@@ -29435,9 +29484,8 @@ var ElementView = function (_Component) {
                                         });
                                         _this4.refs.video.pause();
                                     }
-                                },
-                                ref: 'video-container'
-                            },
+                                }
+                            }, 'ref', 'video-container'),
                             _react2.default.createElement(
                                 'video',
                                 {
@@ -29540,7 +29588,7 @@ var ElementView = function (_Component) {
                             'div',
                             {
                                 className: 'code',
-                                ref: 'code',
+                                ref: 'element',
                                 style: _defineProperty({
                                     display: 'inline-block',
                                     padding: 0,
@@ -29590,11 +29638,30 @@ var ElementView = function (_Component) {
                         style: {
                             float: 'none',
                             display: 'table-cell',
-                            verticalAlign: 'top'
+                            verticalAlign: 'top',
+                            width: '100%'
                         },
                         dangerouslySetInnerHTML: { __html: model.content }
                     });
             }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+
+            return _react2.default.createElement(
+                'div',
+                {
+                    style: {
+                        // height: this.state.elementHeight,
+                        // width: '100%',
+                        // display: 'inline-block',
+                        // position: 'relative',
+                        // overflow: 'hidden'
+                    }
+                },
+                this.display()
+            );
         }
     }]);
 

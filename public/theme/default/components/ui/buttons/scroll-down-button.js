@@ -20,7 +20,7 @@ const ScrollDownButton = (props) => {
             style = {{
                 animationDuration: '4s',
                 animationIterationCount: 'infinite',
-                animationName: 'example2',
+                animationName: 'scroll-down-animation-2',
                 height: 50,
                 position: 'absolute',
                 width: 50,
@@ -32,6 +32,14 @@ const ScrollDownButton = (props) => {
             onMouseEnter = {() => {onMouseEnter();}}
             onMouseLeave = {() => {onMouseLeave();}}
             onClick = {() => {
+
+                const videos = document.getElementsByTagName('video');
+
+                if (videos.length > 0) {
+                    for( let i = 0; i < videos.length; i++ ) {
+                        videos[i].pause();
+                    }
+                }
 
                 let startingY = window.scrollY;
                 let diff = (target().clientHeight + 25) - startingY
@@ -81,7 +89,7 @@ const ScrollDownButton = (props) => {
                 style = {{
                     animationDuration: '4s',
                     animationIterationCount: 'infinite',
-                    animationName: 'example',
+                    animationName: 'scroll-down-animation-1',
                     background: 'rgba(0,0,0,0)',
                     height: 30,
                     left: 0,

@@ -170,7 +170,8 @@ router.get('/', (req, res) => {
         post.getBlog({
             postTypeId: 1,
             container: false,
-            hyperlink: ''
+            hyperlink: '',
+            parentStatus: 'public'
         }, ( posts ) => {
             user._get((_user) => {
                 const initialState = {
@@ -184,6 +185,8 @@ router.get('/', (req, res) => {
                     children: posts,
                     type: 'home'
                 };
+
+                console.log( posts);
 
                 const content = renderToString(<Index {...initialState }></Index>);
 
@@ -262,22 +265,22 @@ router.get('/*', ( req, res ) => {
 
                                             if (post.extension === 'mp4') {
 
-                                                var streamPath = path.resolve(_path);
+                                                let streamPath = path.resolve(_path);
                                                 //Calculate the size of the file
-                                                var stat = fs.statSync(streamPath);
-                                                var total = stat.size;
-                                                var file;
-                                                var contentType = "video/mp4";
+                                                let stat = fs.statSync(streamPath);
+                                                let total = stat.size;
+                                                let file;
+                                                let contentType = "video/mp4";
 
                                                 if (req.headers.range) {
-                                                    var range = req.headers.range;
-                                                    var parts = range.replace(/bytes=/, "").split("-");
-                                                    var partialstart = parts[0];
-                                                    var partialend = parts[1];
+                                                    let range = req.headers.range;
+                                                    let parts = range.replace(/bytes=/, "").split("-");
+                                                    let partialstart = parts[0];
+                                                    let partialend = parts[1];
 
-                                                    var start = parseInt(partialstart, 10);
-                                                    var end = partialend ? parseInt(partialend, 10) : total - 1;
-                                                    var chunksize = (end - start) + 1;
+                                                    let start = parseInt(partialstart, 10);
+                                                    let end = partialend ? parseInt(partialend, 10) : total - 1;
+                                                    let chunksize = (end - start) + 1;
 
                                                     file = fs.createReadStream(streamPath, {
                                                         start: start,
@@ -302,7 +305,7 @@ router.get('/*', ( req, res ) => {
                                                 }
                                           } else {
 
-                                              var file = fs.readFileSync( _path );
+                                              let file = fs.readFileSync( _path );
 
                                               res.writeHead(200, {'Content-Type': mime.lookup(_path)});
                                               res.end(file, 'binary');
@@ -472,7 +475,7 @@ router.get('/*', ( req, res ) => {
 
                         const path = __dirname + '/../src' + postByHyperlink.path + postByHyperlink.filename + '.' + postByHyperlink.extension;
 
-                        var file = fs.readFileSync( path );
+                        let file = fs.readFileSync( path );
 
                         res.writeHead(200, {'Content-Type': mime.lookup( path ) });
                         res.end(file, 'binary');

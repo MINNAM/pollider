@@ -45,11 +45,11 @@ class Profile extends React.Component {
                     className = 'toggle-content'
                 >
                     <h1
+                        className = 'greeting'
                         style = {{
                             color: 'rgb(40,40,40)',
                             display: 'inline-block',
-                            fontFamily: 'hind',
-                            fontSize: 44,
+                            fontFamily: 'hind',                            
                             letterSpacing: '2px',
                             marginBottom: 12,
                             marginTop: 5,
@@ -61,14 +61,13 @@ class Profile extends React.Component {
                         <p
                             style = {{
                                 fontFamily: 'Hind',
-                                fontSize: 18,
                                 fontWeight: 300,
                                 letterSpacing: '.85px',
                                 lineHeight: '35px',
                             }}
                         >
                             <br/>
-                            My name is <span style = {{ fontWeight: 500, fontSize : 25, paddingLeft: 10, paddingRight: 10 }}>{`Min Nam`}.</span>
+                            My name is <span className = 'user-name' style = {{ fontWeight: 500, paddingLeft: 10, paddingRight: 10 }}>{`Min Nam`}.</span>
                             I am a web developer resides in Vancouver, Canada.
                             I love the world of coding where a grain of ideas can turn in to a rolling stone, something big!
                             <br/>

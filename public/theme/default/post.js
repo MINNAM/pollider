@@ -16,6 +16,12 @@ class Post extends React.Component {
                         before: 'image-enlarge-container',
                         after: 'image-enlarge-container-toggled'
                     }
+                },
+                scrolled: {
+                    classNames: {
+                        before: 'image-scrolled-before',
+                        after: 'image-scrolled-after',
+                    }
                 }
             }
         }

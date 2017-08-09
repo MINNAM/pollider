@@ -699,21 +699,27 @@ class Post {
 
                 let sqlOnIds = '';
 
+                const allowedChildren = [];
+
                 _children.map( ( child, key ) => {
 
-                    if ( parentStatus == 'private' ) {
-
-                        sqlOnIds += `p.id = ${ child.alias_id ? child.alias_id : child.id } ${ key < _children.length - 1 ? 'OR' : ''} `;
+                    if (parentStatus == 'private') {
+                        if (child.status != 'hidden') {
+                            allowedChildren.push(child)
+                        }
 
                     } else {
-
-                        if ( child.status != 'private' ) {
-                            sqlOnIds += `p.id = ${ child.alias_id ? child.alias_id : child.id } ${ key < _children.length - 1 ? 'OR' : ''} `;
+                        if (child.status != 'private' && child.status != 'hidden') {
+                            allowedChildren.push(child)
                         }
 
                     }
 
                 });
+
+                allowedChildren.map((child,key) => {
+                    sqlOnIds += `p.id = ${ child.alias_id ? child.alias_id : child.id } ${ key < allowedChildren.length - 1 ? 'OR' : ''} `;
+                })
 
                 this.db.connection.query (
                     `SELECT
@@ -795,6 +801,8 @@ class Post {
                     [ postTypeId, postTypeId ],
                     ( err, rows ) => {
 
+                        console.log(err);
+
                         const posts = {};
 
                         let _posts;
@@ -855,7 +863,7 @@ class Post {
 
                             _posts = [];
 
-                            _children.map( ( element, key ) => {
+                            allowedChildren.map( ( element, key ) => {
 
                                 if ( posts[ element.id ] ) {
 

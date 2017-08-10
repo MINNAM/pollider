@@ -142,7 +142,9 @@ class Contact extends React.Component {
                 data        : JSON.stringify( this.state.data ),
                 contentType : "application/json; charset=utf-8",
                 dataType    : "json",
-                success     : ( response ) => {
+                success     : (response) => {
+
+                    ga('send', 'event', 'contact', 'send', `From ${window.location.href}`);
 
                     this.setState({
                         sending : false,
@@ -205,7 +207,7 @@ class Contact extends React.Component {
                 <div
                     className = 'toggle-content'
                 >
-                    <h1
+                    <span
                         ref = 'title'
                         style = {{
                             fontFamily: 'hind',
@@ -218,7 +220,7 @@ class Contact extends React.Component {
                         }}
                     >
                         Say Hello!
-                    </h1>
+                    </span>
                     <div>
                         {
                             this.state.data.map( ( element, key ) => {
@@ -268,9 +270,8 @@ class Contact extends React.Component {
                                                         this.setState({ _data : data });
 
                                                     }}
-                                                    max     = { 500 }
+                                                    max = { 500 }
                                                 />
-
                                         );
                                         break;
                                     }

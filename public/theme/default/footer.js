@@ -121,6 +121,7 @@ const Footer = (props) => {
                             }}
                             onClick = {() => {
                                 window.open('https://github.com/minnam');
+                                ga('send', 'event', 'click', 'sns', `Github from ${window.location.href}`);
                             }}
                         />
                         <FontAwesomeButton
@@ -138,6 +139,7 @@ const Footer = (props) => {
                             }}
                             onClick = {() => {
                                 window.open('https://vimeo.com/minnam');
+                                ga('send', 'event', 'click', 'sns', `Vimeo ${window.location.href}`);
                             }}
                         />
                     </Wrapper>

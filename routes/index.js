@@ -135,6 +135,7 @@ const handleContainer = function ( row, res ) {
         hyperlink: row.hyperlink,
         postDataCount: row.post_data_count
     }, (posts) => {
+
          user._get((_user) => {
              const initialState = {
                  model : {
@@ -173,6 +174,7 @@ router.get('/', (req, res) => {
             hyperlink: '',
             parentStatus: 'public'
         }, ( posts ) => {
+
             user._get((_user) => {
                 const initialState = {
                     model : {
@@ -182,11 +184,13 @@ router.get('/', (req, res) => {
                             hyperlink: ''
                         }]
                     },
-                    children: posts,
+                    children: posts ? posts.sort((a,b) => {
+                        const date1 = new Date(a.public_date);
+                        const date2 = new Date(a.public_date);
+                        return date1.getTime() < date2.getTime();
+                    }) : [],
                     type: 'home'
                 };
-
-                console.log( posts);
 
                 const content = renderToString(<Index {...initialState }></Index>);
 

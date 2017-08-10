@@ -72,8 +72,8 @@ class Body extends React.Component {
             addLoadedQueue,
         } = this.props;
 
-        let banner = model.data ? model.data['Banner 1'] : null;
-        let backupBanner = model.data ? model.data['Banner 2'] : null;
+        let banner = model.data ? model.data['Banner'] : null;
+        let backupBanner = model.data ? model.data['Backup Banner'] : null;
         let bannerType = model.data ? model.data[ 'Banner Type'] : null;
 
         this.setVideoStatus();
@@ -400,6 +400,7 @@ class Body extends React.Component {
                                 }}
                                 onClick = {(event) => {
                                     event.stopPropagation();
+                                    ga('send', 'event', `play`, 'Banner Video', `From ${window.location.href}`);
                                     if (this.refs.video.requestFullscreen) {
                                         this.refs.video.requestFullscreen();
                                     } else if (this.refs.video.mozRequestFullScreen) {

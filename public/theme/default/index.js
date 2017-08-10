@@ -13,8 +13,18 @@ import FontAwesomeButton from './components/ui/buttons/font-awesome-button.js';
 import Heading from './components/heading.js';
 import Input from './components/input.js';
 
+
 const PRIMARY_COLOR = 'rgb(76, 211, 173)';
 
+if (typeof window  != 'undefined') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-104311552-1', 'auto');
+    ga('send', 'pageview');
+}
 
 class Index extends Component {
 
@@ -35,6 +45,8 @@ class Index extends Component {
         };
 
         this.toggle = this.toggle.bind(this);
+
+
     }
 
     componentDidMount () {
@@ -110,6 +122,7 @@ class Index extends Component {
                     this.setState({toggle: null});
                 } else {
                     this.setState({toggle: _toggle});
+                    ga('send', 'event', `toggled`, 'Profile', `From ${window.location.href}`);
                 }
             break;
             case 'contact':
@@ -117,6 +130,7 @@ class Index extends Component {
                     this.setState({toggle: null});
                 } else {
                     this.setState({toggle: _toggle});
+                    ga('send', 'event', `toggled`, 'Contact', `From ${window.location.href}`);
                 }
             break;
             default:
@@ -205,6 +219,7 @@ class Index extends Component {
 
                 {
                     loading ? <img
+                        alt = 'Loding gif image, four circles animating'
                         src = '/assets/loading.gif'
                         style = {{
                             zIndex: 300,

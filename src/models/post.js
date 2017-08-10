@@ -719,7 +719,7 @@ class Post {
 
                 allowedChildren.map((child,key) => {
                     sqlOnIds += `p.id = ${ child.alias_id ? child.alias_id : child.id } ${ key < allowedChildren.length - 1 ? 'OR' : ''} `;
-                })
+                });
 
                 this.db.connection.query (
                     `SELECT
@@ -764,7 +764,7 @@ class Post {
                 			FROM ${ this.table_prefix }post p
                             INNER JOIN post_data_type pdt
                                 ON p.post_data_type_id = pdt.id
-                            WHERE p.post_type_id = ? ${ !container ? 'AND p.container = 0' : '' } AND (${ sqlOnIds })
+                            WHERE p.post_type_id = ? ${ !container ? 'AND p.container = 0' : '' }${ sqlOnIds ? ` AND (${ sqlOnIds })` : ''}
                         ) a
                         LEFT OUTER JOIN
                             (
@@ -794,7 +794,7 @@ class Post {
                                     ON p.id = pd.post_id
                                 INNER JOIN post_data_type pdt
                                     ON p.post_data_type_id = pdt.id
-                                WHERE p.post_type_id = ? ${ !container ? 'AND p.container = 0' : '' } AND (${ sqlOnIds })
+                                WHERE p.post_type_id = ? ${ !container ? 'AND p.container = 0' : '' }${ sqlOnIds ? ` AND (${ sqlOnIds })` : ''}
                                 ORDER BY p.parent_id
                             ) b
                         ON a.post_id = b.post_id`,

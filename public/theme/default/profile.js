@@ -44,19 +44,19 @@ class Profile extends React.Component {
                 <div
                     className = 'toggle-content'
                 >
-                    <h1
+                    <span
                         className = 'greeting'
                         style = {{
                             color: 'rgb(40,40,40)',
                             display: 'inline-block',
-                            fontFamily: 'hind',                            
+                            fontFamily: 'hind',
                             letterSpacing: '2px',
                             marginBottom: 12,
                             marginTop: 5,
                         }}
                     >
                         {title}
-                    </h1>
+                    </span>
                     <div>
                         <p
                             style = {{

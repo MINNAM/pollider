@@ -31,8 +31,8 @@ const PostHeader = (props) => {
                     content = {
                         model.data ?
                             (
-                                model.data[ 'Description' ] ?
-                                    <span>
+                                model.data[ 'Subtitle' ] ?
+                                    <h2>
                                         <i
                                             className="fa fa-lock"
                                             style = {{
@@ -42,8 +42,8 @@ const PostHeader = (props) => {
                                                 display: model.status != 'public' ? 'inline': 'none'
                                             }}
                                         />
-                                        { model.data[ 'Description' ].content }
-                                    </span>
+                                        { model.data[ 'Subtitle' ].content }
+                                    </h2>
                                     : ''
                             )   :
                             <i

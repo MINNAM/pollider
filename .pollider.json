@@ -3,7 +3,7 @@
     "port": 3000,
     "postTypes": [
         {
-            "name": "Project",
+            "name": "Portfolio",
             "name_singular": "Project",
             "name_plural": "Projects",
             "hyperlink": "posts",
@@ -19,17 +19,33 @@
             },
             "meta": [
                 {
+                    "field": "Subtitle",
+                    "data_type": "text",
+                    "display": 1
+                },
+                {
                     "field": "Description",
                     "data_type": "text",
                     "display": 1
                 },
                 {
-                    "field": "Banner 1",
+                    "field": "Content",
+                    "data_type": "project",
+                    "display": 1,
+                    "main": true
+                },
+                {
+                    "field": "Keywords",
+                    "data_type": "text",
+                    "display": 1
+                },
+                {
+                    "field": "Banner",
                     "data_type": "post-container",
                     "display": 1
                 },
                 {
-                    "field": "Banner 2",
+                    "field": "Backup Banner",
                     "data_type": "post-container",
                     "display": 1
                 },
@@ -52,14 +68,7 @@
                     "field": "Thumbnail",
                     "data_type": "post-container",
                     "display": 1
-                },
-                {
-                    "field": "Content",
-                    "data_type": "project",
-                    "display": 1,
-                    "main": true
                 }
-
             ]
         },
         {

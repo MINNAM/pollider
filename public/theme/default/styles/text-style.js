@@ -1,5 +1,4 @@
 const TEXT_STYLE = {
-
     NORMALTEXT: {
         fontSize : 18,
         letterSpacing : '.85px',
@@ -15,7 +14,7 @@ const TEXT_STYLE = {
         lineHeight : '35px',
     },
     HEADING1: {
-        fontSize : 28,
+        fontSize : 21,
         letterSpacing : '.85px',
         fontFamily : 'Hind',
         fontWeight : 300,
@@ -23,7 +22,7 @@ const TEXT_STYLE = {
         color: 'rgb(160,160,160)'
     },
     HEADING2: {
-        fontSize : 24,
+        fontSize : 19,
         letterSpacing : '.85px',
         fontFamily : 'Hind',
         fontWeight : 300,
@@ -35,7 +34,6 @@ const TEXT_STYLE = {
         fontSize   : 12,
         lineHeight : '14px'
     }
-
-}
+};
 
 export default TEXT_STYLE;

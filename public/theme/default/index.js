@@ -106,6 +106,7 @@ class Index extends Component {
     onKeyDown (event) {
         switch (event.keyCode) {
             case 27:
+            ga('send', 'event', `toggled`, this.state.toggle, `Off by ESC from ${window.location.href}`);
                 this.toggle(null);
                 break;
         }
@@ -120,17 +121,19 @@ class Index extends Component {
             case 'profile':
                 if (toggle == _toggle) {
                     this.setState({toggle: null});
+                    ga('send', 'event', `toggled`, 'profile', `Off by close button from ${window.location.href}`);
                 } else {
                     this.setState({toggle: _toggle});
-                    ga('send', 'event', `toggled`, 'Profile', `From ${window.location.href}`);
+                    ga('send', 'event', `toggled`, 'profile', `From ${window.location.href}`);
                 }
             break;
             case 'contact':
                 if (toggle == _toggle) {
                     this.setState({toggle: null});
+                    ga('send', 'event', `toggled`, 'profile', `Off by close button from ${window.location.href}`);
                 } else {
                     this.setState({toggle: _toggle});
-                    ga('send', 'event', `toggled`, 'Contact', `From ${window.location.href}`);
+                    ga('send', 'event', `toggled`, 'profile', `From ${window.location.href}`);
                 }
             break;
             default:
@@ -316,6 +319,7 @@ class Index extends Component {
                         })
                     }}
                     onClick = {() => {
+                        ga('send', 'event', `toggled`, this.state.toggle, `Off by clicking content from ${window.location.href}`);
                         this.toggle(null);
                     }}
                 />

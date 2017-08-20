@@ -138,24 +138,24 @@ class Thumbnail extends React.Component {
                             cursor: 'pointer',
                         }}
                         onMouseEnter = {() => {
+                            this.setState({
+                                mouseOver: true
+                            });
                             if (loaded) {
-                                this.nextImage();
-                                this.setState({
-                                    mouseOver: true
-                                });
+                                this.nextImage();                                
                                 this.slideInterval = setInterval(() => {
                                     this.nextImage();
                                 }, 1000);
                             }
                         }}
                         onMouseLeave = {() => {
+                            this.setState({
+                                mouseOver : false
+                            });
                             if (loaded) {
                                 if (this.slideInterval) {
                                     clearInterval(this.slideInterval);
                                 }
-                                this.setState({
-                                    mouseOver : false
-                                });
                             }
                         }}
                     >
@@ -174,22 +174,22 @@ class Thumbnail extends React.Component {
                                     marginBottom: 5
                                 }}
                             >
+                            <span
+                                style = {{
+                                    borderBottom: '2px solid rgb(76, 211, 173)',
+                                    display: 'inline-block',
+                                    left: '50%',
+                                    position: 'absolute',
+                                    bottom: 3.5,
+                                    transition: '.25s ease all',
+                                    width: this.state.mouseOver ? '100%' : '0%',
+                                    transform: 'translate(-50%,0)'
+
+                                }}
+                            />
                                 <Heading
                                     textColor = {'rgb(160,160,160)'}
                                     content = {subtitle}
-                                />
-                                <span
-                                    style = {{
-                                        borderBottom: '2px solid rgb(76, 211, 173)',
-                                        display: 'inline-block',
-                                        left: '50%',
-                                        position: 'absolute',
-                                        bottom: 3.5,
-                                        transition: '.25s ease all',
-                                        width: mouseOver ? '100%' : '0%',
-                                        transform: 'translate(-50%,0)'
-
-                                    }}
                                 />
                             </span>
                             <div

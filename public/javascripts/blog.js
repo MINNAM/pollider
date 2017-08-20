@@ -16724,24 +16724,24 @@ var Thumbnail = function (_React$Component) {
                             cursor: 'pointer'
                         },
                         onMouseEnter: function onMouseEnter() {
+                            _this3.setState({
+                                mouseOver: true
+                            });
                             if (loaded) {
                                 _this3.nextImage();
-                                _this3.setState({
-                                    mouseOver: true
-                                });
                                 _this3.slideInterval = setInterval(function () {
                                     _this3.nextImage();
                                 }, 1000);
                             }
                         },
                         onMouseLeave: function onMouseLeave() {
+                            _this3.setState({
+                                mouseOver: false
+                            });
                             if (loaded) {
                                 if (_this3.slideInterval) {
                                     clearInterval(_this3.slideInterval);
                                 }
-                                _this3.setState({
-                                    mouseOver: false
-                                });
                             }
                         }
                     },
@@ -16764,10 +16764,6 @@ var Thumbnail = function (_React$Component) {
                                     marginBottom: 5
                                 }
                             },
-                            _react2.default.createElement(_heading2.default, {
-                                textColor: 'rgb(160,160,160)',
-                                content: subtitle
-                            }),
                             _react2.default.createElement('span', {
                                 style: {
                                     borderBottom: '2px solid rgb(76, 211, 173)',
@@ -16776,10 +16772,14 @@ var Thumbnail = function (_React$Component) {
                                     position: 'absolute',
                                     bottom: 3.5,
                                     transition: '.25s ease all',
-                                    width: mouseOver ? '100%' : '0%',
+                                    width: this.state.mouseOver ? '100%' : '0%',
                                     transform: 'translate(-50%,0)'
 
                                 }
+                            }),
+                            _react2.default.createElement(_heading2.default, {
+                                textColor: 'rgb(160,160,160)',
+                                content: subtitle
                             })
                         ),
                         _react2.default.createElement(

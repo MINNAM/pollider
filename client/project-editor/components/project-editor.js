@@ -858,20 +858,10 @@ class ProjectEditor extends React.Component {
                             paddingRight: 10,
                             paddingLeft: 10
                         }}
-                    >
-                        <PostIcon
-                            model = { this.props.post }
-                            style = {{
-                                width: 35,
-                                height: 35,
-                                marginTop: 10.5
-                            }}
-                        />
+                    >                        
                         <span
                             style = {{
                                 display: 'inline-block',
-                                marginTop: 10.5,
-                                marginLeft: 7.5
                             }}
                         >
                             <span
@@ -879,7 +869,9 @@ class ProjectEditor extends React.Component {
                                 style = {{
                                     paddingLeft: 5,
                                     color: THEME.primaryColor,
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+                                    fontSize: 18,
+                                    lineHeight: '56px'
                                 }}
                                 onClick = {() => {
                                     this.handleDialogModel({ type: 'Name'});
@@ -887,7 +879,6 @@ class ProjectEditor extends React.Component {
                             >
                                 {this.props.post.name}
                             </span>
-                            <span className = { 'file-date' } style = {{ paddingLeft: 5 }}>{ formatDate(this.props.post.created_date) }</span>
                         </span>
 
 

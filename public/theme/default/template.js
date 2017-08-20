@@ -37,6 +37,8 @@ export default ({ body, title, initialState }) => {
         keywords =  `${model.first_name} ${model.last_name},Web Design,Web Development,App Development,Freelance,Vancouver`;
     }
 
+    console.log(model.username);
+
     return `
     <!DOCTYPE html>
     <html>

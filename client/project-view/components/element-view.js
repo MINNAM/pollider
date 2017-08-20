@@ -270,12 +270,22 @@ class ElementView extends Component {
                                     }
                                 }}
                                 src = { `/${ contentModel._hyperlink }` }
-                                alt = { contentModel.data ? (contentModel.data[ 'Alt Text' ] ? contentModel.data[ 'Alt Text' ].content: ''): '' }
+                                alt = {contentModel.data ? (contentModel.data[ 'Alt Text' ] ? contentModel.data[ 'Alt Text' ].content: '') : ''}
                                 style = {{
                                     width: (col.elementWidth * 100) + '%', // 70
                                 }}
                             />
                             </div>
+                            <p
+                                style = {{
+                                    position: 'block',
+                                    fontStyle: 'italic',
+                                    fontSize: 14,
+                                    color: 'rgb(120,120,120)'
+                                }}
+                            >
+                                {contentModel.data ? (contentModel.data[ 'Description' ] ? contentModel.data[ 'Description' ].content: '') : ''}
+                            </p>
                             <div
                                 className = {enlargeClassName}
                                 style = {{

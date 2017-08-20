@@ -137,6 +137,7 @@ const handleContainer = function ( row, res ) {
     }, (posts) => {
 
          user._get((_user) => {
+
              const initialState = {
                  model : {
                      ...row,
@@ -150,7 +151,7 @@ const handleContainer = function ( row, res ) {
 
             res.send( Template({
                 body: content,
-                title: `${_user.first_name} ${_user.last_name} | ${ row.name }`,
+                title: `${row.name }`,
                 initialState: JSON.stringify( initialState )
             }));
          });
@@ -231,8 +232,6 @@ router.get('/*', ( req, res ) => {
         }, (postByHyperlink) => {
 
             const _post = Object.assign({ ...postByHyperlink, post_data_count : home.post_data_count, hyperlink : req.originalUrl });
-
-
 
             user._get((_user) => {
                 if (!postByHyperlink) {
@@ -315,8 +314,6 @@ router.get('/*', ( req, res ) => {
                                               res.end(file, 'binary');
                                           }
 
-
-
                                         } else {
 
                                             if ( post.container == 1 ) {
@@ -326,18 +323,19 @@ router.get('/*', ( req, res ) => {
                                             } else {
 
                                                 const initialState = {
-                                                    model : { ...post },
+                                                    model : {
+                                                        ...post,
+                                                        ..._user
+                                                    },
                                                     type  : 'post',
                                                 };
 
                                                 const content = renderToString( <Index {...initialState }/> );
 
                                                 res.send( Template({
-
                                                     body         : content,
-                                                    title        : `${_user.first_name} ${_user.last_name} | ${ post.name }`,
+                                                    title        : `${post.name}`,
                                                     initialState : JSON.stringify(initialState)
-
                                                 }));
 
                                             }
@@ -460,7 +458,7 @@ router.get('/*', ( req, res ) => {
 
                                         res.send( Template({
                                             body: content,
-                                            title: `${_user.first_name } ${_user.last_name } | ${postType.name}`,
+                                            title: `${postType.name}`,
                                             initialState : JSON.stringify( initialState )
                                         }));
 
@@ -493,7 +491,10 @@ router.get('/*', ( req, res ) => {
                         } else {
 
                             const initialState = {
-                                model : { ...postByHyperlink },
+                                model : {
+                                    ...postByHyperlink,
+                                    ..._user
+                                },
                                 type  : 'post',
                             };
 
@@ -502,11 +503,9 @@ router.get('/*', ( req, res ) => {
                             user._get((_user) => {
 
                                 res.send(Template({
-
                                     body         : content,
-                                    title        : `${_user.first_name} ${_user.last_name} | ${postByHyperlink.name}`,
+                                    title        : `${postByHyperlink.name}`,
                                     initialState : JSON.stringify(initialState)
-
                                 }));
 
                             });

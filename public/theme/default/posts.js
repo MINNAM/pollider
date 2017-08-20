@@ -85,7 +85,7 @@ class Posts extends React.Component {
                                     parentModel = {model}
                                     name = {element.name}
                                     hyperlink = {element.hyperlink}
-                                    description = {element.data ? (element.data['Description'] ? element.data['Description'].content : '') : ''}
+                                    subtitle = {element.data ? (element.data[ 'Subtitle' ] ? element.data[ 'Subtitle' ].content : '') : ''}
                                     addLoadingQueue = {addLoadingQueue}
                                     addLoadedQueue = {addLoadedQueue}
                                 />

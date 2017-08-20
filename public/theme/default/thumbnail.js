@@ -102,7 +102,7 @@ class Thumbnail extends React.Component {
         const {
             name,
             index,
-            description,
+            subtitle,
             type,
             hyperlink,
             addLoadingQueue,
@@ -176,7 +176,7 @@ class Thumbnail extends React.Component {
                             >
                                 <Heading
                                     textColor = {'rgb(160,160,160)'}
-                                    content = {description}
+                                    content = {subtitle}
                                 />
                                 <span
                                     style = {{

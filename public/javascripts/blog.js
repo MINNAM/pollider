@@ -49455,8 +49455,14 @@ var TextTypeControls = function (_React$Component) {
     _createClass(TextTypeControls, [{
         key: 'onChange',
         value: function onChange(event, index, value) {
-            this.props.focus();
+            var _this2 = this;
+
+            event.preventDefault();
             this.props.onToggle(TEXTS[value].style);
+            setTimeout(function () {
+                console.log('focus');
+                _this2.props.focus();
+            }, 500);
         }
     }, {
         key: 'render',
@@ -49492,6 +49498,9 @@ var TextTypeControls = function (_React$Component) {
                         style: {
                             width: 150,
                             fontSize: 15
+                        },
+                        underlineFocusStyle: {
+                            color: _.THEME.primaryColor
                         }
                     },
                     TEXTS.map(function (type, key) {
@@ -49612,12 +49621,14 @@ var STYLES = {
         height: 'calc(100% - 50px)',
         outline: 'none',
         padding: 15,
-        width: '100%'
+        width: '100%',
+        cursor: 'text'
     },
     textEditor: {
         height: 'calc(100% - 50px)',
         width: '100%',
-        overflow: 'scroll'
+        overflow: 'scroll',
+        cursor: 'text'
     }
 };
 
@@ -49766,8 +49777,8 @@ var TextEditor = function (_Component) {
             var editorState = this.state.editorState;
 
             var selection = editorState.getSelection();
-            var nextContentState = Object.keys(_textTypeControls.TEXT_STYLE_MAP).reduce(function (contentState, color) {
-                return _draftJs.Modifier.removeInlineStyle(contentState, selection, color);
+            var nextContentState = Object.keys(_textTypeControls.TEXT_STYLE_MAP).reduce(function (contentState, textType) {
+                return _draftJs.Modifier.removeInlineStyle(contentState, selection, textType);
             }, editorState.getCurrentContent());
 
             var nextEditorState = _draftJs.EditorState.push(editorState, nextContentState, 'change-inline-style');

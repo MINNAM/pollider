@@ -52,8 +52,12 @@ class TextTypeControls extends React.Component {
     }
 
     onChange (event, index, value) {
-        this.props.focus();
+        event.preventDefault();
         this.props.onToggle(TEXTS[value].style);
+        setTimeout(() => {
+            console.log('focus');
+            this.props.focus();
+        }, 500);
     }
 
     render () {
@@ -86,6 +90,9 @@ class TextTypeControls extends React.Component {
                     style = {{
                         width: 150,
                         fontSize: 15
+                    }}
+                    underlineFocusStyle = {{
+                        color: THEME.primaryColor
                     }}
                 >
                     {

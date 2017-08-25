@@ -78,7 +78,7 @@ class Post {
         const formattedDate = new Date( public_date ).toISOString().slice( 0, 19 ).replace('T', ' ');
 
         let sql    = `UPDATE ${ this.table_prefix }post SET \`parent_id\` = ${ !parent_id ? 'null' : '?' }, \`name\` = ?, \`hyperlink\` = ?, \`public_date\` = ?, \`status\` = ? WHERE id = ?;`;
-        let fields = !parent_id ? [ name, hyperlink, formattedDate, status, id, ] : [ parent_id, name, hyperlink, formattedDate, status, id ];
+        let fields = !parent_id ? [name, hyperlink, formattedDate, status, id,] : [parent_id, name, hyperlink, formattedDate, status, id];
 
         this.db.connection.query (
 
@@ -104,7 +104,7 @@ class Post {
                                     element.content,
                                     element.content_raw,
                                     element.id
-                                ],
+                               ],
 
                                 ( err, row ) => { /**/ }
 
@@ -155,11 +155,11 @@ class Post {
 
             (( _key ) => {
 
-                itemsToDelete.push( posts[ _key ].id );
+                itemsToDelete.push( posts[_key].id );
 
-                if ( posts[ _key ].path ) {
+                if ( posts[_key].path ) {
 
-                    paths.push( __dirname + '/..' + posts[ _key ].path );
+                    paths.push( __dirname + '/..' + posts[_key].path );
 
                 }
 
@@ -201,7 +201,7 @@ class Post {
         this.db.connection.query (
 
             `DELETE FROM ${ this.table_prefix }post WHERE id IN ?`,
-            [[ itemsToDelete ]],
+            [[itemsToDelete]],
             ( err, row ) => {
 
                 res.send( true );
@@ -236,14 +236,14 @@ class Post {
         this.db.connection.query (
 
             `SELECT * FROM ( SELECT pm.field, pct.id as data_type_id FROM ${ this.table_prefix }post_meta pm INNER JOIN ${ this.table_prefix }post_content_type pct ON pm.data_type LIKE pct.name WHERE pm.post_type_id = ? ) pmnpct;`,
-            [ post_type_id ],
+            [post_type_id],
             ( err, postDataTypes ) => {
 
                 this.db.connection.query (
 
-                    `INSERT INTO ${ this.table_prefix }post ( \`id\`, \`parent_id\`, \`user_id\`, \`post_type_id\`, \`post_data_type_id\`, \`name\`, \`hyperlink\`, \`extension\`, \`size\`, \`container\`, \`status\` ) VALUES ( null, ?, 1, ?, ?, ?, ?, ?, ?, ?, 'public' );`,
+                    `INSERT INTO ${ this.table_prefix }post ( \`id\`, \`parent_id\`, \`user_id\`, \`post_type_id\`, \`post_data_type_id\`, \`name\`, \`hyperlink\`, \`extension\`, \`size\`, \`container\`, \`status\` ) VALUES ( null, ?, 1, ?, ?, ?, ?, ?, ?, ?, 'private' );`,
 
-                    [ parent_id ? parent_id : null, post_type_id, post_data_type_id, name, hyperlink, extension, size ? size : -1, container ],
+                    [parent_id ? parent_id : null, post_type_id, post_data_type_id, name, hyperlink, extension, size ? size : -1, container],
 
                     ( err, post ) => {
 
@@ -251,7 +251,7 @@ class Post {
 
                         postDataTypes.map(( element, key ) => {
 
-                            postData.push([ post.insertId, element.data_type_id, element.field, '' ]); // The last field is going to be a default value
+                            postData.push([post.insertId, element.data_type_id, element.field, '']); // The last field is going to be a default value
 
                         });
 
@@ -259,7 +259,7 @@ class Post {
 
                             `INSERT INTO ${ this.table_prefix }post_data ( \`post_id\`, \`post_content_type_id\`, \`field\`, \`content\` ) VALUES ?`,
 
-                            [ postData ],
+                            [postData],
 
                             ( err, row2 ) => {
 
@@ -267,35 +267,33 @@ class Post {
 
                                     `SELECT pd.id, pd.field, pd.content FROM ${ this.table_prefix }post p LEFT JOIN ${ this.table_prefix }post_data pd ON p.id = pd.post_id WHERE p.id = ?`,
 
-                                    [ post.insertId ],
+                                    [post.insertId],
 
                                     ( err, newPostData ) => {
 
                                         this.db.connection.query (
 
-                                            `SELECT p.id, p.parent_id, p.path, p.filename, p.name, p.hyperlink, p.container, p.public_date, p.extension, p.size, p.created_date, p.modified_date, pdt.name AS post_data_type FROM ${ this.table_prefix }post p INNER JOIN ${this.table_prefix }post_data_type pdt ON pdt.id = p.post_data_type_id  WHERE p.id = ?`,
-
-                                            [ post.insertId ],
-
+                                            `SELECT p.id, p.parent_id, p.path, p.filename, p.status, p.name, p.hyperlink, p.container, p.public_date, p.extension, p.size, p.created_date, p.modified_date, pdt.name AS post_data_type FROM ${ this.table_prefix }post p INNER JOIN ${this.table_prefix }post_data_type pdt ON pdt.id = p.post_data_type_id  WHERE p.id = ?`,
+                                            [post.insertId],
                                             ( err, newPost ) => {
 
                                                 var newPost = {
 
-                                                    id            : newPost[ 0 ].id,
-                                                    parent_id     : newPost[ 0 ].parent_id,
-                                                    name          : newPost[ 0 ].name,
-                                                    hyperlink     : newPost[ 0 ].hyperlink,
-                                                    status        : 'public',
-                                                    container     : newPost[ 0 ].container,
-                                                    public_date   : newPost[ 0 ].public_date,
-                                                    created_date  : newPost[ 0 ].created_date,
-                                                    modified_date : newPost[ 0 ].created_date,
-                                                    size          : newPost[ 0 ].size,
-                                                    data          : newPostData,
-                                                    hide          : {
-                                                        dataType : newPost[ 0 ].post_data_type,
-                                                        path     : newPost[ 0 ].path,
-                                                        filename : newPost[ 0 ].filename
+                                                    id: newPost[0].id,
+                                                    parent_id: newPost[0].parent_id,
+                                                    name: newPost[0].name,
+                                                    hyperlink: newPost[0].hyperlink,
+                                                    status: newPost[0].status,
+                                                    container: newPost[0].container,
+                                                    public_date: newPost[0].public_date,
+                                                    created_date: newPost[0].created_date,
+                                                    modified_date: newPost[0].created_date,
+                                                    size: newPost[0].size,
+                                                    data: newPostData,
+                                                    hide: {
+                                                        dataType: newPost[0].post_data_type,
+                                                        path: newPost[0].path,
+                                                        filename: newPost[0].filename
                                                     },
 
 
@@ -333,7 +331,7 @@ class Post {
         this.db.connection.query(
 
             `SELECT * FROM ${ this.table_prefix }post p WHERE id = ?`,
-            [ id ],
+            [id],
             ( err, rows ) => {
 
                 this.db.connection.query(
@@ -354,18 +352,18 @@ class Post {
                         ) VALUES ( null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );
                     `,
                     [
-                        rows[ 0 ].parent_id,
-                        rows[ 0 ].id,
-                        rows[ 0 ].user_id,
-                        rows[ 0 ].post_type_id,
-                        rows[ 0 ].post_data_type_id,
-                        rows[ 0 ].name,
-                        rows[ 0 ].hyperlink,
+                        rows[0].parent_id,
+                        rows[0].id,
+                        rows[0].user_id,
+                        rows[0].post_type_id,
+                        rows[0].post_data_type_id,
+                        rows[0].name,
+                        rows[0].hyperlink,
                         null,
                         null,
-                        rows[ 0 ].container,
-                        rows[ 0 ].status,
-                    ], ( err, rows ) => {
+                        rows[0].container,
+                        rows[0].status,
+                   ], ( err, rows ) => {
 
                         this.db.connection.query(
 
@@ -375,10 +373,10 @@ class Post {
                                 INNER JOIN ${ this.table_prefix }post_data_type pdt
                                     ON p.post_data_type_id = pdt.id
                                 WHERE p.id = ?`,
-                            [ rows.insertId ],
+                            [rows.insertId],
                             ( err, posts ) => {
 
-                                const post = posts[ 0 ];
+                                const post = posts[0];
 
                                 res.send({
 
@@ -504,7 +502,7 @@ class Post {
                         ORDER BY p.parent_id
                     ) b
                 ON a.post_id = b.post_id`,
-            [ post_type_id, post_type_id ],
+            [post_type_id, post_type_id],
             ( err, posts ) => {
 
                 const _posts = {};
@@ -513,9 +511,9 @@ class Post {
 
                     posts.map( ( element, key ) => {
 
-                        if ( !_posts[ element.post_id ] ) {
+                        if ( !_posts[element.post_id] ) {
 
-                            _posts[ element.post_id ] = {
+                            _posts[element.post_id] = {
 
                                 id            : element.post_id,
                                 alias_id      : element.alias_id,
@@ -542,7 +540,7 @@ class Post {
 
                         }
 
-                        _posts[ element.post_id ].data.push({
+                        _posts[element.post_id].data.push({
 
                             id      : element.post_data_id,
                             field   : element.field,
@@ -582,7 +580,7 @@ class Post {
             INNER JOIN ${ this.table_prefix }post_data pd
                 ON p.id = pd.post_id
             WHERE p.id = ?;`,
-            [ req.query.id ],
+            [req.query.id],
             ( err, rows ) => {
 
                 res.send( rows );
@@ -621,7 +619,7 @@ class Post {
 
             if ( row.parent_id == id ) {
 
-                _children[ row.id ] = row;
+                _children[row.id] = row;
                 _children = { ...this.findChildren ( row.id, rows, _children ) };
 
             }
@@ -650,17 +648,17 @@ class Post {
 
                     if ( post.parent_id == parentId ) {
 
-                        children[ post.id ] = post;
+                        children[post.id] = post;
 
                         if ( post.alias_id ) {
 
-                            if ( aliases[ post.alias_id ] ) {
+                            if ( aliases[post.alias_id] ) {
 
-                                aliases[ post.alias_id ].push( post );
+                                aliases[post.alias_id].push( post );
 
                             } else {
 
-                                aliases[ post.alias_id ] = [ post ];
+                                aliases[post.alias_id] = [post];
 
                             }
 
@@ -672,15 +670,15 @@ class Post {
 
                             for ( let key in children ) {
 
-                                if ( children[ key ].alias_id ) {
+                                if ( children[key].alias_id ) {
 
-                                    if ( aliases[ post.alias_id ] ) {
+                                    if ( aliases[post.alias_id] ) {
 
-                                        aliases[ children[ key ].alias_id ].push( children[ key ] );
+                                        aliases[children[key].alias_id].push( children[key] );
 
                                     } else {
 
-                                        aliases[ children[ key ].alias_id ] = [ children[ key ] ];
+                                        aliases[children[key].alias_id] = [children[key]];
 
                                     }
 
@@ -695,7 +693,7 @@ class Post {
 
                 });
 
-                const _children = Object.keys( children ).map( key => children[ key ] );
+                const _children = Object.keys( children ).map( key => children[key] );
 
                 let sqlOnIds = '';
 
@@ -798,7 +796,7 @@ class Post {
                                 ORDER BY p.parent_id
                             ) b
                         ON a.post_id = b.post_id`,
-                    [ postTypeId, postTypeId ],
+                    [postTypeId, postTypeId],
                     ( err, rows ) => {
 
                         console.log(err);
@@ -813,15 +811,15 @@ class Post {
 
                             for ( let i = 0, len = rows.length; i < len; i++ ) {
 
-                                lookup[ rows[ i ].post_id ] = rows[ i ];
+                                lookup[rows[i].post_id] = rows[i];
 
                             }
 
                             rows.map( ( element, key ) => {
 
-                                if ( !posts[ element.post_id ] ) {
+                                if ( !posts[element.post_id] ) {
 
-                                    posts[ element.post_id ] = {
+                                    posts[element.post_id] = {
 
                                         id            : element.post_id,
                                         parent_id     : element.parent_id,
@@ -845,11 +843,11 @@ class Post {
 
                                     };
 
-                                    // lookup[ element.id ] = posts[ element.hyperlink ];
+                                    // lookup[element.id] = posts[element.hyperlink];
 
                                 }
 
-                                posts[ element.post_id ].data[ element.field ] = {
+                                posts[element.post_id].data[element.field] = {
 
                                     id      : element.post_data_id,
                                     field   : element.field,
@@ -865,15 +863,15 @@ class Post {
 
                             allowedChildren.map( ( element, key ) => {
 
-                                if ( posts[ element.id ] ) {
+                                if ( posts[element.id] ) {
 
-                                    _posts.push( posts[ element.id ] );
+                                    _posts.push( posts[element.id] );
 
                                 } else {
 
-                                    if ( posts[ element.alias_id ] ) {
+                                    if ( posts[element.alias_id] ) {
 
-                                        const _post = { ...posts[ element.alias_id ] };
+                                        const _post = { ...posts[element.alias_id] };
 
                                         _post.id = element.id;
                                         _post.name = element.name;
@@ -886,23 +884,23 @@ class Post {
 
                             })
 
-                            // _posts = Object.keys( posts ).map( key => posts[ key ] );
+                            // _posts = Object.keys( posts ).map( key => posts[key] );
 
                             this.db.connection.query (
 
                                 `SELECT id, parent_id, hyperlink FROM ${ this.table_prefix }post WHERE post_type_id = ?`,
-                                [ postTypeId ],
+                                [postTypeId],
                                 ( err, rows ) => {
 
                                     _posts.map( ( element, key ) => {
 
                                         if ( parentId ) {
 
-                                            _posts[ key ].hyperlink = parentHyperlink + this.buildHyperlink( element.id, rows, '' );
+                                            _posts[key].hyperlink = parentHyperlink + this.buildHyperlink( element.id, rows, '' );
 
                                         } else {
 
-                                            _posts[ key ].hyperlink = hyperlink + this.buildHyperlink( element.id, rows, '' );
+                                            _posts[key].hyperlink = hyperlink + this.buildHyperlink( element.id, rows, '' );
 
                                         }
 
@@ -961,21 +959,21 @@ class Post {
             `SELECT *
             FROM ${ this.table_prefix }post p
             ${whereClauseForPostId}`,
-            [ id ],
+            [id],
             ( err, posts ) => {
 
                 this.db.connection.query (
                     `SELECT *
                     FROM ${ this.table_prefix }post p
                     WHERE p.post_type_id = ?;`,
-                    [ post_type_id ],
+                    [post_type_id],
                     ( err, rows ) => {
 
                         this.db.connection.query (
                             `SELECT *
                             FROM ${ this.table_prefix }post_type
                             WHERE id = ?;`,
-                            [ post_type_id ],
+                            [post_type_id],
                             ( err, postTypes ) => {
 
 
@@ -995,13 +993,13 @@ class Post {
                                             */
                                             postData.map( ( element ) => {
 
-                                                _postData[ element.field ] = element;
+                                                _postData[element.field] = element;
 
                                             });
 
                                             const post = {
-                                                ...posts[ 0 ],
-                                                _hyperlink : postTypes[ 0 ].hyperlink + this.buildHyperlink( posts[ 0 ].parent_id, rows, '' ) + '/' + posts[ 0 ].hyperlink,
+                                                ...posts[0],
+                                                _hyperlink : postTypes[0].hyperlink + this.buildHyperlink( posts[0].parent_id, rows, '' ) + '/' + posts[0].hyperlink,
                                                 data : _postData
                                             }
 
@@ -1034,7 +1032,7 @@ class Post {
 
                                                     if ( element.post_id == post.id ) {
 
-                                                        _postData[ element.field ] = element;
+                                                        _postData[element.field] = element;
 
                                                     }
 
@@ -1044,7 +1042,7 @@ class Post {
 
                                                 const _post = {
                                                     ...post,
-                                                    _hyperlink : postTypes[ 0 ].hyperlink + this.buildHyperlink( post.parent_id, rows, '' ) + '/' + post.hyperlink,
+                                                    _hyperlink : postTypes[0].hyperlink + this.buildHyperlink( post.parent_id, rows, '' ) + '/' + post.hyperlink,
                                                     data : _postData
                                                 }
 
@@ -1099,7 +1097,7 @@ class Post {
                     ON pt.id = pm.post_type_id
                 WHERE pt.hyperlink = ?
                 GROUP BY pt.id;`,
-                [ hyperlink ],
+                [hyperlink],
 
                 ( err, postTypes ) => {
                     done( postTypes[0] );
@@ -1152,10 +1150,10 @@ class Post {
 
                 sql,
                 [
-                    links[ index ],
+                    links[index],
                     postTypeId
 
-                ],
+               ],
                 ( err, rows ) => {
 
                     let _row;
@@ -1172,13 +1170,13 @@ class Post {
 
                     if ( index + 1 < links.length  ) {
 
-                        if ( links[ index + 1 ] == '' ) {
+                        if ( links[index + 1] == '' ) {
 
                             this.db.connection.query (
 
                                 `SELECT * FROM ${ this.table_prefix }post_data WHERE post_id = ?;`,
 
-                                [ _row.id ],
+                                [_row.id],
 
                                 ( err, data ) => {
 
@@ -1186,7 +1184,7 @@ class Post {
 
                                     data.map( ( row ) => {
 
-                                        _row.data[ row.field ] = row;
+                                        _row.data[row.field] = row;
 
                                     })
 
@@ -1254,7 +1252,7 @@ class Post {
 
                             `SELECT * FROM ${ this.table_prefix }post_data WHERE post_id = ?;`,
 
-                            [ _row.alias_id ? _row.alias_id : _row.id ],
+                            [_row.alias_id ? _row.alias_id : _row.id],
 
                             ( err, data ) => {
 
@@ -1262,7 +1260,7 @@ class Post {
 
                                 data.map( ( row ) => {
 
-                                    _row.data[ row.field ] = row;
+                                    _row.data[row.field] = row;
 
                                 })
 
@@ -1307,7 +1305,7 @@ class Post {
 
                 for ( let key in rows ) {
 
-                    model[ rows[ key ][ 'Field' ]  ] = null;
+                    model[rows[key]['Field'] ] = null;
 
                 }
 
@@ -1331,7 +1329,7 @@ class Post {
 
                 for ( let key in rows ) {
 
-                    model[ rows[ key ].name ] = rows[ key ].id;
+                    model[rows[key].name] = rows[key].id;
 
                 }
 
@@ -1395,7 +1393,7 @@ class Post {
 
             `SELECT * from ${ this.table_prefix }post_data WHERE id = ?`,
 
-            [ post_id ],
+            [post_id],
 
             ( err, rows ) => {
 
@@ -1468,14 +1466,14 @@ class Post {
 
                 }
 
-                let file = files[ key ];
+                let file = files[key];
 
                 fs.readFile( file.path, ( err, data ) => {
 
 
                     let fileNameSplit     = self.splitFileNameAndExt( file.name );
-                    let fileNameFormatted = self.formatFileName( fileNameSplit[ 0 ] );
-                    let fileName          = fileNameFormatted + '.' + fileNameSplit[ 1 ];
+                    let fileNameFormatted = self.formatFileName( fileNameSplit[0] );
+                    let fileName          = fileNameFormatted + '.' + fileNameSplit[1];
                     let newPath           = dirYearMonth + "/" + fileName;
 
                     fs.writeFile( newPath, data,  ( err ) => {
@@ -1486,7 +1484,7 @@ class Post {
 
                             `UPDATE ${this.db.config.table_prefix ? this.db.config.table_prefix + '_' : ''}post SET \`path\` = ?, \`filename\` = ?, \`extension\` = ? WHERE id = ?;`,
 
-                            [ path, fileNameFormatted, fileNameSplit[ 1 ], fields.id ],
+                            [path, fileNameFormatted, fileNameSplit[1], fields.id],
 
                             ( err, rows ) => {
 
@@ -1494,7 +1492,7 @@ class Post {
 
                                     `SELECT p.id AS post_id, p.parent_id, p.post_type_id as post_type_id, pdt.name AS post_data_type, p.name, p.hyperlink, p.status, p.extension, p.path, p.filename, p.size, p.container, p.public_date, p.created_date, p.modified_date, pd.id AS post_data_id, pd.field, pd.content, pd.content_raw FROM ${this.db.config.table_prefix ? this.db.config.table_prefix + '_' : ''}post p INNER JOIN ${this.db.config.table_prefix ? this.db.config.table_prefix + '_' : ''}post_data pd ON p.id = pd.post_id INNER JOIN ${this.db.config.table_prefix ? this.db.config.table_prefix + '_' : ''}post_data_type pdt ON p.post_data_type_id = pdt.id  WHERE post_id = ?`,
 
-                                    [ fields.id ],
+                                    [fields.id],
 
                                     ( err, rows ) => {
 
@@ -1504,9 +1502,9 @@ class Post {
 
                                             rows.map( ( element, key ) => {
 
-                                                if ( !posts[ element.post_id ] ) {
+                                                if ( !posts[element.post_id] ) {
 
-                                                    posts[ element.post_id ] = {
+                                                    posts[element.post_id] = {
 
                                                         id            : element.post_id,
                                                         parent_id     : element.parent_id,
@@ -1532,7 +1530,7 @@ class Post {
 
                                                 }
 
-                                                posts[ element.post_id ].data.push({
+                                                posts[element.post_id].data.push({
 
                                                     id      : element.post_data_id,
                                                     field   : element.field,
@@ -1545,7 +1543,7 @@ class Post {
 
                                         }
 
-                                        res.send( posts[ fields.id ] );
+                                        res.send( posts[fields.id] );
 
                                     }
 

@@ -57,11 +57,13 @@ const STYLES = {
         outline: 'none',
         padding: 15,
         width: '100%',
+        cursor: 'text'
     },
     textEditor: {
         height : 'calc(100% - 50px)',
         width: '100%',
         overflow: 'scroll',
+        cursor: 'text'
     }
 };
 
@@ -111,7 +113,7 @@ class TextEditor extends Component {
         }, 100);
     }
 
-    focus () {
+    focus () {        
         this.refs.editor.focus();
     }
 
@@ -136,7 +138,7 @@ class TextEditor extends Component {
                 inlineStyles[key] = {
                     style: TEXT_STYLE_MAP[key]
                 };
-            }            
+            }
 
             const options = {inlineStyles};
 
@@ -216,8 +218,8 @@ class TextEditor extends Component {
         const { editorState } = this.state;
         const selection = editorState.getSelection();
         const nextContentState = Object.keys(TEXT_STYLE_MAP)
-            .reduce((contentState, color) => {
-                return Modifier.removeInlineStyle(contentState, selection, color);
+            .reduce((contentState, textType) => {
+                return Modifier.removeInlineStyle(contentState, selection, textType);
             }, editorState.getCurrentContent());
 
         let nextEditorState = EditorState.push(

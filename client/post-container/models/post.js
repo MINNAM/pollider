@@ -29,7 +29,7 @@ class Post {
             const xhr = new XMLHttpRequest();
             const formData = new FormData();
             const onReady = function(event) {};
-            const onError = function(error) {};
+            const onError = function(error) {};            
 
             formData.append('files', this.fileToUpload);
             formData.append('id', this.id);
@@ -77,7 +77,7 @@ class Post {
                 } else {
                     return `${hyperlink}`;
                 }
-            }            
+            }
 
             return this.buildLink (`${node.parentNode.hyperlink}/${hyperlink}`, node.parentNode);
         } else {

@@ -78,9 +78,13 @@ class Index extends Component {
 
                             self.setState({loaded: false});
 
-                            setTimeout(function(){
+                            if (this.safetyLoad) {
+                                clearTimeout(this.safetyLoad);
+                            }
+
+                            setTimeout(() => {
                                  window.location = href;
-                            },501);
+                            },550);
                         }
                     });
                 }

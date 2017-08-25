@@ -124,7 +124,6 @@ class Body extends React.Component {
         }
 
         if (banner) {
-
             if (banner.content) {
                 if (addLoadingQueue) {
                     addLoadingQueue();
@@ -167,6 +166,10 @@ class Body extends React.Component {
         } else {
             if (addLoadedQueue) {
                 addLoadedQueue(null);
+            } else {
+                this.setState({
+                    displayBannerError: true
+                })
             }
         }
 
@@ -381,7 +384,8 @@ class Body extends React.Component {
                                     zIndex: -1,
                                     fontWeight: 300,
                                     color: 'rgb(160,160,160)',
-                                    zIndex: 1
+                                    zIndex: 1,
+                                    display: this.state.displayBannerError
                                 }}
                             >
                                 Sorry, this video format is not supported at your browser.

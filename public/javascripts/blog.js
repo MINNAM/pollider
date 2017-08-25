@@ -16042,7 +16042,6 @@ var Body = function (_React$Component) {
             }
 
             if (banner) {
-
                 if (banner.content) {
                     if (addLoadingQueue) {
                         addLoadingQueue();
@@ -16081,6 +16080,10 @@ var Body = function (_React$Component) {
             } else {
                 if (addLoadedQueue) {
                     addLoadedQueue(null);
+                } else {
+                    this.setState({
+                        displayBannerError: true
+                    });
                 }
             }
 
@@ -16134,7 +16137,8 @@ var Body = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
+            var _this3 = this,
+                _ref;
 
             var _props2 = this.props,
                 className = _props2.className,
@@ -16296,7 +16300,7 @@ var Body = function (_React$Component) {
                         _react2.default.createElement(
                             'span',
                             {
-                                style: _defineProperty({
+                                style: (_ref = {
                                     position: 'absolute',
                                     top: '50%',
                                     left: '50%',
@@ -16305,7 +16309,7 @@ var Body = function (_React$Component) {
                                     zIndex: -1,
                                     fontWeight: 300,
                                     color: 'rgb(160,160,160)'
-                                }, 'zIndex', 1)
+                                }, _defineProperty(_ref, 'zIndex', 1), _defineProperty(_ref, 'display', this.state.displayBannerError), _ref)
                             },
                             'Sorry, this video format is not supported at your browser.'
                         ),
@@ -47090,9 +47094,13 @@ var Index = function (_Component) {
 
                                     self.setState({ loaded: false });
 
+                                    if (this.safetyLoad) {
+                                        clearTimeout(this.safetyLoad);
+                                    }
+
                                     setTimeout(function () {
                                         window.location = href;
-                                    }, 501);
+                                    }, 550);
                                 }
                             });
                         }

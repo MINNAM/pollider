@@ -172,11 +172,9 @@ class Body extends React.Component {
             }
         }
 
-        console.log(bannerType);
-
         this.setState({
             navAbsoluteTop: this.refs['post-header'].getBoundingClientRect().height + 100,
-            bannerType: bannerType.content
+            bannerType: bannerType ? bannerType.content : null
         });
 
     }

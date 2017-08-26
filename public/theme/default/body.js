@@ -94,7 +94,6 @@ class Body extends React.Component {
                 }).then((response) => {
                     this.setState({
                         backupBanner: '/' + response.data._hyperlink,
-                        bannerType: bannerType.content,
                     });
 
                     const downloadingImage = new Image();
@@ -126,7 +125,7 @@ class Body extends React.Component {
         if (banner) {
             if (banner.content) {
                 if (addLoadingQueue) {
-                    addLoadingQueue();
+                    addLoadingQueue({type: 'banner'});
                 }
                 banner = JSON.parse(banner.content);
 
@@ -139,19 +138,23 @@ class Body extends React.Component {
                     this.setState({
                         banner: '/' + response.data._hyperlink,
                         postBanner: this.refs['post-banner'],
-                        bannerType: bannerType.content,
                     });
                     this.setState({
                         bannerHeight: this.refs.video.parentNode.offsetHeight
                     })
                     this.refs.video.load();
 
+                    const self = this;
+                    if (self.refs.video.canPlayType('video/mp4') == '') {
+                        self.setState({
+                            displayBannerError: true
+                        })
+                    }
                     this.refs.video.addEventListener('loadeddata', function(event) {
                         if (addLoadedQueue) {
                             addLoadedQueue();
                         }
                     }, false);
-
 
                 }).catch((error) => {
                     console.log(error);
@@ -166,17 +169,15 @@ class Body extends React.Component {
         } else {
             if (addLoadedQueue) {
                 addLoadedQueue(null);
-            } else {
-                this.setState({
-                    displayBannerError: true
-                })
             }
         }
 
-        this.setState({
-            navAbsoluteTop: this.refs['post-header'].getBoundingClientRect().height + 45 + 30 + 25
-        })
+        console.log(bannerType);
 
+        this.setState({
+            navAbsoluteTop: this.refs['post-header'].getBoundingClientRect().height + 100,
+            bannerType: bannerType.content
+        });
 
     }
 
@@ -257,6 +258,7 @@ class Body extends React.Component {
         let navFixed = false;
         let navRight = '';
         let navTop;
+
 
         if (nav) {
             navRight = this.offsetRight(nav.parentNode) + (toggled ? nav.parentNode.offsetWidth/2 : 0)
@@ -374,6 +376,7 @@ class Body extends React.Component {
                                 ref = 'backup-banner'
                                 src = {this.state.backupBanner}
                             />
+
                             <span
                                 style = {{
                                     position: 'absolute',
@@ -385,11 +388,24 @@ class Body extends React.Component {
                                     fontWeight: 300,
                                     color: 'rgb(160,160,160)',
                                     zIndex: 1,
-                                    display: this.state.displayBannerError
+                                    display: this.state.displayBannerError ? 'inline' : 'none'
                                 }}
                             >
                                 Sorry, this video format is not supported at your browser.
                             </span>
+                            <img
+                                alt = 'Loding gif image, four circles animating'
+                                src = '/assets/loading.gif'
+                                style = {{
+                                    display: !this.state.displayBannerError ? 'inline' : 'none',
+                                    zIndex: -1,
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transition: '.4s all',
+                                    transform: 'translate(-50%,-50%)'
+                                }}
+                            />
                             <video
                                 preload = {true}
                                 ref = 'video'
@@ -439,7 +455,7 @@ class Body extends React.Component {
                             }}
                         >
                             <ScrollDownButton
-                                primaryColor = { this.state.bannerType == '0' ? null : 'white'}
+                                primaryColor = { this.state.bannerType ? 'white' : 'rgb(30,30,30)'}
                                 style = {{
                                     left: '50%',
                                     top: 0,

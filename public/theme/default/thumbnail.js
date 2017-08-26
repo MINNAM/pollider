@@ -60,7 +60,7 @@ class Thumbnail extends React.Component {
                         selected: 0,
                         loaded: true
                     });
-                    addLoadingQueue(contentModel.length);
+                    addLoadingQueue({index: contentModel.length});
                     contentModel.map((element) => {
                         const image = new Image();
                         image.src = `/${element._hyperlink}`;
@@ -142,7 +142,7 @@ class Thumbnail extends React.Component {
                                 mouseOver: true
                             });
                             if (loaded) {
-                                this.nextImage();                                
+                                this.nextImage();
                                 this.slideInterval = setInterval(() => {
                                     this.nextImage();
                                 }, 1000);

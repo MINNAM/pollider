@@ -233,6 +233,7 @@ class Index extends Component {
                             position: 'fixed',
                             top: '50%',
                             left: '50%',
+                            transition: '.4s all',
                             transform: 'translate(-50%,-50%)'
                         }}
                     /> : ''
@@ -260,14 +261,14 @@ class Index extends Component {
                                     toggle: this.toggle,
                                     toggled: this.state.toggle,
                                     allowTransition: this.state.allowTransition,
-                                    addLoadingQueue: (index) => {
-                                        if (index) {
+                                    addLoadingQueue: (params = {}) => {
+                                        if (params.index) {
                                             this.setState({
-                                                loadingQueue: this.state.loadingQueue + index
+                                                loadingQueue: this.state.loadingQueue + params.index,
                                             });
                                         } else {
                                             this.setState({
-                                                loadingQueue: this.state.loadingQueue + 1
+                                                loadingQueue: this.state.loadingQueue + 1,
                                             });
                                         }
                                     },

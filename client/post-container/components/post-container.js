@@ -1429,8 +1429,7 @@ class PostContainer extends Component {
                                             </span>
                                             <span
                                                 style = {{
-                                                    fontWeight: 500,
-                                                    borderBottom: `2px solid ${THEME.primaryColor}`,
+                                                    fontWeight: 500,                                                    
                                                     paddingBottom: 5
                                                 }}
                                             >
@@ -1439,8 +1438,7 @@ class PostContainer extends Component {
                                             {` or `}
                                             <span
                                                 style = {{
-                                                    fontWeight: 500,
-                                                    borderBottom: `2px solid ${THEME.primaryColor}`,
+                                                    fontWeight: 500,                                                    
                                                     paddingBottom: 5
                                                 }}
                                             >

@@ -454,7 +454,7 @@ class PostInfoContainer extends Component {
                                                         this.props.handleDialogModel(this.props.postMeta[model.data[key].field].data_type, key)
                                                     }}
                                                 >
-                                                    {data ? data.id: 'Click here to edit'}
+                                                    {data ? data.id ? data.id : 'Click here to edit' : 'Click here to edit'}
                                                 </span>
                                             </span>
                                         );

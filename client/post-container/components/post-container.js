@@ -162,6 +162,17 @@ class PostContainer extends Component {
             this.setState({selected});
 
         } else {
+
+            if (selected) {
+                if (selected.id == post.id) {
+                    this.setState({
+                        selected: null
+                    })
+                    return null;
+                }
+            }
+
+
             /* onAction* in ProjectEditor  */
             if (onExternalActionChange) {
                 onExternalActionChange({ ...post, post_type_id : postType.id });
@@ -816,17 +827,31 @@ class PostContainer extends Component {
                         execute: (_data) => {
                             const children = [];
 
-                            for (let key in _data[0].value.children ) {
-                                children.push(key);
+                            if (_data[0]) {
+                                for (let key in _data[0].value.children ) {
+                                    children.push(key);
+                                }
+
+                                selected.data[model].content = JSON.stringify({
+                                    post_type_id: _data[0].value.post_type_id,
+                                    id: _data[0].value.id,
+                                    children
+                                });
+                            } else {
+
+                                selected.data[model].content = JSON.stringify({
+                                    post_type_id: null,
+                                    id: null,
+                                    children
+                                });
                             }
 
-                            selected.data[model].content = JSON.stringify({
-                                post_type_id: _data[0].value.post_type_id,
-                                id: _data[0].value.id,
-                                children
+                            this.state.model.updatePost(selected, () => {
+                                setTimeout(() => {
+                                    this.setState({ updatePreview: true });
+                                },300);
                             });
 
-                            this.state.model.updatePost(selected);
                         },
                     },
                     style: {
@@ -1429,7 +1454,7 @@ class PostContainer extends Component {
                                             </span>
                                             <span
                                                 style = {{
-                                                    fontWeight: 500,                                                    
+                                                    fontWeight: 500,
                                                     paddingBottom: 5
                                                 }}
                                             >
@@ -1438,7 +1463,7 @@ class PostContainer extends Component {
                                             {` or `}
                                             <span
                                                 style = {{
-                                                    fontWeight: 500,                                                    
+                                                    fontWeight: 500,
                                                     paddingBottom: 5
                                                 }}
                                             >

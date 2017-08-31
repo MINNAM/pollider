@@ -75,14 +75,13 @@ function highlightSyntax (code, colors = {
     object: '#E57373', // red
     function: '#00BCD4', // cyan
     reserve: '#64B5F6', // blue
-    comment: '#9E9E9E' // grey
 }) {
     // string
     code = code.replace(/['"].*['"]/g, (str) => {
         return colorString(str, colors.string );
     });
     // object
-    code = code.replace(/[a-zA-Z][a-zA-Z0-9]*[.][a-zA-Z][a-zA-Z0-9]*/g, (str) => {
+    code = code.replace(/[a-zA-Z][a-zA-Z0-9]*[.][a-zA-Z][a-zA-Z0-9]*[(]/g, (str) => {
         return colorString(str.split('.')[0], colors.object) + '.' + str.split('.')[1]
     });
     // function
@@ -92,12 +91,7 @@ function highlightSyntax (code, colors = {
 
     RESERVES.map((str) => {
         code = code.replace(new RegExp(str, 'g'), colorString(str, colors.reserve));
-    })
-
-    // Comments
-    code = code.replace(/[\/][\/\*][^<]*[\*\/]+/g, (str) => {
-        return colorString(str, colors.comment);
-    });
+    })    
 
     return code;
 }

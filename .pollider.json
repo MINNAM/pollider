@@ -3,9 +3,9 @@
     "port": 3000,
     "postTypes": [
         {
-            "name": "Portfolio",
-            "name_singular": "Project",
-            "name_plural": "Projects",
+            "name": "Blog",
+            "name_singular": "Post",
+            "name_plural": "Posts",
             "hyperlink": "posts",
             "uploadable": false,
             "home": true,
@@ -38,32 +38,7 @@
                     "field": "Keywords",
                     "data_type": "text",
                     "display": 1
-                },
-                {
-                    "field": "Banner",
-                    "data_type": "post-container",
-                    "display": 1
-                },
-                {
-                    "field": "Backup Banner",
-                    "data_type": "post-container",
-                    "display": 1
-                },
-                {
-                    "field": "Banner Type",
-                    "data_type": "select",
-                    "display": 1,
-                    "data": [
-                        {
-                            "name": "Primary Color",
-                            "value": 0
-                        },
-                        {
-                            "name": "Secondary Color",
-                            "value": 1
-                        }
-                    ]
-                },
+                },                
                 {
                     "field": "Thumbnail",
                     "data_type": "post-container",

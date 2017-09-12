@@ -15998,8 +15998,6 @@ var Body = function (_React$Component) {
             var backupBanner = model.data ? model.data['Backup Banner'] : null;
             var bannerType = model.data ? model.data['Banner Type'] : null;
 
-            console.log(banner);
-
             this.setVideoStatus();
 
             if (backupBanner) {

@@ -8,8 +8,7 @@ const PostHeader = (props) => {
         children,
         display
     } = props;
-
-    console.log(model);
+    
     const date = model.public_date ? new Date(model.public_date): new Date(model.public_date);
 
     return (

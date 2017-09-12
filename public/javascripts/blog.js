@@ -16654,16 +16654,23 @@ var Thumbnail = function (_React$Component) {
 
                 var element = new _element2.default('image', JSON.parse(model.data['Thumbnail'].content), JSON.parse(model.data['Thumbnail'].content));
 
+                console.log(element);
+
                 element.getPostById(function (contentModel) {
                     if (Array.isArray(contentModel)) {
                         // check if multiple images
+
+                        var sortedThumbnails = contentModel.sort(function (a, b) {
+                            return new Date(b.public_date) - new Date(a.public_date);
+                        });
+
                         _this2.setState({
-                            thumbnails: contentModel,
+                            thumbnails: sortedThumbnails,
                             selected: 0,
                             loaded: true
                         });
                         addLoadingQueue({ index: contentModel.length });
-                        contentModel.map(function (element) {
+                        sortedThumbnails.map(function (element) {
                             var image = new Image();
                             image.src = '/' + element._hyperlink;
                             image.onload = function () {
@@ -87039,7 +87046,6 @@ var PostHeader = function PostHeader(props) {
         display = props.display;
 
 
-    console.log(model);
     var date = model.public_date ? new Date(model.public_date) : new Date(model.public_date);
 
     return _react2.default.createElement(
@@ -87364,6 +87370,7 @@ var Posts = function (_React$Component) {
                         null,
                         (0, _index.createProjectView)(model, this.handler),
                         children ? children.map(function (element, key) {
+
                             return _react2.default.createElement(_thumbnail2.default, {
                                 key: key,
                                 type: element.data ? element.data['Type'] ? element.data['Type'].content : 1 : 1,

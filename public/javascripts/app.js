@@ -101255,7 +101255,6 @@ var PostHeader = function PostHeader(props) {
         display = props.display;
 
 
-    console.log(model);
     var date = model.public_date ? new Date(model.public_date) : new Date(model.public_date);
 
     return _react2.default.createElement(

@@ -125,7 +125,7 @@ class Home extends React.Component {
                         >
                             {createProjectView(model)}
                             {
-                                children ? children.map( ( element, key ) => {
+                                children ? children.map(( element, key ) => {                                
                                     return (
                                         <Thumbnail
                                             key = {key}

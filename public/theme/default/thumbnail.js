@@ -53,15 +53,22 @@ class Thumbnail extends React.Component {
 
             const element = new Element('image', JSON.parse(model.data['Thumbnail'].content), JSON.parse(model.data['Thumbnail'].content));
 
+            console.log(element);
+
             element.getPostById((contentModel) => {
                 if (Array.isArray(contentModel)) { // check if multiple images
+
+                    const sortedThumbnails = contentModel.sort((a,b) => {
+                        return new Date(b.public_date) - new Date(a.public_date);
+                    });
+
                     this.setState({
-                        thumbnails: contentModel,
+                        thumbnails: sortedThumbnails,
                         selected: 0,
                         loaded: true
                     });
                     addLoadingQueue({index: contentModel.length});
-                    contentModel.map((element) => {
+                    sortedThumbnails.map((element) => {
                         const image = new Image();
                         image.src = `/${element._hyperlink}`;
                         image.onload = () => {
@@ -98,7 +105,6 @@ class Thumbnail extends React.Component {
     }
 
     render () {
-
         const {
             name,
             index,

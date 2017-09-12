@@ -75,6 +75,7 @@ class Posts extends React.Component {
                     }
                     {
                         children ? children.map((element, key) => {
+                            
                             return (
 
                                 <Thumbnail

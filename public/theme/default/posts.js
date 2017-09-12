@@ -33,17 +33,21 @@ class Posts extends React.Component {
         if (children) {
             if (children.length == 0) {
                 addLoadedQueue(null);
+            } else {
+                this.state = {
+                    children: children.sort((a,b) => {
+                        return new Date(b.public_date) - new Date(a.public_date);
+                    })
+                }                
             }
         } else {
             addLoadedQueue(null);
         }
-
     }
 
     render () {
         const {
             model,
-            children,
             toggle,
             toggled,
             allowTransition,
@@ -51,6 +55,9 @@ class Posts extends React.Component {
             addLoadingQueue,
             addLoadedQueue
         } = this.props;
+        const {
+            children
+        } = this.state;
 
         return (
             <Body
@@ -75,7 +82,7 @@ class Posts extends React.Component {
                     }
                     {
                         children ? children.map((element, key) => {
-                            
+
                             return (
 
                                 <Thumbnail

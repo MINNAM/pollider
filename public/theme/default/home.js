@@ -16,10 +16,22 @@ class Home extends React.Component {
         scrollDownOver: false
     }
 
+    constructor (props) {
+        super(props);
+        const {
+            children
+        } = props;
+
+        this.state = {
+            children: children.sort((a,b) => {
+                return new Date(b.public_date) - new Date(a.public_date);
+            })
+        }
+    }
+
     render () {
         const {
             model,
-            children,
             toggle,
             toggled,
             allowTransition,
@@ -28,6 +40,9 @@ class Home extends React.Component {
             addLoadingQueue,
             addLoadedQueue
         } = this.props;
+        const {
+            children
+        } = this.state;
 
         return (
             <div
@@ -125,7 +140,7 @@ class Home extends React.Component {
                         >
                             {createProjectView(model)}
                             {
-                                children ? children.map(( element, key ) => {                                
+                                children ? children.map(( element, key ) => {
                                     return (
                                         <Thumbnail
                                             key = {key}

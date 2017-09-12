@@ -50,10 +50,7 @@ class Thumbnail extends React.Component {
         } = this.props;
 
         if (model.data['Thumbnail'] && model.data['Thumbnail'].content) {
-
             const element = new Element('image', JSON.parse(model.data['Thumbnail'].content), JSON.parse(model.data['Thumbnail'].content));
-
-            console.log(element);
 
             element.getPostById((contentModel) => {
                 if (Array.isArray(contentModel)) { // check if multiple images

@@ -15998,6 +15998,8 @@ var Body = function (_React$Component) {
             var backupBanner = model.data ? model.data['Backup Banner'] : null;
             var bannerType = model.data ? model.data['Banner Type'] : null;
 
+            console.log(banner);
+
             this.setVideoStatus();
 
             if (backupBanner) {
@@ -16041,7 +16043,7 @@ var Body = function (_React$Component) {
             }
 
             if (banner) {
-                if (banner.content) {
+                if (banner.content && banner.content.id) {
                     if (addLoadingQueue) {
                         addLoadingQueue({ type: 'banner' });
                     }

@@ -76,6 +76,8 @@ class Body extends React.Component {
         let backupBanner = model.data ? model.data['Backup Banner'] : null;
         let bannerType = model.data ? model.data[ 'Banner Type'] : null;
 
+        console.log(banner);
+
         this.setVideoStatus();
 
         if (backupBanner) {
@@ -123,7 +125,7 @@ class Body extends React.Component {
         }
 
         if (banner) {
-            if (banner.content) {
+            if (banner.content && banner.content.id) {
                 if (addLoadingQueue) {
                     addLoadingQueue({type: 'banner'});
                 }

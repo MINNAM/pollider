@@ -38,9 +38,14 @@
                     "field": "Keywords",
                     "data_type": "text",
                     "display": 1
-                },                
+                },
                 {
                     "field": "Thumbnail",
+                    "data_type": "post-container",
+                    "display": 1
+                },
+                {
+                    "field": "Banner",
                     "data_type": "post-container",
                     "display": 1
                 }

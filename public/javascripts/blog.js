@@ -14039,7 +14039,7 @@ var Footer = function Footer(props) {
                             position: 'relative',
                             float: 'right',
                             marginTop: 2,
-                            marginRight: 12.5
+                            marginRight: 25
                         },
                         onClick: function onClick() {
                             window.open('https://vimeo.com/minnam');
@@ -16192,7 +16192,7 @@ var Body = function (_React$Component) {
                         style: {
                             height: 45,
                             width: '100%',
-                            borderBottom: '1px solid rgb(220,220,220)',
+                            borderBottom: '1px solid rgb(238,238,238)',
                             background: 'white',
                             zIndex: 200,
                             cursor: 'pointer'

@@ -135,7 +135,7 @@ const Footer = (props) => {
                                 position: 'relative',
                                 float: 'right',
                                 marginTop: 2,
-                                marginRight: 12.5
+                                marginRight: 25
                             }}
                             onClick = {() => {
                                 window.open('https://vimeo.com/minnam');

@@ -847,10 +847,10 @@ body {
     padding: 0 20px 0 20px;
   }
   #pollider-public div.toggle-content .greeting {
-    font-size: 35px;
+    font-size: 40px;
   }
   #pollider-public div.toggle-content p {
-    font-size: 14px;
+    font-size: 18px;
     line-height: 32px !important;
   }
   #pollider-public div.toggle-content .user-name {
@@ -985,7 +985,7 @@ body {
     font-size: 35px;
   }
   #pollider-public div.toggle-content p {
-    font-size: 14px;
+    font-size: 18px;
     line-height: 32px !important;
   }
   #pollider-public div.toggle-content .user-name {

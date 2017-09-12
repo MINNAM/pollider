@@ -273,70 +273,69 @@ class Body extends React.Component {
                     style = {{
                         height: 45,
                         width : '100%',
-                        borderBottom: '1px solid rgb(220,220,220)',
+                        borderBottom: '1px solid rgb(238,238,238)',
                         background: 'white',
                         zIndex: 200,
                         cursor: 'pointer'
                     }}
                 >
-                <Logo
-                    size = {30}
-                    url = {'/'}
-                    style = {{
-                        float: 'left',
-                        marginTop: 5,
-                        marginLeft: 15
-                    }}
-                />
-                <FontAwesomeButton
-                    className   = 'fa-user-o'
-                    size        = { 19.5 }
-                    iconStyle   = {{
-                        color: 'rgb(160, 160, 160)',
-                    }}
-                    hoverStyle  = {{ color: 'rgb(170,170,170)' }}
-                    parentStyle = {{
-                        marginTop: 11,
-                        marginLeft: 15,
-                        position: 'relative',
-                        float: 'left'
-                    }}
-                    onClick = {() => {
-                        this.props.toggle('profile');
-                    }}
-                />
-                {
-                    this.state.banner? <a href = {this.state.banner}><span
+                    <Logo
+                        size = {30}
+                        url = {'/'}
                         style = {{
-                            display: 'inline-block',
-                            height: 45,
-                            lineHeight: '45px',
-                            float: 'right',
-                            width: '30%',
-                            borderLeft: '1px solid rgb(220,220,220)',
-                            textAlign: 'center',
-                            textTransform: 'uppercase',
-                            letterSpacing: '.8px',
-                            fontSize: '10px',
-                            color: this.state.watchDemoButtonOver ? '#F9B7B1' : 'rgb(60,60,60)',
-                            background: 'white',
-                            transition: '.2s all'
+                            float: 'left',
+                            marginTop: 5,
+                            marginLeft: 15
                         }}
-                        onMouseOver = {() => {
-                            this.setState({
-                                watchDemoButtonOver: true
-                            })
+                    />
+                    <FontAwesomeButton
+                        className   = 'fa-user-o'
+                        size        = { 19.5 }
+                        iconStyle   = {{
+                            color: 'rgb(160, 160, 160)',
                         }}
-                        onMouseLeave = {() => {
-                            this.setState({
-                                watchDemoButtonOver: false
-                            })
+                        hoverStyle  = {{ color: 'rgb(170,170,170)' }}
+                        parentStyle = {{
+                            marginTop: 11,
+                            marginLeft: 15,
+                            position: 'relative',
+                            float: 'left'
                         }}
-                    >
-                        {'Watch Demo'}
-                    </span></a> : ''
-                }
-
+                        onClick = {() => {
+                            this.props.toggle('profile');
+                        }}
+                    />
+                    {
+                        this.state.banner? <a href = {this.state.banner}><span
+                            style = {{
+                                display: 'inline-block',
+                                height: 45,
+                                lineHeight: '45px',
+                                float: 'right',
+                                width: '30%',
+                                borderLeft: '1px solid rgb(220,220,220)',
+                                textAlign: 'center',
+                                textTransform: 'uppercase',
+                                letterSpacing: '.8px',
+                                fontSize: '10px',
+                                color: this.state.watchDemoButtonOver ? '#F9B7B1' : 'rgb(60,60,60)',
+                                background: 'white',
+                                transition: '.2s all'
+                            }}
+                            onMouseOver = {() => {
+                                this.setState({
+                                    watchDemoButtonOver: true
+                                })
+                            }}
+                            onMouseLeave = {() => {
+                                this.setState({
+                                    watchDemoButtonOver: false
+                                })
+                            }}
+                        >
+                            {'Watch Demo'}
+                        </span></a> : ''
+                    }
                 </div>
                 {
                     this.state.banner ? <div

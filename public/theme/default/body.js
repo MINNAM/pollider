@@ -75,7 +75,7 @@ class Body extends React.Component {
         let banner = model.data ? model.data['Banner'] : null;
         let backupBanner = model.data ? model.data['Backup Banner'] : null;
         let bannerType = model.data ? model.data[ 'Banner Type'] : null;
-        
+
         this.setVideoStatus();
 
         if (backupBanner) {
@@ -221,7 +221,6 @@ class Body extends React.Component {
     }
 
     render () {
-
         const {
             className,
             model,

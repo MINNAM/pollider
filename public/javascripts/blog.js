@@ -87038,7 +87038,9 @@ var PostHeader = function PostHeader(props) {
         children = props.children,
         display = props.display;
 
-    var date = model.modified_date ? new Date(model.modified_date) : new Date(model.created_date);
+
+    console.log(model);
+    var date = model.public_date ? new Date(model.public_date) : new Date(model.public_date);
 
     return _react2.default.createElement(
         'div',

@@ -1138,6 +1138,7 @@ class Post {
                 p.size,
                 p.status,
                 p.created_date,
+                p.public_date,
                 p.modified_date
             FROM ${this.table_prefix }post p
             INNER JOIN ${this.table_prefix }user u ON p.user_id

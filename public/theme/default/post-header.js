@@ -8,7 +8,9 @@ const PostHeader = (props) => {
         children,
         display
     } = props;
-    const date = model.modified_date ? new Date(model.modified_date): new Date(model.created_date);
+
+    console.log(model);
+    const date = model.public_date ? new Date(model.public_date): new Date(model.public_date);
 
     return (
 

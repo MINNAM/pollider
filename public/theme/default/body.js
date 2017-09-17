@@ -123,7 +123,7 @@ class Body extends React.Component {
         }
 
         if (banner) {
-            if (banner.content && banner.content.id) {
+            if (banner.content) {
                 if (addLoadingQueue) {
                     addLoadingQueue({type: 'banner'});
                 }
@@ -135,6 +135,7 @@ class Body extends React.Component {
                         post_type_id: banner.post_type_id
                     }
                 }).then((response) => {
+
                     this.setState({
                         banner: '/' + response.data._hyperlink,
                         postBanner: this.refs['post-banner'],
@@ -260,7 +261,7 @@ class Body extends React.Component {
         if (nav) {
             navRight = this.offsetRight(nav.parentNode) + (toggled ? nav.parentNode.offsetWidth/2 : 0)
             navTop = (screen.availHeight / 2);
-        }
+        }        
 
         return (
             <div

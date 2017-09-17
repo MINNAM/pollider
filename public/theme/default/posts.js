@@ -38,7 +38,7 @@ class Posts extends React.Component {
                     children: children.sort((a,b) => {
                         return new Date(b.public_date) - new Date(a.public_date);
                     })
-                }                
+                }
             }
         } else {
             addLoadedQueue(null);

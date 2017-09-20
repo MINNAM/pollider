@@ -17,17 +17,15 @@ const TEXT_STYLE = {
         fontSize : 21,
         letterSpacing : '.85px',
         fontFamily : 'Hind',
-        fontWeight : 300,
+        fontWeight : 400,
         lineHeight : '35px',
-        color: 'rgb(160,160,160)'
     },
     HEADING2: {
-        fontSize : 19,
+        fontSize : 18,
         letterSpacing : '.85px',
         fontFamily : 'Hind',
-        fontWeight : 300,
-        lineHeight : '35px',
-        color: 'rgb(160,160,160)'
+        fontWeight : 400,
+        lineHeight : '35px',        
     },
     CODE : {
         fontFamily : 'courier',

@@ -71,10 +71,10 @@ const colorString = (str, color) => {
 };
 
 function highlightSyntax (code, colors = {
-    string: '#FF9800', // orange
-    object: '#E57373', // red
-    function: '#00BCD4', // cyan
-    reserve: '#64B5F6', // blue
+    string: '#969696', //'#FF9800', // orange
+    object: '#E57373', //'#E57373', // red
+    function: '#00BCD4', //'#00BCD4', // cyan
+    reserve: '#64B5F6', //'#64B5F6', // blue
 }) {
     // string
     code = code.replace(/['"].*['"]/g, (str) => {
@@ -91,7 +91,7 @@ function highlightSyntax (code, colors = {
 
     RESERVES.map((str) => {
         code = code.replace(new RegExp(str, 'g'), colorString(str, colors.reserve));
-    })    
+    })
 
     return code;
 }
@@ -448,7 +448,8 @@ class ElementView extends Component {
                         letterSpacing: '0px',
                         lineHeight: '21px',
                         fontSize: 14,
-                        background: 'rgb(245,245,245)',
+                        background: '#384144',
+                        color: 'rgb(220,220,220)',
                         width: '100%',
                         padding: 15
                     }}

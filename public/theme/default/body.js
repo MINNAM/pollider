@@ -261,7 +261,7 @@ class Body extends React.Component {
         if (nav) {
             navRight = this.offsetRight(nav.parentNode) + (toggled ? nav.parentNode.offsetWidth/2 : 0)
             navTop = (screen.availHeight / 2);
-        }        
+        }
 
         return (
             <div
@@ -452,7 +452,7 @@ class Body extends React.Component {
                             }}
                         >
                             <ScrollDownButton
-                                primaryColor = { this.state.bannerType ? 'white' : 'rgb(30,30,30)'}
+                                primaryColor = { this.state.bannerType == 1 ? 'white' : 'rgb(30,30,30)'}
                                 style = {{
                                     left: '50%',
                                     top: 0,

@@ -71,7 +71,7 @@ const colorString = (str, color) => {
 };
 
 function highlightSyntax (code, colors = {
-    string: '#969696', //'#FF9800', // orange
+    string: '#ffba54', //'#FF9800', // orange
     object: '#E57373', //'#E57373', // red
     function: '#00BCD4', //'#00BCD4', // cyan
     reserve: '#64B5F6', //'#64B5F6', // blue

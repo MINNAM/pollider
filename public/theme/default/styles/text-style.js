@@ -29,7 +29,8 @@ const TEXT_STYLE = {
         fontWeight : 400,
         lineHeight : '35px',
         display: 'inline-block',
-        marginBottom: 24
+        marginBottom: 24,
+        color: 'rgb(170,170,170)'
     },
     CODE : {
         fontFamily : 'courier',

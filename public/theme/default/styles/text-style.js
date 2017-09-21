@@ -19,13 +19,17 @@ const TEXT_STYLE = {
         fontFamily : 'Hind',
         fontWeight : 400,
         lineHeight : '35px',
+        display: 'inline-block',
+        marginBottom: 20
     },
     HEADING2: {
         fontSize : 18,
         letterSpacing : '.85px',
         fontFamily : 'Hind',
         fontWeight : 400,
-        lineHeight : '35px',        
+        lineHeight : '35px',
+        display: 'inline-block',
+        marginBottom: 15
     },
     CODE : {
         fontFamily : 'courier',

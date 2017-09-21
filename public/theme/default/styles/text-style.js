@@ -20,7 +20,7 @@ const TEXT_STYLE = {
         fontWeight : 400,
         lineHeight : '35px',
         display: 'inline-block',
-        marginBottom: 24
+        marginBottom: 30
     },
     HEADING2: {
         fontSize : 18,
@@ -29,8 +29,7 @@ const TEXT_STYLE = {
         fontWeight : 400,
         lineHeight : '35px',
         display: 'inline-block',
-        marginBottom: 24,
-        color: 'rgb(170,170,170)'
+        marginBottom: 24
     },
     CODE : {
         fontFamily : 'courier',

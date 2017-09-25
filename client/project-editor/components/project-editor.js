@@ -628,14 +628,16 @@ class ProjectEditor extends React.Component {
 
                         execute: (_data) => {
 
-                            model.content    = _data.content;
+                            model.content = _data.content;
                             model.contentRaw = _data.contentRaw;
 
                         },
 
                         update: (_data) => {
 
-                            model.content    = _data.content;
+                            console.log(_data.content);
+
+                            model.content = _data.content;
                             model.contentRaw = _data.contentRaw;
 
                             this.setState({
@@ -858,7 +860,7 @@ class ProjectEditor extends React.Component {
                             paddingRight: 10,
                             paddingLeft: 10
                         }}
-                    >                        
+                    >
                         <span
                             style = {{
                                 display: 'inline-block',

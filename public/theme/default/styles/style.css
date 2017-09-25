@@ -624,6 +624,9 @@ body {
   #pollider-public div#contact-container-toggled {
     box-shadow: -1px 1px 5px rgba(0,0,0,0.07);
   }
+  #pollider-public .code {
+    font-family: Inconsolata;
+  }
   #pollider-public .code p {
     margin-bottom: 0;
   }

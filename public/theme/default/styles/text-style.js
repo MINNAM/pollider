@@ -32,7 +32,7 @@ const TEXT_STYLE = {
         marginBottom: 24
     },
     CODE : {
-        fontFamily : 'courier',
+        fontFamily : 'Inconsolata',
         fontSize   : 12,
         lineHeight : '14px'
     }

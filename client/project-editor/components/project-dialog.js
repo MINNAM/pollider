@@ -231,9 +231,13 @@ class ProjectDialog extends DialogHelper {
                             disableHTML = { true }
                             onChange = {
                                 (values) => {
+
                                     this.setState({
                                         error: false,
-                                        values: values
+                                        values: {
+                                            ...values,
+                                            content: values.content.replace(new RegExp('/script', 'g'), '&closetag;')
+                                        }
                                     });
                                 }
                             }

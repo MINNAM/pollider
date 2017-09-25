@@ -66,8 +66,8 @@ const RESERVES = [
     'with '
 ];
 
-const colorString = (str, color) => {
-    return `<span style = 'color: ${color}'>${str}</span>`;
+const colorString = (str, color, override) => {
+    return `<span style = 'color: ${color};'>${ override ? str.replace(/color:.+?;/g, ' ') : str}</span>`;
 };
 
 function highlightSyntax (code, colors = {
@@ -75,11 +75,8 @@ function highlightSyntax (code, colors = {
     object: '#E57373', //'#E57373', // red
     function: '#00BCD4', //'#00BCD4', // cyan
     reserve: '#64B5F6', //'#64B5F6', // blue
+    comment: '#a0a0a0', //'#64B5F6', // blue
 }) {
-    // string
-    code = code.replace(/['"].*['"]/g, (str) => {
-        return colorString(str, colors.string );
-    });
     // object
     code = code.replace(/[a-zA-Z][a-zA-Z0-9]*[.][a-zA-Z][a-zA-Z0-9]*[(]/g, (str) => {
         return colorString(str.split('.')[0], colors.object) + '.' + str.split('.')[1]
@@ -91,7 +88,17 @@ function highlightSyntax (code, colors = {
 
     RESERVES.map((str) => {
         code = code.replace(new RegExp(str, 'g'), colorString(str, colors.reserve));
-    })
+    });
+
+    // string
+    code = code.replace(/"([^"]*)"/g, (str) => {
+        return colorString(str, colors.string, true);
+    });
+
+    // comment
+    code = code.replace(/\/[\/]+.*/g, (str) => {
+        return colorString(str, colors.comment, true);
+    });
 
     return code;
 }
@@ -439,34 +446,42 @@ class ElementView extends Component {
                 }
 
                 const code = <div
-                    className = {'code'}
-                    ref = 'element'
-                    style = {{
-                        display: 'inline-block',
-                        padding: 0,
-                        fontFamily: 'monaco',
-                        letterSpacing: '0px',
-                        lineHeight: '21px',
-                        fontSize: 14,
-                        background: '#384144',
-                        color: 'rgb(220,220,220)',
-                        width: '100%',
-                        padding: 15
-                    }}
-                >
+
+                        style = {{
+                            overflow: 'auto',
+                            width: '100%',
+                            display: 'inline-block',
+                        }}
+
+                    ><pre
+                        className = {'code'}
+                        ref = 'element'
+                        style = {{
+                            display: 'inline-block',
+                            padding: 0,
+                            letterSpacing: '0px',
+                            lineHeight: '21px',
+                            fontSize: 14,
+                            background: '#384144',
+                            color: 'rgb(220,220,220)',
+                            width: '100%',
+                            padding: 15,
+                            whiteSpace: 'nowrap'
+                        }}
+                    >
+
                     <div
                         style = {{
                             width: '100%',
                             float: 'left',
-                            fontFamily: 'monaco',
                             lineHeight: '21px !important',
                         }}
                         dangerouslySetInnerHTML = {{
                             __html: highlightSyntax(model.content)
                         }}
-                    >
-                    </div>
-                </div>
+                    />
+
+                </pre></div>
 
                 return (
                     <div

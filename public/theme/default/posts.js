@@ -33,7 +33,9 @@ class Posts extends React.Component {
         if (children) {
             if (children.length == 0) {
                 addLoadedQueue(null);
-                this.state = {};
+                this.state = {
+                    children: []
+                };
             } else {
                 this.state = {
                     children: children ? children.sort((a,b) => {

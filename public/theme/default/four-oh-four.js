@@ -24,9 +24,9 @@ class FourOhFour extends React.Component {
         } = props;
 
         this.state = {
-            children: children.sort((a,b) => {
+            children: children ? children.sort((a,b) => {
                 return new Date(b.public_date) - new Date(a.public_date);
-            })
+            }) : []
         }
     }
 

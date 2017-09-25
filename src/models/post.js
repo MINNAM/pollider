@@ -740,6 +740,7 @@ class Post {
                         b.post_data_id,
                         b.field,
                         b.content,
+                        b.content_raw
                     FROM (
                 	        SELECT
                                 p.id AS post_id,
@@ -785,6 +786,7 @@ class Post {
                                     pd.id AS post_data_id,
                                     pd.field,
                                     pd.content,
+                                    pd.content_raw
                                 FROM ${ this.table_prefix }post p
                                 INNER JOIN ${ this.table_prefix }post_data pd
                                     ON p.id = pd.post_id
@@ -850,6 +852,7 @@ class Post {
                                     id      : element.post_data_id,
                                     field   : element.field,
                                     content : element.content,
+                                    content_raw : element.content_raw
 
                                 };
 

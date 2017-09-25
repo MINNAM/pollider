@@ -71,11 +71,11 @@ const colorString = (str, color, override) => {
 };
 
 function highlightSyntax (code, colors = {
-    string: '#85e6be', //'#FF9800', // orange
+    string: '#ffba54', //'#FF9800', // orange
     object: '#E57373', //'#E57373', // red
     function: '#00BCD4', //'#00BCD4', // cyan
     reserve: '#64B5F6', //'#64B5F6', // blue
-    cont: '#ffba54',
+    cont: '#85e6be',
     comment: '#a0a0a0', //'#64B5F6', // blue
 }) {
     // object

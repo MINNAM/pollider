@@ -71,10 +71,11 @@ const colorString = (str, color, override) => {
 };
 
 function highlightSyntax (code, colors = {
-    string: '#ffba54', //'#FF9800', // orange
+    string: '#85e6be', //'#FF9800', // orange
     object: '#E57373', //'#E57373', // red
     function: '#00BCD4', //'#00BCD4', // cyan
     reserve: '#64B5F6', //'#64B5F6', // blue
+    cont: '#ffba54',
     comment: '#a0a0a0', //'#64B5F6', // blue
 }) {
     // object
@@ -88,6 +89,11 @@ function highlightSyntax (code, colors = {
 
     RESERVES.map((str) => {
         code = code.replace(new RegExp(str, 'g'), colorString(str, colors.reserve));
+    });
+
+    // continue
+    code = code.replace(/[.][.][.]/g, (str) => {
+        return colorString(str, colors.cont, true);
     });
 
     // string

@@ -54,12 +54,6 @@ const customRoutes = (router, database, user) => {
                                     <div style="max-width:700px;margin-left:auto;margin-right:auto">
                                         <div style="min-width:100%;width:100%;margin-top:15px;margin-bottom:40px;">
                                             <div style="overflow:auto;min-height:150px;margin-bottom:15px;background-color:#ffffff;box-shadow:1px 1px 1px rgba(0,0,0,0.1); position: relative">
-                                                <a href= 'http://minnam.io' target='_blank'>
-                                                    <img
-                                                        src = 'http://minnam.io/uploads/images/logo'
-                                                        style = 'position:absolute; right: 0'
-                                                    />
-                                                </a>
                                                 <div style="padding-top:15px;padding-left:15px;padding-right:15px">
                                                     <div style="font-size:20px;line-height:1.2;margin-bottom:20px">
                                                         Hello ${data['first_name']}!

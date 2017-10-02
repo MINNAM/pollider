@@ -439,55 +439,44 @@ class ElementView extends Component {
 
             case 'code': {
                 const lines = model.content.split(/\r\n|\r|\n/).length;
-                const lineNumbers = [];
-
-                for (let i = 0; i < lines; i++) {
-                    lineNumbers.push(
-                        <div
-                            key = {i}
-                        >
-                            { i + 1}
-                        </div>
-                    );
-                }
 
                 const code = <div
-
-                        style = {{
-                            overflow: 'auto',
-                            width: '100%',
-                            display: 'inline-block',
-                        }}
-
-                    ><pre
-                        className = {'code'}
-                        ref = 'element'
-                        style = {{
-                            display: 'inline-block',
-                            padding: 0,
-                            letterSpacing: '0px',
-                            lineHeight: '21px',
-                            fontSize: 14,
-                            background: '#384144',
-                            color: 'rgb(220,220,220)',
-                            width: '100%',
-                            padding: 15,
-                            whiteSpace: 'nowrap'
-                        }}
-                    >
+                    className = {'code'}
+                    ref = 'element'
+                    style = {{
+                        display: 'inline-block',
+                        position: 'relative',
+                        padding: 0,
+                        background: '#384144',
+                        lineHeight: '21px',
+                        fontSize: 14,
+                        color: 'rgb(220,220,220)',
+                        width: '100%',
+                        height: (lines * 21) + 30,
+                        overflow: 'auto',
+                        whiteSpace: 'nowrap'
+                    }}
+                >
 
                     <div
                         style = {{
-                            width: '100%',
-                            float: 'left',
                             lineHeight: '21px !important',
+                            background: '#384144',
+                            position: 'absolute',
+                            fontFamily: 'Menlo,Monaco,Consolas,"Courier New",monospace',
+                            fontWeight: 300,
+                            padding: 15,
+                            letterSpacing: 'normal',
+                            width: 'calc(100% - 15px)',
+
                         }}
                         dangerouslySetInnerHTML = {{
                             __html: highlightSyntax(model.content)
                         }}
                     />
 
-                </pre></div>
+                </div>
+
 
                 return (
                     <div

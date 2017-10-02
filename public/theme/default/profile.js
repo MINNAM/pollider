@@ -67,14 +67,24 @@ class Profile extends React.Component {
                             }}
                         >
                             <br/>
-                            My name is <span className = 'user-name' style = {{ fontWeight: 500, paddingLeft: 10, paddingRight: 10 }}>{`Min Nam`}.</span>
-                            I am a web developer resides in Vancouver, Canada.
-                            I love the world of coding where a grain of ideas can turn in to a rolling stone, something big!
+                                <span
+                                    className = 'desktop-only'
+                                >
+                                    My name is <span className = 'user-name' style = {{ fontWeight: 500, paddingLeft: 10, paddingRight: 10 }}>{`Min Nam`}.</span>
+                                    I am a web developer resides in Vancouver, Canada.
+                                    I love the world of coding where a grain of ideas can turn in to a rolling stone, something big!
+                                </span>
+                                <span
+                                    className = 'mobile-only'
+                                >
+                                    My name is <span className = 'user-name' style = {{ fontWeight: 500, paddingLeft: 10, paddingRight: 10 }}>{`Min Nam`}.</span>
+                                    I am a web developer resides in Vancouver, Canada.                                    
+                                </span>
                             <br/>
                             <br/>
                             If you are interested in collaborating, please {`contact me `}
                             <span
-                                id = 'contact-button-desktop'
+                                className = 'desktop-only'
                                 style = {{borderBottom: '2px solid rgb(76, 211, 173)', cursor: 'pointer'}}
                                 onClick = {() => {
                                     toggle('contact');
@@ -83,7 +93,7 @@ class Profile extends React.Component {
                                 {`here`}
                             </span>
                             <span
-                                id = 'contact-button-mobile'
+                                className = 'mobile-only'
                             >
                                 {`at `}
                                 <span

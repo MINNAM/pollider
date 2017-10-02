@@ -75,7 +75,11 @@ class Post {
             data
         } = req.body;
 
+        console.log('updating');
+
         const formattedDate = new Date( public_date ).toISOString().slice( 0, 19 ).replace('T', ' ');
+
+        console.log(data);
 
         let sql    = `UPDATE ${ this.table_prefix }post SET \`parent_id\` = ${ !parent_id ? 'null' : '?' }, \`name\` = ?, \`hyperlink\` = ?, \`public_date\` = ?, \`status\` = ? WHERE id = ?;`;
         let fields = !parent_id ? [name, hyperlink, formattedDate, status, id,] : [parent_id, name, hyperlink, formattedDate, status, id];
@@ -106,7 +110,7 @@ class Post {
                                     element.id
                                ],
 
-                                ( err, row ) => { /**/ }
+                                ( err, row ) => { /**/ console.log(err) }
 
                             );
 

@@ -57,12 +57,12 @@ class Index extends Component {
 
         if (typeof window  != 'undefined') {
             const anchors = document.getElementsByTagName('a');
-            const self = this;            
+            const self = this;
             for (let key in anchors) {
                 if (anchors[key].addEventListener) {
                     anchors[key].addEventListener('click', function(event) {
-                        console.log( 'anchor', this );
-                        if (!this.getAttribute('target')) {
+
+                        if (!this.getAttribute('target') && !this.getAttribute('href').includes('mailto:')) {
                             event.preventDefault();
 
                             const videos = document.getElementsByTagName('video');

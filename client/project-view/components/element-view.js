@@ -518,7 +518,7 @@ class ElementView extends Component {
             <div
                 style = {{
                     // height: this.state.elementHeight,
-                    // width: '100%',
+                    width: '100%',
                     // display: 'inline-block',
                     // position: 'relative',
                     // overflow: 'hidden'

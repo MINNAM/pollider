@@ -102,12 +102,14 @@ const Footer = (props) => {
                                     lineHeight: '24px',
                                     float: 'left',
                                     marginLeft: 7.5,
+                                    borderBottom: '2px solid rgb(76, 211, 173)'
                                 }}
                             >
                                 <a
                                     style = {{
                                         textDecoration: 'none',
-                                        color: 'inherit'
+                                        color: 'inherit',
+                                        borderBottom: 'none'
                                     }}
                                     href= 'http://minnam.io/web-applications/introducing-pollider'
                                     target='_blank'

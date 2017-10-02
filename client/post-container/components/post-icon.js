@@ -41,6 +41,7 @@ const STYLES = {
 const ICONS = {
     'folder': <Avatar style = {STYLES.avatar} icon = { <FileFolder /> } />,
     'image': <Avatar style = {STYLES.avatar} icon = { <Photo /> } />,
+    'text': <Avatar style = {STYLES.avatar} icon = { <Photo /> } />,
     'post': <Avatar style = {STYLES.avatar} icon = { <ArtTrack /> } />,
     'audio': <Avatar style = {STYLES.avatar} icon = { <MusicNote /> } />,
     'video': <Avatar style = {STYLES.avatar} icon = { <Movie /> } />,

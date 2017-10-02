@@ -241,7 +241,7 @@ class Post {
 
             `SELECT * FROM ( SELECT pm.field, pct.id as data_type_id FROM ${ this.table_prefix }post_meta pm INNER JOIN ${ this.table_prefix }post_content_type pct ON pm.data_type LIKE pct.name WHERE pm.post_type_id = ? ) pmnpct;`,
             [post_type_id],
-            ( err, postDataTypes ) => {
+            ( err, postDataTypes ) => {                
 
                 this.db.connection.query (
 

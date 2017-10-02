@@ -226,6 +226,7 @@ class Post extends Component {
                 const dataTypeName = files[ i ].type.split( '/' )[ 0 ];
                 const dataType     = this.props.postDataTypes[ dataTypeName ];
 
+
                 if ( this.props.postType.support.indexOf( dataTypeName ) > -1 ) {
 
                     if ( dataType ) {
@@ -240,7 +241,12 @@ class Post extends Component {
 
                 } else {
 
-                    // Not Supported Type
+                    if (this.props.postType.support.indexOf( 'image' )) {
+
+                        console.log( files[i] );
+                        this.props.insertPost( this.props.model, files[ i ], 3 );
+
+                    }
 
                 }
 

@@ -453,6 +453,8 @@ class PostContainer extends Component {
         data.extension = filename[1] ? filename[1] : null;
         data.hyperlink = formatHyperlink(data.name);
 
+        console.log( data );
+
         let temp = {
             post_type_id: this.props.postType.id,
             ...data

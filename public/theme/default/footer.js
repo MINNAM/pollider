@@ -102,7 +102,6 @@ const Footer = (props) => {
                                     lineHeight: '24px',
                                     float: 'left',
                                     marginLeft: 7.5,
-                                    borderBottom: '2px solid rgb(76, 211, 173)'
                                 }}
                             >
                                 <a

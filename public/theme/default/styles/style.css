@@ -455,6 +455,7 @@ body {
     display: none;
   }
   #pollider-public div.content .inner-content {
+    display: block;
     padding: 0 90px 0 90px;
   }
   #pollider-public .desktop-only {

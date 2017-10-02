@@ -105,7 +105,16 @@ const Footer = (props) => {
                                     borderBottom: '2px solid rgb(76, 211, 173)'
                                 }}
                             >
-                                {` Pollider `}
+                                <a
+                                    style = {{
+                                        textDecoration: 'none',
+                                        color: 'inherit'
+                                    }}
+                                    href= 'http://minnam.io/web-applications/introducing-pollider'
+                                    target='_blank'
+                                >
+                                    {` Pollider `}
+                                </a>
                             </span>
                         </span>
                         <FontAwesomeButton

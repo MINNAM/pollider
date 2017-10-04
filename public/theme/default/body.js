@@ -214,7 +214,11 @@ class Body extends React.Component {
 
     offsetRightAbsolute () {
         if (this.refs.nav) {
-            return (window.getComputedStyle(this.refs.nav.parentNode.parentNode, null)['margin-left'].replace('px', ''));
+
+            const computedLeft = (window.getComputedStyle(this.refs.nav.parentNode.parentNode, null)['margin-left'].replace('px', ''));
+
+            return computedLeft != 0 ? computedLeft : this.refs.nav.parentNode.parentNode.getBoundingClientRect().left;
+
         } else {
             return 0;
         }
@@ -222,6 +226,8 @@ class Body extends React.Component {
     }
 
     render () {
+
+        console.log(navRight, this.offsetRightAbsolute());
         const {
             className,
             model,

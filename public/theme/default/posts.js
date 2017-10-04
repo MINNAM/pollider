@@ -38,7 +38,7 @@ class Posts extends React.Component {
                 };
             } else {
                 this.state = {
-                    children: children ? children.sort((a,b) => {
+                    children: children ? children.sort((a,b) => {                        
                         return new Date(b.public_date) - new Date(a.public_date);
                     }) : []
                 }

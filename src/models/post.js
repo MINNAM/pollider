@@ -241,7 +241,7 @@ class Post {
 
             `SELECT * FROM ( SELECT pm.field, pct.id as data_type_id FROM ${ this.table_prefix }post_meta pm INNER JOIN ${ this.table_prefix }post_content_type pct ON pm.data_type LIKE pct.name WHERE pm.post_type_id = ? ) pmnpct;`,
             [post_type_id],
-            ( err, postDataTypes ) => {                
+            ( err, postDataTypes ) => {
 
                 this.db.connection.query (
 
@@ -642,7 +642,7 @@ class Post {
         const { parentId, parentStatus, container,postTypeId, parentHyperlink, hyperlink } = query;
 
         this.db.connection.query(
-            `SELECT id, parent_id, alias_id, container, name, status FROM ${ this.table_prefix }post;`,
+            `SELECT id, parent_id, alias_id, public_date, container, name, status FROM ${ this.table_prefix }post;`, //alias data
             ( err, posts ) => {
 
                 let children = {};
@@ -879,6 +879,7 @@ class Post {
 
                                         _post.id = element.id;
                                         _post.name = element.name;
+                                        _post.public_date = element.public_date;
 
                                         _posts.push ( _post );
 

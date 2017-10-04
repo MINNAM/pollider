@@ -226,8 +226,7 @@ class Body extends React.Component {
     }
 
     render () {
-
-        console.log(navRight, this.offsetRightAbsolute());
+                
         const {
             className,
             model,

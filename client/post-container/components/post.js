@@ -242,8 +242,7 @@ class Post extends Component {
                 } else {
 
                     if (this.props.postType.support.indexOf( 'image' )) {
-
-                        console.log( files[i] );
+                        
                         this.props.insertPost( this.props.model, files[ i ], 3 );
 
                     }

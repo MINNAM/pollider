@@ -6,7 +6,7 @@ class GoogleApi {
 
         this.user          = "hi@minnam.io";
         this.client_secret = 'OpTZ-Y1KBHkXm1zeyh1WTgmP';
-        this.refresh_token = '1/gmanqqjrsES3Bv-wMwqQWgb9XREySPKfqRWCZ8dkffw';
+        this.refresh_token = '1/oCVwqBNocTZUl9qyAkVbEcmJ_DfId408SvG2Y_lATmQ';
         this.client_id     = '871610360530-shuinpl59btc88dll12k24ujcno33d8j.apps.googleusercontent.com';
 
     }

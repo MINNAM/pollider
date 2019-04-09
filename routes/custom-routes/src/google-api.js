@@ -5,9 +5,9 @@ class GoogleApi {
     constructor () {
 
         this.user          = "hi@minnam.io";
-        this.client_secret = 'OpTZ-Y1KBHkXm1zeyh1WTgmP';
-        this.refresh_token = '1/oCVwqBNocTZUl9qyAkVbEcmJ_DfId408SvG2Y_lATmQ';
-        this.client_id     = '871610360530-shuinpl59btc88dll12k24ujcno33d8j.apps.googleusercontent.com';
+        this.client_secret = 'BNSZpSvuzuY4fw7Ji6X5HUEs'; // BNSZpSvuzuY4fw7Ji6X5HUEs
+        this.refresh_token = '1/hQ3DNLWEZdnRn248ifOvW1CDqRf7aAKGsUw--Fr9Er1N1oiGKxbyOIUWrViYm6Z2';
+        this.client_id     = '871610360530-pu586abnrsg1hso8m5uq5a5ntm2l9t09.apps.googleusercontent.com'; // 871610360530-pu586abnrsg1hso8m5uq5a5ntm2l9t09.apps.googleusercontent.com
 
     }
 
